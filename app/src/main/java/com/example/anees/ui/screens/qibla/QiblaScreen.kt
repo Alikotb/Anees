@@ -3,6 +3,8 @@ package com.example.anees.ui.screens.qibla
 import android.app.Activity
 import android.app.Application
 import android.util.Log
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -31,6 +33,11 @@ fun QiblaScreen() {
     )
 
     val rotationAngle by viewModel.azimuth
+    val animatedRotation by animateFloatAsState(
+        targetValue = rotationAngle,
+        animationSpec = tween(durationMillis = 300)
+    )
+
     Log.d("QIBLA", "Rotation angle to Qibla: $rotationAngle")
 
     Box(
@@ -44,7 +51,7 @@ fun QiblaScreen() {
             contentDescription = "Qibla Direction",
             modifier = Modifier
                 .size(250.dp)
-                .rotate(rotationAngle)
+                .rotate(animatedRotation)
         )
     }
 }
