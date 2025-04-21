@@ -1,17 +1,20 @@
-package com.abdok.atmosphere.data.local.sharedPreference
+package com.example.anees.data.local.sharedpreference
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.abdok.atmosphere.data.local.sharedPreference.ISharedPreferences
 import com.example.anees.utils.Constants
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SharedPreferencesImpl @Inject constructor(@ApplicationContext context: Context) : ISharedPreferences {
+class SharedPreferencesImpl @Inject constructor(@ApplicationContext context: Context) :
+    ISharedPreferences {
 
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences(Constants.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
+
 
     override fun <T> saveData(key: String, value: T) {
         with(sharedPreferences.edit()) {
@@ -29,6 +32,7 @@ class SharedPreferencesImpl @Inject constructor(@ApplicationContext context: Con
     }
 
     override fun <T> fetchData(key: String, defaultValue: T): T {
+        @Suppress("UNCHECKED_CAST")
         return when (defaultValue) {
             is String -> sharedPreferences.getString(key, defaultValue) as T
             is Int -> sharedPreferences.getInt(key, defaultValue) as T

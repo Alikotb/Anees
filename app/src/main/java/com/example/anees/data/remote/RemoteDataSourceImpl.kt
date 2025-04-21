@@ -1,4 +1,6 @@
 package com.example.anees.data.remote
 
-class RemoteDataSourceImpl : RemoteDataSource {
+import javax.inject.Inject
+
+class RemoteDataSourceImpl @Inject constructor(): RemoteDataSource {
 }
