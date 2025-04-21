@@ -3,25 +3,15 @@ package com.abdok.atmosphere.data.local.sharedPreference
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.anees.utils.Constants
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class SharedPreferencesImpl private constructor(context: Context) : ISharedPreferences {
+@Singleton
+class SharedPreferencesImpl @Inject constructor(@ApplicationContext context: Context) : ISharedPreferences {
 
-    private val sharedPreferences: SharedPreferences = context.getSharedPreferences(Constants.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
-
-
-    companion object{
-        @Volatile
-        private var INSTANCE: SharedPreferencesImpl? = null
-
-        fun initSharedPreferences(context: Context) {
-            INSTANCE ?: synchronized(this) {
-                INSTANCE ?: SharedPreferencesImpl(context.applicationContext).also {
-                    INSTANCE = it
-                }
-            }
-        }
-        fun getInstance() = INSTANCE!!
-    }
+    private val sharedPreferences: SharedPreferences =
+        context.getSharedPreferences(Constants.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
 
     override fun <T> saveData(key: String, value: T) {
         with(sharedPreferences.edit()) {
