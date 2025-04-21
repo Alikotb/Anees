@@ -12,7 +12,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.anees.qibla.LocationProvider
+import com.example.anees.ui.screens.qibla.LocationProvider
+import com.example.anees.ui.screens.qibla.QiblaScreen
 import com.example.anees.ui.theme.AneesTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,14 +21,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            AneesTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+            QiblaScreen()
         }
     }
 
@@ -41,24 +35,8 @@ class MainActivity : ComponentActivity() {
 
         val locationProvider = LocationProvider(this)
         locationProvider.handlePermissionResult(requestCode, grantResults, this) {
-            // Optional: update ViewModel or state with the location
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    AneesTheme {
-        Greeting("Android")
-    }
-}
 
