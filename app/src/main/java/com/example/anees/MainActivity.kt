@@ -1,6 +1,7 @@
 package com.example.anees
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -11,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.anees.qibla.LocationProvider
 import com.example.anees.ui.theme.AneesTheme
 
 class MainActivity : ComponentActivity() {
@@ -26,6 +28,20 @@ class MainActivity : ComponentActivity() {
                     )
                 }
             }
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        Log.d("TAG", "onRequestPermissionsResult: called")
+
+        val locationProvider = LocationProvider(this)
+        locationProvider.handlePermissionResult(requestCode, grantResults, this) {
+            // Optional: update ViewModel or state with the location
         }
     }
 }
@@ -45,3 +61,4 @@ fun GreetingPreview() {
         Greeting("Android")
     }
 }
+
