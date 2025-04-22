@@ -139,7 +139,7 @@ fun SebihaScreen() {
     var isLottieVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(rounds) {
-        if (rounds % 2 == 0 ) {
+        if (rounds % 2 == 0 && rounds != 0) {
             isLottieVisible = true
             delay(4000)
             isLottieVisible = false
