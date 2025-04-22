@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
 
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -38,7 +36,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.anees.data.model.Zekir
-import com.example.anees.ui.screens.sebha.component.ZekirCard
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -52,6 +49,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.anees.R
 import com.example.anees.data.model.Sebiha
+import com.example.anees.ui.screens.sebha.component.ZekrHorizontalStaggeredGrid
 import kotlinx.coroutines.delay
 
 
@@ -270,20 +268,15 @@ fun SebihaScreen() {
                 modifier = Modifier.padding(vertical = 32.dp)
             )
             Spacer(modifier = Modifier.height(30.dp))
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                itemsIndexed(azkarList) { index, zekr ->
-                    ZekirCard(
-                        zero = zekr, onClick = {
-                            currentIndex = index
-                            counter = 0
-                        }, index = index, currentIndex = currentIndex
-                    )
-                }
-            }
+            ZekrHorizontalStaggeredGrid(
+                azkarList, currentIndex,
+                onZekrClick = {
+                    currentIndex = it
+                    counter = 0
+                },
+            )
         }
 
     }
 }
+
