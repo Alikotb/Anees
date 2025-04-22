@@ -1,7 +1,7 @@
 package com.example.anees.hilt
 
 import com.abdok.atmosphere.data.local.sharedPreference.ISharedPreferences
-import com.abdok.atmosphere.data.local.sharedPreference.SharedPreferencesImpl
+import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
 import com.example.anees.data.local.LocalDataSource
 import com.example.anees.data.local.LocalDataSourceImpl
 import com.example.anees.data.remote.RemoteDataSource
@@ -42,5 +42,7 @@ abstract class AppBindingModule {
     abstract fun bindRepository(
         repositoryImpl: RepositoryImpl
     ): Repository
+
+
 
 }
