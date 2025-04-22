@@ -5,6 +5,8 @@ plugins {
     id("com.google.dagger.hilt.android")
     kotlin("kapt")
     id("com.google.devtools.ksp")
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.22"
+
 
 }
 
@@ -61,6 +63,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+
+
     implementation("com.google.android.gms:play-services-location:21.0.1")
 
     implementation("com.airbnb.android:lottie-compose:6.6.3")
@@ -81,5 +86,9 @@ dependencies {
     implementation("androidx.room:room-runtime:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
     ksp("androidx.room:room-compiler:$room_version")
+
+
+    val nav_version = "2.8.8"
+    implementation("androidx.navigation:navigation-compose:$nav_version")
 
 }

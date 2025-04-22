@@ -54,7 +54,9 @@ import kotlinx.coroutines.delay
 
 
 @Composable
-fun SebihaScreen() {
+fun SebihaScreen(
+    navToHome: () -> Unit = {}
+) {
     val azkarList = listOf(
         Zekir(
             arabicName = "سبحان الله",
@@ -164,6 +166,7 @@ fun SebihaScreen() {
         Box {
             IconButton(
                 onClick = {
+                    navToHome()
                 },
                 modifier = Modifier
                     .align(Alignment.TopStart)
