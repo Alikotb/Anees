@@ -1,5 +1,7 @@
 package com.example.anees.ui.screens.home
 
+import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,7 +26,7 @@ import androidx.compose.ui.unit.sp
 
 @Preview(showBackground = true)
 @Composable
-fun HomeScreen(navToSebiha: () -> Unit = {}, navToQibla: () -> Unit = {}, navToQuran: () -> Unit = {}) {
+fun HomeScreen(navToSebiha: () -> Unit = {}, navToQibla: () -> Unit = {}, navToQuran: () -> Unit = {},navToAzkar: () -> Unit = {}) {
     val screenHeight =LocalConfiguration.current.screenHeightDp.dp
     Box(
         modifier = Modifier
@@ -36,9 +38,11 @@ fun HomeScreen(navToSebiha: () -> Unit = {}, navToQibla: () -> Unit = {}, navToQ
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(Modifier.height(
-                screenHeight/4
-            ))
+            Spacer(
+                Modifier.height(
+                    screenHeight / 4
+                )
+            )
             HomeButton("Azkar") {
                 navToSebiha()
             }
@@ -48,8 +52,12 @@ fun HomeScreen(navToSebiha: () -> Unit = {}, navToQibla: () -> Unit = {}, navToQ
             HomeButton("Quran") {
                 navToQuran()
             }
+            HomeButton("Azkar") {
+                navToAzkar()
+            }
         }
     }
+
 }
 
 @Composable
