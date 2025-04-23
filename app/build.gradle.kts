@@ -67,4 +67,8 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.51")
     kapt("com.google.dagger:hilt-compiler:2.51")
 
+    implementation("com.github.barteksc:android-pdf-viewer:3.2.0-beta.1")
+
+
+
 }
