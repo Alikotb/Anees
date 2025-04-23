@@ -1,16 +1,17 @@
 package com.example.anees.ui.screens.qibla
 
 import android.app.Activity
-import android.app.Application
-import android.util.Log
+
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,30 +29,65 @@ import com.example.anees.R
 fun QiblaScreen() {
     val context = LocalContext.current
     val activity = context as Activity
-    val viewModel: QiblaViewModel = viewModel(
-        factory = QiblaViewModelFactory(context.applicationContext as Application, activity)
+    val viewModel: QiblaViewModel = viewModel()
+
+    LaunchedEffect(Unit) {
+        LocationProvider(context).fetchLatLong(activity) { location ->
+            viewModel.updateQiblaDirection(location.latitude, location.longitude)
+        }
+    }
+
+    val deviceAzimuth by viewModel.deviceAzimuth
+    val bearingToQibla by viewModel.bearingToQibla
+
+    val animatedDeviceRotation by animateFloatAsState(
+        targetValue = deviceAzimuth,
+        animationSpec = tween(300)
     )
 
-    val rotationAngle by viewModel.azimuth
-    val animatedRotation by animateFloatAsState(
-        targetValue = rotationAngle,
-        animationSpec = tween(durationMillis = 300)
+    val animatedQiblaRotation by animateFloatAsState(
+        targetValue = bearingToQibla,
+        animationSpec = tween(300)
     )
 
-    Log.d("QIBLA", "Rotation angle to Qibla: $rotationAngle")
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(color = Color(0xFF272727)),
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.qibla),
-            contentDescription = "Qibla Direction",
+            painter = painterResource(id = R.drawable.compassbg),
+            contentDescription = "Qibla Compass Background",
             modifier = Modifier
-                .size(250.dp)
-                .rotate(animatedRotation)
+                .background(color = Color(0xFF272727))
+                .align(Alignment.Center)
         )
+
+        Image(
+            painter = painterResource(id = R.drawable.qiblaa),
+            contentDescription = "Qibla Compass Needle",
+            modifier = Modifier
+                .rotate(animatedDeviceRotation)
+                .align(Alignment.Center)
+        )
+
+        Box(
+            modifier = Modifier
+                .size(200.dp)
+                .align(Alignment.Center)
+                .rotate(animatedQiblaRotation)
+
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.kaaba),
+                contentDescription = "Kaaba Direction",
+                modifier = Modifier
+                    .size(32.dp)
+                    .padding(top = 8.dp)
+                    .align(Alignment.TopCenter)
+            )
+        }
     }
 }

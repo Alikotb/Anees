@@ -1,28 +1,30 @@
 package com.example.anees.ui.screens.qibla
 
-import android.app.Activity
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 
-class QiblaViewModel(application: Application, private val activity: Activity) : AndroidViewModel(application), SensorEventListener {
+@HiltViewModel
+class QiblaViewModel @Inject constructor(application: Application) : AndroidViewModel(application), SensorEventListener {
 
-    private val context = application.applicationContext
-    private val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+    private val sensorManager = application.getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
-    private val _azimuth = mutableStateOf(0f)
-    val azimuth = _azimuth
+    private val _deviceAzimuth = mutableStateOf(0f)
+    val deviceAzimuth = _deviceAzimuth
+
+    private val _bearingToQibla = mutableStateOf(0f)
+    val bearingToQibla = _bearingToQibla
 
     private val rotationMatrix = FloatArray(9)
     private val orientationAngles = FloatArray(3)
@@ -31,14 +33,8 @@ class QiblaViewModel(application: Application, private val activity: Activity) :
     private var lastAzimuth = 0f
     private val alpha = 0.1f
 
-    private val locationProvider = LocationProvider(context)
-
     init {
         registerSensor()
-        locationProvider.fetchLatLong(activity) { location ->
-            qiblaDirection = calculateQiblaAngle(location.latitude, location.longitude)
-            Log.d("QIBLA", "Qibla direction: $qiblaDirection°")
-        }
     }
 
     private fun registerSensor() {
@@ -54,14 +50,16 @@ class QiblaViewModel(application: Application, private val activity: Activity) :
 
             val azimuthRad = orientationAngles[0]
             val azimuthDeg = Math.toDegrees(azimuthRad.toDouble()).toFloat()
-            val deviceAzimuth = (azimuthDeg + 360) % 360
+            val deviceHeading = (azimuthDeg + 360) % 360
 
-            val bearingToQibla = (qiblaDirection - deviceAzimuth + 360) % 360
-            val smoothedAzimuth = lastAzimuth + alpha * (bearingToQibla - lastAzimuth)
+            _deviceAzimuth.value = deviceHeading
 
-            if (kotlin.math.abs(_azimuth.value - smoothedAzimuth) > 1f) {
-                _azimuth.value = smoothedAzimuth
-                lastAzimuth = smoothedAzimuth
+            val bearingToQibla = (qiblaDirection - deviceHeading + 360) % 360
+            val smoothedBearing = lastAzimuth + alpha * (bearingToQibla - lastAzimuth)
+
+            if (kotlin.math.abs(_bearingToQibla.value - smoothedBearing) > 1f) {
+                _bearingToQibla.value = smoothedBearing
+                lastAzimuth = smoothedBearing
             }
         }
     }
@@ -71,6 +69,10 @@ class QiblaViewModel(application: Application, private val activity: Activity) :
     override fun onCleared() {
         super.onCleared()
         sensorManager.unregisterListener(this)
+    }
+
+    fun updateQiblaDirection(lat: Double, lon: Double) {
+        qiblaDirection = calculateQiblaAngle(lat, lon)
     }
 
     private fun calculateQiblaAngle(lat: Double, lon: Double): Float {
@@ -89,11 +91,3 @@ class QiblaViewModel(application: Application, private val activity: Activity) :
     }
 }
 
-class QiblaViewModelFactory(
-    private val context: Application,
-    private val activity: Activity
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return QiblaViewModel(context, activity) as T
-    }
-}
