@@ -1,6 +1,5 @@
 package com.example.anees.ui.screens.azkar
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,6 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.anees.ui.screens.azkar.component.ZekrCard
+import com.example.anees.utils.AzkarUtils
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,7 +43,6 @@ fun AdhkarScreen(navToDetails: (String) -> Unit = {}) {
     val categories = remember { AzkarUtils.getAdhkarCategories(azkarList) }
     val selectedCategory = remember { mutableStateOf("") }
     var searchQuery by remember { mutableStateOf("") }
-    Log.d("TAG", "AdhkarScreen: ${categories}")
     Column(
         modifier = Modifier
             .fillMaxSize()

@@ -1,9 +1,8 @@
-package com.example.anees.ui.screens.azkar
+package com.example.anees.utils
 
 import android.content.Context
 import com.example.anees.data.model.ZekrModelItem
 import com.example.anees.data.model.adhkarItem
-import com.example.anees.utils.Constants
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
