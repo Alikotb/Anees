@@ -25,6 +25,14 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        val locationProvider = LocationProvider(this)
+        locationProvider.fetchLatLong(this) { location ->
+            Log.d("TAG", "Latitude: ${location.latitude}, Longitude: ${location.longitude}")
+        }
+    }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
