@@ -2,11 +2,11 @@ package com.example.anees.ui.screens.hadith
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.anees.data.model.HadithBooksResponse
-import com.example.anees.data.model.HadithResponse
+import com.example.anees.data.model.EditionResponse
 import com.example.anees.data.model.HadithsResponse
 import com.example.anees.data.model.Response
 import com.example.anees.data.repository.RepositoryImpl
+import com.example.anees.utils.AuthorEdition
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,45 +15,36 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class HadithViewModel @Inject constructor(private val repo: RepositoryImpl): ViewModel() {
-    private val _booksState = MutableStateFlow<Response<HadithBooksResponse>>(Response.Loading)
-    val booksState  = _booksState.asStateFlow()
+    private val _sectionsState = MutableStateFlow<Response<EditionResponse>>(Response.Loading)
+    val sectionsState = _sectionsState.asStateFlow()
 
-    private val _hadithsState = MutableStateFlow<Response<HadithsResponse>>(Response.Loading)
-    val hadithsState = _hadithsState.asStateFlow()
-
-    private val _specificHadithState = MutableStateFlow<Response<HadithResponse>>(Response.Loading)
-    val specificHadithState = _specificHadithState.asStateFlow()
+    private val _authorHadithsState = MutableStateFlow<Response<HadithsResponse>>(Response.Loading)
+    val authorHadithsState = _authorHadithsState.asStateFlow()
 
     private val _messageState = MutableStateFlow<String?>(null)
     val messageState = _messageState.asStateFlow()
 
-    fun getBooks() {
+    fun getSections(author: AuthorEdition) {
         viewModelScope.launch(Dispatchers.IO) {
-            repo.getBooks().catch {
-                _booksState.value = Response.Error(it.message.toString())
-            }.collect {
-                _booksState.value = Response.Success(it)
-            }
+            repo.getAllSections(author.apiKey)
+                .catch {
+                    _sectionsState.value = Response.Error(it.message.toString())
+                }
+                .collect {
+                    _sectionsState.value = Response.Success(it)
+                }
         }
     }
 
-    fun getHadithsByRange(bookName: String, range: String) {
+    fun getAuthorHadithsBySection(sectionName: String, author: AuthorEdition) {
         viewModelScope.launch(Dispatchers.IO) {
-            repo.getHadithsByRange(bookName, range).catch{
-                _hadithsState.value = Response.Error(it.message.toString())
-            }.collect {
-                _hadithsState.value = Response.Success(it)
-            }
-        }
-    }
-
-    fun getSpecificHadith(bookName: String, hadithNumber: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repo.getSpecificHadith(bookName, hadithNumber).catch {
-                _specificHadithState.value = Response.Error(it.message.toString())
-            }.collect {
-                _specificHadithState.value = Response.Success(it)
-            }
+            repo.getAuthorHadithsBySection(sectionName, author.apiKey)
+                .catch {
+                    _authorHadithsState.value = Response.Error(it.message.toString())
+                }
+                .collect {
+                    _authorHadithsState.value = Response.Success(it)
+                }
         }
     }
 }

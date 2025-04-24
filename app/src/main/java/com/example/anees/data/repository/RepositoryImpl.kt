@@ -1,8 +1,7 @@
 package com.example.anees.data.repository
 
 import com.example.anees.data.local.LocalDataSource
-import com.example.anees.data.model.HadithBooksResponse
-import com.example.anees.data.model.HadithResponse
+import com.example.anees.data.model.EditionResponse
 import com.example.anees.data.model.HadithsResponse
 import com.example.anees.data.model.Sebiha
 import com.example.anees.data.remote.RemoteDataSource
@@ -24,15 +23,15 @@ class RepositoryImpl @Inject constructor(
         return localDataSource.getSebiha()
     }
 
-    override suspend fun getBooks(): Flow<HadithBooksResponse> {
-        return flowOf(remoteDataSource.getBooks())
+    override suspend fun getAllSections(name: String): Flow<EditionResponse> {
+        return flowOf(remoteDataSource.getAllSections(name))
     }
 
-    override suspend fun getHadithsByRange(name: String, range: String): Flow<HadithsResponse> {
-        return flowOf(remoteDataSource.getHadithsByRange(name, range))
+    override suspend fun getAuthorHadithsBySection(
+        name: String,
+        author: String
+    ): Flow<HadithsResponse> {
+        return flowOf(remoteDataSource.getAuthorHadithsBySection(name, author))
     }
 
-    override suspend fun getSpecificHadith(name: String, number: Int): Flow<HadithResponse> {
-        return flowOf(remoteDataSource.getSpecificHadith(name, number))
-    }
 }

@@ -34,7 +34,7 @@ object AppProviderModule  {
     @Named("HadithApi")
     fun provideHadithRetrofit(): Retrofit =
         Retrofit.Builder()
-            .baseUrl(Constants.HTTPS_API_HADITH_GADING_DEV_)
+            .baseUrl(Constants.API_HADITH_)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
