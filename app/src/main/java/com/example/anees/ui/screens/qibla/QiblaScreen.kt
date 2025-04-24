@@ -1,6 +1,9 @@
 package com.example.anees.ui.screens.qibla
 
 import android.app.Activity
+import android.content.Context
+import android.os.Vibrator
+import androidx.compose.animation.core.LinearEasing
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -29,6 +32,7 @@ import com.example.anees.R
 fun QiblaScreen() {
     val context = LocalContext.current
     val activity = context as Activity
+    val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     val viewModel: QiblaViewModel = viewModel()
 
     LaunchedEffect(Unit) {
@@ -40,14 +44,35 @@ fun QiblaScreen() {
     val deviceAzimuth by viewModel.deviceAzimuth
     val bearingToQibla by viewModel.bearingToQibla
 
+    val tolerance = 1f
+    val isAligned = when {
+        bearingToQibla in (0f..tolerance) || bearingToQibla in (360f - tolerance..360f) -> true
+        bearingToQibla in (355f..360f) || bearingToQibla in (0f..5f) -> true
+        else -> false
+    }
+    val kaabaImage = if (isAligned)
+        R.drawable.kaaba2
+    else
+        R.drawable.kaaba
+
+    LaunchedEffect(isAligned) {
+        if (isAligned) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                vibrator.vibrate(android.os.VibrationEffect.createOneShot(500, android.os.VibrationEffect.DEFAULT_AMPLITUDE))
+            } else {
+                vibrator.vibrate(500)
+            }
+        }
+    }
+
     val animatedDeviceRotation by animateFloatAsState(
         targetValue = deviceAzimuth,
-        animationSpec = tween(300)
+        animationSpec = tween(300, easing = LinearEasing)
     )
 
     val animatedQiblaRotation by animateFloatAsState(
         targetValue = bearingToQibla,
-        animationSpec = tween(300)
+        animationSpec = tween(300, easing = LinearEasing)
     )
 
 
@@ -81,7 +106,7 @@ fun QiblaScreen() {
 
         ) {
             Image(
-                painter = painterResource(id = R.drawable.kaaba),
+                painter = painterResource(id = kaabaImage),
                 contentDescription = "Kaaba Direction",
                 modifier = Modifier
                     .size(32.dp)
