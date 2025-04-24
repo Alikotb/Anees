@@ -1,4 +1,10 @@
 package com.example.anees.data.repository
 
+import com.example.anees.data.model.Sebiha
+import kotlinx.coroutines.flow.Flow
+
 interface Repository {
+    suspend fun addSebiha(sebiha: Sebiha)
+    fun getSebiha(): Flow<Sebiha>
+
 }
