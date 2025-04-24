@@ -69,6 +69,7 @@ dependencies {
 
     implementation("com.github.barteksc:android-pdf-viewer:3.2.0-beta.1")
 
+    implementation ("androidx.compose.material:material-icons-extended:1.4.0")
 
 
 }
