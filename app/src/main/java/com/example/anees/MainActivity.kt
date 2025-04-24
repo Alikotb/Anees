@@ -9,6 +9,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.anees.ui.navigation.SetUpNavHost
 import com.example.anees.ui.screens.qibla.LocationProvider
+import com.example.anees.ui.screens.qibla.QiblaScreen
+import com.example.anees.ui.screens.quran.QuranIndexScreen
+import com.example.anees.ui.screens.quran.QuranPDFViewerScreen
+import com.example.anees.ui.theme.AneesTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -17,7 +21,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+//enableEdgeToEdge()
         setContent {
             navController = rememberNavController()
             SetUpNavHost(navController = navController)
