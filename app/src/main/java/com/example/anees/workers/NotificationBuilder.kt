@@ -10,6 +10,8 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.anees.R
+import com.example.anees.utils.Constants
+import com.example.anees.utils.azkarList
 import com.example.anees.utils.getRandomZekir
 import java.util.concurrent.TimeUnit
 
@@ -24,6 +26,7 @@ fun showNotification(context: Context) {
         .setSmallIcon(R.drawable.mosque)
         .setContentTitle("Anees")
         .setContentText(getRandomZekir().arabicName)
+        .setStyle(NotificationCompat.BigTextStyle().bigText(getRandomZekir().arabicName))
         .setPriority(NotificationCompat.PRIORITY_HIGH)
         .setCategory(NotificationCompat.CATEGORY_RECOMMENDATION)
         .setLargeIcon(largeIcon)
@@ -43,14 +46,19 @@ fun createNotificationChannel(context: Context) {
         val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
             description = descriptionText
         }
-
         val notificationManager: NotificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
     }
 }
 
-fun setNotification(ctx: Context,interval:Long=3){
+fun setNotification(ctx: Context, choice:String){
+    var interval = when (choice) {
+        Constants.ONE_HOUR -> 1L
+        Constants.THREE_HOUR -> 3L
+        Constants.SIX_HOUR -> 6L
+        else -> 3L
+    }
     val workRequest = PeriodicWorkRequestBuilder<MyPeriodicWorker>(
         interval , TimeUnit.HOURS
     ).build()

@@ -48,13 +48,7 @@ fun AdhkarScreen(navToDetails: (String) -> Unit = {}) {
     var searchQuery by remember { mutableStateOf("") }
     val hmada = Constants.ONE_HOUR
     LaunchedEffect(Unit) {
-        if (hmada==Constants.ONE_HOUR)
-            setNotification(context, 1)
-        else if (hmada==Constants.THREE_HOUR)
-            setNotification(context, 3)
-        else if (hmada==Constants.SIX_HOUR)
-            setNotification(context, 6)
-
+        setNotification(context, hmada)
     }
     Column(
         modifier = Modifier
