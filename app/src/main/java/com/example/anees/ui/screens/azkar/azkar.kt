@@ -52,7 +52,7 @@ fun AdhkarScreen(navToDetails: (String) -> Unit = {}) {
             setNotification(context, 1)
         else if (hmada==Constants.THREE_HOUR)
             setNotification(context, 3)
-        else (hmada==Constants.SIX_HOUR)
+        else if (hmada==Constants.SIX_HOUR)
             setNotification(context, 6)
 
     }
