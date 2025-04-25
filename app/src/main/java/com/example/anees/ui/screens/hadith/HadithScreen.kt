@@ -10,13 +10,12 @@ import com.example.anees.data.model.Response
 @Composable
 fun HadithScreen(viewModel: HadithViewModel = viewModel()) {
 
-    val booksState by viewModel.booksState.collectAsStateWithLifecycle()
+    val sectionsState by viewModel.sectionsState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.getBooks()
     }
 
-    when(val state = booksState) {
+    when(val state = sectionsState) {
         is Response.Loading -> TODO()
         is Response.Success -> TODO()
         is Response.Error -> TODO()
