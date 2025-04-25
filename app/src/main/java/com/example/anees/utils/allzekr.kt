@@ -80,3 +80,7 @@ val azkarList = listOf(
     )
 
 )
+
+fun getRandomZekir(): Zekir {
+    return azkarList.random()
+}
