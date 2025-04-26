@@ -203,6 +203,8 @@ fun SebihaScreen(
                 onZekrClick = {
                     currentIndex = it
                     counter = 0
+                    rounds = 0
+                    viewModel.addSebiha(Sebiha(0, counter, rounds))
                 },
             )
         }
