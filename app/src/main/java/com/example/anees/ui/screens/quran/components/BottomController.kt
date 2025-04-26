@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.sp
 import com.example.anees.ui.screens.quran.QuranIndexScreen
 
 @Composable
-fun BottomControlBar(page: Int) {
+fun BottomControlBar(page: Int , onIndexButtonClick: () -> Unit) {
     Surface(color = Color.Black.copy(alpha = 0.8f), modifier = Modifier.fillMaxWidth()) {
         Column (
             modifier = Modifier
@@ -117,8 +117,7 @@ fun BottomControlBar(page: Int) {
                 }
 
                 IconButton(
-                    onClick = {
-                    },
+                    onClick = onIndexButtonClick,
                     modifier = Modifier.weight(1f),
 
 

@@ -20,4 +20,8 @@ sealed class ScreenRout {
     data class AzkarDetailsScreen(val category: String) : ScreenRout()
 
 
+    @Serializable
+    object QuranIndexScreen : ScreenRout()
+
+
 }

@@ -2,6 +2,7 @@ package com.example.anees.ui.screens.quran
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.anees.Enums.SuraTypeEnum
 import com.example.anees.R
@@ -45,29 +47,34 @@ fun SurahRow(
             .background(Color(0xFFF8F5E3)),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        Spacer(modifier = Modifier.width(16.dp))
+
         Image(
             painter = painterResource(
                 id = if (sura.type == SuraTypeEnum.MECCA)
                     R.drawable.kaaba else R.drawable.mosque
             ),
             contentDescription = "Surah Icon",
-            modifier = Modifier.size(40.dp)
+            modifier = Modifier.size(40.dp).weight(1f)
         )
 
         Spacer(modifier = Modifier.width(16.dp))
 
         Column(
             modifier = Modifier.weight(1f),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
             Text(
                 text = "آياتها",
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall,
+                textAlign = TextAlign.End
             )
             Text(
                 text = "${sura.ayahNumber}",
                 style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.End
             )
         }
 
@@ -75,7 +82,8 @@ fun SurahRow(
             text = "  سوره ${sura.suraName}",
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(end = 16.dp)
+            modifier = Modifier.padding(end = 16.dp).weight(3f),
+            textAlign = TextAlign.End
         )
 
         Text(
@@ -83,7 +91,7 @@ fun SurahRow(
             fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .background(Color.Black)
-                .padding(16.dp),
+                .padding(16.dp).weight(1.5f),
             color = Color.White
         )
     }

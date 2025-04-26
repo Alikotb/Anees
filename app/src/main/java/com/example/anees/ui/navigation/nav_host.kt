@@ -9,6 +9,7 @@ import com.example.anees.ui.screens.azkar.AdhkarDetailsScreen
 import com.example.anees.ui.screens.azkar.AdhkarScreen
 import com.example.anees.ui.screens.home.HomeScreen
 import com.example.anees.ui.screens.qibla.QiblaScreen
+import com.example.anees.ui.screens.quran.QuranIndexScreen
 import com.example.anees.ui.screens.quran.QuranPDFViewerScreen
 import com.example.anees.ui.screens.sebha.SebihaScreen
 import com.example.anees.ui.screens.splash.SplashScreen
@@ -55,7 +56,9 @@ fun SetUpNavHost(
             QiblaScreen()
         }
         composable<ScreenRout.CompleteQuranScreen> {
-            QuranPDFViewerScreen()
+            QuranPDFViewerScreen(onIndexButtonClick = {
+                navController.navigate(ScreenRout.QuranIndexScreen)
+            })
         }
 
         composable<ScreenRout.AdhkarScreen> {
@@ -70,6 +73,9 @@ fun SetUpNavHost(
                 navController.popBackStack()
                 navController.navigate(ScreenRout.AdhkarScreen)
             }
+        }
+        composable<ScreenRout.QuranIndexScreen> {
+            QuranIndexScreen()
         }
 
     }

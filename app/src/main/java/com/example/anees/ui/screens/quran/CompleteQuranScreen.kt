@@ -62,7 +62,9 @@ import java.io.FileOutputStream
 
 
 @Composable
-fun QuranPDFViewerScreen() {
+fun QuranPDFViewerScreen(
+    onIndexButtonClick: () -> Unit
+) {
     val context = LocalContext.current
     var controlsVisible by remember { mutableStateOf(false) }
 
@@ -93,7 +95,7 @@ fun QuranPDFViewerScreen() {
             exit = fadeOut(),
             modifier = Modifier.align(Alignment.BottomCenter)
         ) {
-            BottomControlBar(pageNumber.value)
+            BottomControlBar(pageNumber.value , onIndexButtonClick)
         }
     }
 }
