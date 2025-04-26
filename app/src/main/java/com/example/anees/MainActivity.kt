@@ -8,9 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.anees.ui.navigation.SetUpNavHost
-import com.example.anees.ui.screens.hadith.HadithAuthorsScreen
 import com.example.anees.ui.screens.qibla.LocationProvider
-import com.example.anees.utils.AuthorEdition
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,9 +19,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            //navController = rememberNavController()
-            //SetUpNavHost(navController = navController)
-            HadithAuthorsScreen {}
+            navController = rememberNavController()
+            SetUpNavHost(navController = navController)
 
         }
     }

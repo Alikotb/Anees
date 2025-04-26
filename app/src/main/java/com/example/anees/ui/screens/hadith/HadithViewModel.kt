@@ -7,6 +7,7 @@ import com.example.anees.data.model.HadithsResponse
 import com.example.anees.data.model.Response
 import com.example.anees.data.repository.RepositoryImpl
 import com.example.anees.utils.AuthorEdition
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class HadithViewModel @Inject constructor(private val repo: RepositoryImpl): ViewModel() {
     private val _sectionsState = MutableStateFlow<Response<EditionResponse>>(Response.Loading)
     val sectionsState = _sectionsState.asStateFlow()

@@ -34,15 +34,16 @@ import androidx.compose.ui.unit.sp
 import com.example.anees.R
 import com.example.anees.utils.AuthorAssets
 import com.example.anees.utils.AuthorEdition
+import com.google.gson.Gson
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HadithAuthorsScreen(onAuthorSelected: (AuthorEdition) -> Unit) {
+fun HadithAuthorsScreen(navToHadithsSections: (String) -> Unit) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(stringResource(R.string.hadith_authors)) })
-        }
+            TopAppBar(title = { Text("رواه الحديث") })
+        },
     ) { paddingValues ->
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
@@ -53,7 +54,7 @@ fun HadithAuthorsScreen(onAuthorSelected: (AuthorEdition) -> Unit) {
         ) {
             items(AuthorEdition.entries) { author ->
                 AuthorCard(author = author, onClick = {
-                    onAuthorSelected(author)
+                    navToHadithsSections(Gson().toJson(author))
                 })
             }
         }

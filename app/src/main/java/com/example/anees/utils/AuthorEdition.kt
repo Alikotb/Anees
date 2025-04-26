@@ -5,16 +5,17 @@ enum class AuthorEdition(
     val displayNameEn: String,
     val displayNameAr: String
 ) {
-    ABU_DAWUD("abudawud", "Abu Dawud", "أبو داود"),
+    MUSLIM("muslim", "Imam Muslim", "الإمام مسلم"),
     BUKHARI("bukhari", "Imam Bukhari", "الإمام البخاري"),
-    DEHLAWI("dehlawi", "Shah Waliullah Dehlawi", "شاه ولي الله الدهلوي"),
+    ABU_DAWUD("abudawud", "Abu Dawud", "أبو داود"),
+    TIRMIDHI("tirmidhi", "At-Tirmidhi", "الترمذي"),
+    NASAI("nasai", "An-Nasā’ī", "النسائي"),
     IBN_MAJAH("ibnmajah", "Ibn Majah", "ابن ماجه"),
     MALIK("malik", "Imam Malik", "الإمام مالك"),
-    MUSLIM("muslim", "Imam Muslim", "الإمام مسلم"),
-    NASAI("nasai", "An-Nasā’ī", "النسائي"),
+    DEHLAWI("dehlawi", "Shah Waliullah Dehlawi", "شاه ولي الله الدهلوي"),
     NAWAWI("nawawi", "Imam Nawawi", "الاربعين النوويه"),
-    QUDSI("qudsi", "Hadith Qudsi", "الحديث القدسي"),
-    TIRMIDHI("tirmidhi", "At-Tirmidhi", "الترمذي");
+    QUDSI("qudsi", "Hadith Qudsi", "الحديث القدسي");
+
 
     companion object {
         fun fromApiKey(key: String): AuthorEdition? =
