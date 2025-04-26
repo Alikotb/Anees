@@ -1,0 +1,28 @@
+package com.example.anees.ui.navigation
+
+import com.example.anees.utils.AuthorEdition
+import kotlinx.serialization.Serializable
+
+
+sealed class ScreenRoute {
+    @Serializable
+    object SplashScreen : ScreenRoute()
+    @Serializable
+    object HomeScreen : ScreenRoute()
+    @Serializable
+    object Sebiha : ScreenRoute()
+    @Serializable
+    object QiblaScreen : ScreenRoute()
+    @Serializable
+    object CompleteQuranScreen : ScreenRoute()
+    @Serializable
+    object AdhkarScreen : ScreenRoute()
+    @Serializable
+    data class AzkarDetailsScreen(val category: String) : ScreenRoute()
+    @Serializable
+    data class HadithScreen(val author: String, val number: String) : ScreenRoute()
+    @Serializable
+    data object HadithAuthorsScreen : ScreenRoute()
+    @Serializable
+    data class HadithSectionsScreen(val author: String) : ScreenRoute()
+}

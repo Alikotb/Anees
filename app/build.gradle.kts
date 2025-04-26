@@ -90,6 +90,11 @@ dependencies {
     implementation("androidx.room:room-ktx:$room_version")
     ksp("androidx.room:room-compiler:$room_version")
 
+    // retrofit
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+
+
     //navigation
     val nav_version = "2.8.8"
     implementation("androidx.navigation:navigation-compose:$nav_version")
@@ -99,7 +104,5 @@ dependencies {
     implementation ("androidx.work:work-runtime-ktx:2.7.1")
     //notification
     implementation("androidx.core:core-ktx:1.16.0")
-
-
 
 }
