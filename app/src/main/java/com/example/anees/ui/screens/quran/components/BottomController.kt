@@ -27,7 +27,8 @@ import androidx.compose.ui.unit.sp
 fun BottomControlBar(onIndexButtonClick: () -> Unit ,
                      onJuzButtonClick: () -> Unit ,
                      onKhatmButtonClick: () -> Unit,
-                     onBookmarkButtonClick: () -> Unit
+                     onBookmarkButtonClick: () -> Unit,
+                     onBookMoveClicked : () -> Unit
 ) {
     Surface(color = Color.Black.copy(alpha = 0.8f), modifier = Modifier.fillMaxWidth()) {
         Column (
@@ -41,7 +42,7 @@ fun BottomControlBar(onIndexButtonClick: () -> Unit ,
                 horizontalArrangement = Arrangement.Center
             ){
                 IconButton(
-                    onClick = { /* Handle previous page action */ },
+                    onClick = onBookMoveClicked,
                     modifier = Modifier.weight(1f),
 
 

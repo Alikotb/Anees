@@ -28,7 +28,10 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Book
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -52,46 +55,66 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.anees.R
 import com.example.anees.ui.screens.quran.components.BottomControlBar
 import com.example.anees.ui.screens.quran.components.PdfViewerFromAssets
 import com.example.anees.ui.screens.quran.components.TopControlBar
+import com.example.anees.ui.screens.quran.components.VerticalBookmarkBar
 import com.example.anees.utils.PdfHelper.getSurahAndJuzForPage
 import com.github.barteksc.pdfviewer.PDFView
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 
-
 @Composable
 fun QuranPDFViewerScreen(
-    initPage:Int = 658,
+    initPage: Int = 568,
     onIndexButtonClick: () -> Unit,
     onKhatmButtonClick: () -> Unit,
     onJuzButtonClick: () -> Unit
 ) {
-
     val context = LocalContext.current
+    val viewModel: CompleteQuranViewModel = hiltViewModel()
 
-    val viewModel : CompleteQuranViewModel = hiltViewModel()
+    val pdfView = remember { PDFView(context, null) }
+
+    LaunchedEffect(Unit) {
+        viewModel.getPageBookmark()
+    }
+
+    val bookmark = viewModel.bookmark.collectAsStateWithLifecycle()
+
+    var mutableInitPage by remember { mutableStateOf(initPage) }
+
     var controlsVisible by remember { mutableStateOf(false) }
     var pageNumber by remember { mutableStateOf(initPage) }
 
     LaunchedEffect(initPage) {
         pageNumber = initPage
     }
+
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .systemBarsPadding()
             .clickable { controlsVisible = !controlsVisible }
     ) {
-        PdfViewerFromAssets("q.pdf", initPage , onPagerChange = {
-            pageNumber = it
-            viewModel.updateCurrentPageIndex(it)
-        }) {
+
+        PdfViewerFromAssets(
+            "q.pdf",pdfView, mutableInitPage,
+            onPagerChange = {
+                pageNumber = it
+                viewModel.updateCurrentPageIndex(it)
+            }
+        ) {
             controlsVisible = !controlsVisible
+        }
+        if (pageNumber == bookmark.value){
+                VerticalBookmarkBar()
         }
 
         AnimatedVisibility(
@@ -109,16 +132,22 @@ fun QuranPDFViewerScreen(
             exit = fadeOut(),
             modifier = Modifier.align(Alignment.BottomCenter)
         ) {
-            BottomControlBar(onIndexButtonClick ,
-                onJuzButtonClick , onKhatmButtonClick
-                , onBookmarkButtonClick = {
+            BottomControlBar(
+                onIndexButtonClick,
+                onJuzButtonClick,
+                onKhatmButtonClick,
+                onBookmarkButtonClick = {
                     Toast.makeText(context, "تم إضافة علامه", Toast.LENGTH_SHORT).show()
+                    viewModel.updatePageBookmark(pageNumber)
                     controlsVisible = !controlsVisible
-                })
+                },
+                onBookMoveClicked = {
+                    controlsVisible = !controlsVisible
+                    pdfView.jumpTo(bookmark.value)
+                }
+            )
         }
     }
 }
-
-
 
 
