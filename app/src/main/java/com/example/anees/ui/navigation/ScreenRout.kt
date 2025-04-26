@@ -22,6 +22,10 @@ sealed class ScreenRout {
 
     @Serializable
     object QuranIndexScreen : ScreenRout()
+    @Serializable
+    object JuzIndexScreen : ScreenRout()
 
+    @Serializable
+    object KhatmQuranDuaScreen : ScreenRout()
 
 }

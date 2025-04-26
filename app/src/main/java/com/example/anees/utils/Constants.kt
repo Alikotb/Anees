@@ -12,6 +12,7 @@ object Constants {
 
     //PDF Quran
     const val CURRENT_PAGE_INDEX="CURRENT_PAGE_INDEX"
+    const val PAGE_BOOKMARK="CURRENT_PAGE_INDEX"
 
 
 }

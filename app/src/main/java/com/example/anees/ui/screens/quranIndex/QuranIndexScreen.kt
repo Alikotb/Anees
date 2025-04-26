@@ -1,5 +1,6 @@
 package com.example.anees.ui.screens.quranIndex
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -56,6 +57,7 @@ fun QuranIndexScreen(onIndexButtonClick: () -> Unit) {
 
 }
 
+@SuppressLint("UnrememberedMutableInteractionSource")
 @Composable
 fun SurahRow(
     sura:SuraIndex,
@@ -64,9 +66,14 @@ fun SurahRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable{
-                onClick(sura.pageNumber)
-            }
+            .padding(vertical = 8.dp)
+            .clickable(
+                indication = null,
+                interactionSource = androidx.compose.foundation.interaction.MutableInteractionSource(),
+                onClick = {
+                    onClick(sura.pageNumber)
+                }
+            )
         ,
         verticalAlignment = Alignment.CenterVertically
     ) {

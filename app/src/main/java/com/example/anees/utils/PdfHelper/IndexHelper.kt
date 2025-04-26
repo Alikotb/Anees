@@ -12,7 +12,7 @@ data class SuraIndex(
 )
 
 val SuraIndexes = listOf(
-    SuraIndex(1,  "الفاتحة", SuraTypeEnum.MECCA, 568, 7),
+    SuraIndex(1,  "ٱلْفَاتِحَةُ", SuraTypeEnum.MECCA, 568, 7),
     SuraIndex(2,  "البقرة", SuraTypeEnum.MADIENA, 567, 286),
     SuraIndex(3, "آل عمران", SuraTypeEnum.MADIENA, 524, 200),
     SuraIndex(4, "النساء", SuraTypeEnum.MADIENA, 500, 176),
@@ -24,7 +24,7 @@ val SuraIndexes = listOf(
     SuraIndex(10,  "يونس", SuraTypeEnum.MECCA, 382, 109),
     SuraIndex(11, "هود", SuraTypeEnum.MECCA, 370, 123),
     SuraIndex(12, "يوسف", SuraTypeEnum.MECCA, 356, 111),
-    SuraIndex(13, "الرعد", SuraTypeEnum.MECCA, 344, 52),
+    SuraIndex(13, "الرعد", SuraTypeEnum.MECCA, 344, 43),
     SuraIndex(14, "إبراهيم", SuraTypeEnum.MECCA, 338, 52),
     SuraIndex(15,  "الحجر", SuraTypeEnum.MECCA, 332, 99),
     SuraIndex(16,  "النحل", SuraTypeEnum.MECCA, 327, 128),
@@ -44,7 +44,6 @@ val SuraIndexes = listOf(
     SuraIndex(30,  "الروم", SuraTypeEnum.MECCA, 198, 60),
     SuraIndex(31,  "لقمان", SuraTypeEnum.MECCA, 192, 34),
     SuraIndex(32, "السجدة", SuraTypeEnum.MECCA, 188, 30),
-
     SuraIndex(33,  "الأحزاب", SuraTypeEnum.MADIENA, 186, 73),
     SuraIndex(34,  "سبأ", SuraTypeEnum.MECCA, 176, 54),
     SuraIndex(35,  "فاطر", SuraTypeEnum.MECCA, 170, 45),
@@ -73,7 +72,6 @@ val SuraIndexes = listOf(
     SuraIndex(58, "المجادلة", SuraTypeEnum.MADIENA, 65, 22),
     SuraIndex(59, "الحشر", SuraTypeEnum.MADIENA, 62, 24),
     SuraIndex(60, "الممتحنة", SuraTypeEnum.MADIENA, 59, 13),
-
     SuraIndex(61, "الصف", SuraTypeEnum.MADIENA, 56, 14),
     SuraIndex(62, "الجمعة", SuraTypeEnum.MADIENA, 54, 11),
     SuraIndex(63, "المنافقون", SuraTypeEnum.MADIENA, 53, 11),

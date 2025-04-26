@@ -24,7 +24,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun BottomControlBar(page: Int , onIndexButtonClick: () -> Unit) {
+fun BottomControlBar(onIndexButtonClick: () -> Unit ,
+                     onJuzButtonClick: () -> Unit ,
+                     onKhatmButtonClick: () -> Unit,
+                     onBookmarkButtonClick: () -> Unit
+) {
     Surface(color = Color.Black.copy(alpha = 0.8f), modifier = Modifier.fillMaxWidth()) {
         Column (
             modifier = Modifier
@@ -54,7 +58,7 @@ fun BottomControlBar(page: Int , onIndexButtonClick: () -> Unit) {
                     }
                 }
                 IconButton(
-                    onClick = { /* Handle previous page action */ },
+                    onClick = onBookmarkButtonClick,
                     modifier = Modifier.weight(1f),
 
 
@@ -78,7 +82,7 @@ fun BottomControlBar(page: Int , onIndexButtonClick: () -> Unit) {
                 horizontalArrangement = Arrangement.Center
             ){
                 IconButton(
-                    onClick = { /* Handle previous page action */ },
+                    onClick = onKhatmButtonClick,
                     modifier = Modifier.weight(1f),
 
 
@@ -95,7 +99,7 @@ fun BottomControlBar(page: Int , onIndexButtonClick: () -> Unit) {
                     }
                 }
                 IconButton(
-                    onClick = { /* Handle previous page action */ },
+                    onClick = onJuzButtonClick ,
                     modifier = Modifier.weight(1f),
 
 

@@ -67,19 +67,20 @@ import java.io.FileOutputStream
 @Composable
 fun QuranPDFViewerScreen(
     initPage:Int = 658,
-    onIndexButtonClick: () -> Unit
+    onIndexButtonClick: () -> Unit,
+    onKhatmButtonClick: () -> Unit,
+    onJuzButtonClick: () -> Unit
 ) {
 
+    val context = LocalContext.current
+
     val viewModel : CompleteQuranViewModel = hiltViewModel()
-
-
     var controlsVisible by remember { mutableStateOf(false) }
     var pageNumber by remember { mutableStateOf(initPage) }
 
     LaunchedEffect(initPage) {
         pageNumber = initPage
     }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -108,7 +109,12 @@ fun QuranPDFViewerScreen(
             exit = fadeOut(),
             modifier = Modifier.align(Alignment.BottomCenter)
         ) {
-            BottomControlBar(pageNumber , onIndexButtonClick)
+            BottomControlBar(onIndexButtonClick ,
+                onJuzButtonClick , onKhatmButtonClick
+                , onBookmarkButtonClick = {
+                    Toast.makeText(context, "تم إضافة علامه", Toast.LENGTH_SHORT).show()
+                    controlsVisible = !controlsVisible
+                })
         }
     }
 }

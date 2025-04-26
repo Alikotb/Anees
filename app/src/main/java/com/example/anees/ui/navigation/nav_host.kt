@@ -10,6 +10,8 @@ import com.example.anees.ui.navigation.ScreenRout.AzkarDetailsScreen
 import com.example.anees.ui.screens.azkar.AdhkarDetailsScreen
 import com.example.anees.ui.screens.azkar.AdhkarScreen
 import com.example.anees.ui.screens.home.HomeScreen
+import com.example.anees.ui.screens.juzIndex.JuzIndexScreen
+import com.example.anees.ui.screens.khatm.KhatmQuranDuaScreen
 import com.example.anees.ui.screens.qibla.QiblaScreen
 import com.example.anees.ui.screens.quranIndex.QuranIndexScreen
 import com.example.anees.ui.screens.quran.QuranPDFViewerScreen
@@ -65,8 +67,12 @@ fun SetUpNavHost(
             QuranPDFViewerScreen(
                 initPage = initPage,
                 onIndexButtonClick = {
-                navController.navigate(ScreenRout.QuranIndexScreen)
-            })
+                navController.navigate(ScreenRout.QuranIndexScreen) },
+                onKhatmButtonClick = {navController.navigate(ScreenRout.KhatmQuranDuaScreen)
+                },
+                onJuzButtonClick = {navController.navigate(ScreenRout.JuzIndexScreen)
+                }
+            )
         }
 
         composable<ScreenRout.AdhkarScreen> {
@@ -88,6 +94,19 @@ fun SetUpNavHost(
                 navController.popBackStack()
                 navController.navigate(ScreenRout.CompleteQuranScreen)
             }
+        }
+
+
+        composable<ScreenRout.JuzIndexScreen> {
+            JuzIndexScreen(){
+                navController.popBackStack()
+                navController.popBackStack()
+                navController.navigate(ScreenRout.CompleteQuranScreen)
+            }
+        }
+
+        composable<ScreenRout.KhatmQuranDuaScreen> {
+            KhatmQuranDuaScreen()
         }
 
     }
