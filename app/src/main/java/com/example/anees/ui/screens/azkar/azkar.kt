@@ -19,6 +19,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +35,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.anees.ui.screens.azkar.component.ZekrCard
 import com.example.anees.utils.AzkarUtils
+import com.example.anees.utils.Constants
+import com.example.anees.workers.setNotification
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,6 +46,10 @@ fun AdhkarScreen(navToDetails: (String) -> Unit = {}) {
     val categories = remember { AzkarUtils.getAdhkarCategories(azkarList) }
     val selectedCategory = remember { mutableStateOf("") }
     var searchQuery by remember { mutableStateOf("") }
+    val hmada = Constants.ONE_HOUR
+    LaunchedEffect(Unit) {
+        setNotification(context, hmada)
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()

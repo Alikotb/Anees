@@ -53,7 +53,7 @@ fun QiblaScreen() {
     val kaabaImage = if (isAligned)
         R.drawable.kaaba2
     else
-        R.drawable.kaaba
+        R.drawable.kaaba_im
 
     LaunchedEffect(isAligned) {
         if (isAligned) {

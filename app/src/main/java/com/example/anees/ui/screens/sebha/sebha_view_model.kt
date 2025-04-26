@@ -28,7 +28,7 @@ class SebihaViewModel @Inject constructor(private val repo: RepositoryImpl): Vie
              repo.getSebiha().catch {
                  _error.value=it.message.toString()
              }.collect {
-                 _sebiha.value = it
+                 _sebiha.value = it ?: Sebiha(0,0,0)
              }
          }
     }

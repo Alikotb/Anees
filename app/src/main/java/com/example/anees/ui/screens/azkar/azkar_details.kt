@@ -53,7 +53,7 @@ fun AdhkarDetailsScreen(selectedCategory: String,navToAzkar:  () -> Unit = {}) {
             .padding(16.dp)
     ) {
         Text(
-            text = "الأذكار اليومية",
+            text = selectedCategory,
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             color = Color(0xFF3B3B3B),
