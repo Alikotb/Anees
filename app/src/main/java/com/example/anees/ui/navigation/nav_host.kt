@@ -12,7 +12,7 @@ import com.example.anees.ui.screens.hadith.HadithScreen
 import com.example.anees.ui.screens.hadith.HadithSectionsScreen
 import com.example.anees.ui.screens.home.HomeScreen
 import com.example.anees.ui.screens.qibla.QiblaScreen
-import com.example.anees.ui.screens.quran.CompleteQuranScreen
+import com.example.anees.ui.screens.quran.QuranPDFViewerScreen
 import com.example.anees.ui.screens.sebha.SebihaScreen
 import com.example.anees.ui.screens.splash.SplashScreen
 import com.example.anees.utils.AuthorEdition
@@ -62,8 +62,9 @@ fun SetUpNavHost(
         composable<ScreenRoute.QiblaScreen> {
             QiblaScreen()
         }
+
         composable<ScreenRoute.CompleteQuranScreen> {
-            CompleteQuranScreen()
+            QuranPDFViewerScreen()
         }
 
         composable<ScreenRoute.AdhkarScreen> {

@@ -105,6 +105,4 @@ dependencies {
     //notification
     implementation("androidx.core:core-ktx:1.16.0")
 
-
-
 }
