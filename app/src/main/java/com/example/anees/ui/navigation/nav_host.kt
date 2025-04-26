@@ -64,9 +64,6 @@ fun SetUpNavHost(
         }
 
         composable<ScreenRoute.CompleteQuranScreen> {
-            CompleteQuranScreen()
-
-        composable<ScreenRout.CompleteQuranScreen> {
             QuranPDFViewerScreen()
         }
 
