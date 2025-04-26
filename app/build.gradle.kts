@@ -62,21 +62,25 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
+    //serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
-
+    //location
     implementation("com.google.android.gms:play-services-location:21.0.1")
 
+    //lotti
     implementation("com.airbnb.android:lottie-compose:6.6.3")
 
     //Scoped API
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose-android:2.8.7")
 
-
+    //dependency injection
     implementation("com.google.dagger:hilt-android:2.51")
     kapt("com.google.dagger:hilt-compiler:2.51")
-
+    //pdf
+    implementation("com.github.barteksc:android-pdf-viewer:3.2.0-beta.1")
+    //icons
+    implementation ("androidx.compose.material:material-icons-extended:1.4.0")
     //Hilt for compose-Navigation
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
@@ -91,8 +95,16 @@ dependencies {
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
 
 
+    //navigation
     val nav_version = "2.8.8"
     implementation("androidx.navigation:navigation-compose:$nav_version")
-
     implementation ("com.google.code.gson:gson:2.10.1")
+
+    //workManager
+    implementation ("androidx.work:work-runtime-ktx:2.7.1")
+    //notification
+    implementation("androidx.core:core-ktx:1.16.0")
+
+
+
 }
