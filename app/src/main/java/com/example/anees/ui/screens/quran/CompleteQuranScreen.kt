@@ -34,6 +34,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,6 +50,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.anees.R
 import com.example.anees.ui.screens.quran.components.BottomControlBar
 import com.example.anees.ui.screens.quran.components.PdfViewerFromAssets
@@ -63,20 +66,30 @@ import java.io.FileOutputStream
 
 @Composable
 fun QuranPDFViewerScreen(
+    initPage:Int = 658,
     onIndexButtonClick: () -> Unit
 ) {
-    val context = LocalContext.current
-    var controlsVisible by remember { mutableStateOf(false) }
 
-    val pageNumber = remember { mutableStateOf(1) }
+    val viewModel : CompleteQuranViewModel = hiltViewModel()
+
+
+    var controlsVisible by remember { mutableStateOf(false) }
+    var pageNumber by remember { mutableStateOf(initPage) }
+
+    LaunchedEffect(initPage) {
+        pageNumber = initPage
+    }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .systemBarsPadding()
-            .clickable { controlsVisible = !controlsVisible } // Toggle visibility on tap
+            .clickable { controlsVisible = !controlsVisible }
     ) {
-        PdfViewerFromAssets("q.pdf", 568 , onPagerChange = { pageNumber.value = it}) {
+        PdfViewerFromAssets("q.pdf", initPage , onPagerChange = {
+            pageNumber = it
+            viewModel.updateCurrentPageIndex(it)
+        }) {
             controlsVisible = !controlsVisible
         }
 
@@ -86,7 +99,7 @@ fun QuranPDFViewerScreen(
             exit = fadeOut(),
             modifier = Modifier.align(Alignment.TopCenter)
         ) {
-            TopControlBar(pageNumber.value)
+            TopControlBar(pageNumber)
         }
 
         AnimatedVisibility(
@@ -95,7 +108,7 @@ fun QuranPDFViewerScreen(
             exit = fadeOut(),
             modifier = Modifier.align(Alignment.BottomCenter)
         ) {
-            BottomControlBar(pageNumber.value , onIndexButtonClick)
+            BottomControlBar(pageNumber , onIndexButtonClick)
         }
     }
 }

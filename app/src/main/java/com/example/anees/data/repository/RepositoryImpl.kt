@@ -19,4 +19,12 @@ class RepositoryImpl @Inject constructor(
     override fun getSebiha(): Flow<Sebiha> {
         return localDataSource.getSebiha()
     }
+
+    override fun saveData(key: String, value: Any) {
+        localDataSource.saveData(key, value)
+    }
+
+    override fun <T> fetchData(key: String, defaultValue: T): T {
+        return localDataSource.fetchData(key,defaultValue)
+    }
 }

@@ -10,4 +10,8 @@ object Constants {
     const val SIX_HOUR="6"
 
 
+    //PDF Quran
+    const val CURRENT_PAGE_INDEX="CURRENT_PAGE_INDEX"
+
+
 }

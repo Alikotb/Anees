@@ -30,7 +30,7 @@ fun TopControlBar(page: Int) {
         Row (Modifier.fillMaxWidth().padding(16.dp)
         , horizontalArrangement = Arrangement.SpaceBetween){
             Text(
-                text = "$juzName",
+                text = "$juzName - $page",
                 color = Color.White,
                 fontSize = 18.sp,
                 textAlign = TextAlign.Start

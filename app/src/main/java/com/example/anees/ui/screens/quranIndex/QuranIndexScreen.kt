@@ -1,12 +1,14 @@
-package com.example.anees.ui.screens.quran
+package com.example.anees.ui.screens.quranIndex
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -22,16 +24,33 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
 import com.example.anees.Enums.SuraTypeEnum
 import com.example.anees.R
 import com.example.anees.utils.PdfHelper.SuraIndex
 import com.example.anees.utils.PdfHelper.SuraIndexes
 
+import androidx.hilt.navigation.compose.hiltViewModel
+
 @Composable
-fun QuranIndexScreen() {
-    LazyColumn {
+fun QuranIndexScreen(onIndexButtonClick: () -> Unit) {
+    val quranIndexViewModel : QuranIndexViewModel = hiltViewModel()
+    LazyColumn(
+        modifier = Modifier.fillMaxWidth().background(Color(0xFFF8F5E3))
+    ) {
+        item {
+            Spacer(modifier = Modifier.height(16.dp).fillMaxWidth()
+            )
+        }
         items(SuraIndexes){
-            SurahRow(sura = it)
+            SurahRow(sura = it){
+                quranIndexViewModel.updateCurrentPageIndex(it)
+                onIndexButtonClick()
+            }
+        }
+        item {
+            Spacer(modifier = Modifier.height(16.dp).fillMaxWidth()
+            )
         }
     }
 
@@ -39,12 +58,16 @@ fun QuranIndexScreen() {
 
 @Composable
 fun SurahRow(
-    sura:SuraIndex
+    sura:SuraIndex,
+    onClick:(Int)-> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFFF8F5E3)),
+            .clickable{
+                onClick(sura.pageNumber)
+            }
+        ,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Spacer(modifier = Modifier.width(16.dp))
@@ -55,7 +78,7 @@ fun SurahRow(
                     R.drawable.kaaba else R.drawable.mosque
             ),
             contentDescription = "Surah Icon",
-            modifier = Modifier.size(40.dp).weight(1f)
+            modifier = Modifier.size(32.dp).weight(1f)
         )
 
         Spacer(modifier = Modifier.width(16.dp))
@@ -88,11 +111,11 @@ fun SurahRow(
 
         Text(
             text = "${sura.index}",
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.Bold, textAlign = TextAlign.Center,
             modifier = Modifier
-                .background(Color.Black)
-                .padding(16.dp).weight(1.5f),
-            color = Color.White
+                .padding(8.dp)
+                .weight(1f),
+            color = Color.Black
         )
     }
 }

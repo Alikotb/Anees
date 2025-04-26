@@ -7,4 +7,7 @@ interface Repository {
     suspend fun addSebiha(sebiha: Sebiha)
     fun getSebiha(): Flow<Sebiha>
 
+    fun saveData(key: String, value: Any)
+    fun <T> fetchData(key: String, defaultValue: T): T
+
 }
