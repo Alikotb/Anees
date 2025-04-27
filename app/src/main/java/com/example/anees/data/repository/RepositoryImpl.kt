@@ -2,7 +2,6 @@ package com.example.anees.data.repository
 
 import com.example.anees.data.local.LocalDataSource
 import com.example.anees.data.model.EditionResponse
-import com.example.anees.data.model.HadithsResponse
 import com.example.anees.data.model.Sebiha
 import com.example.anees.data.remote.RemoteDataSource
 import kotlinx.coroutines.flow.Flow
@@ -27,11 +26,5 @@ class RepositoryImpl @Inject constructor(
         return flowOf(remoteDataSource.getAllSections(name))
     }
 
-    override suspend fun getAuthorHadithsBySection(
-        name: String,
-        author: String
-    ): Flow<HadithsResponse> {
-        return flowOf(remoteDataSource.getAuthorHadithsBySection(name, author))
-    }
 
 }

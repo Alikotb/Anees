@@ -1,7 +1,6 @@
 package com.example.anees.data.repository
 
 import com.example.anees.data.model.EditionResponse
-import com.example.anees.data.model.HadithsResponse
 import com.example.anees.data.model.Sebiha
 import kotlinx.coroutines.flow.Flow
 
@@ -10,5 +9,4 @@ interface Repository {
     fun getSebiha(): Flow<Sebiha>
 
     suspend fun getAllSections(name: String): Flow<EditionResponse>
-    suspend fun getAuthorHadithsBySection(name: String, author: String): Flow<HadithsResponse>
 }
