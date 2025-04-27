@@ -5,18 +5,26 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.anees.ui.navigation.ScreenRoute.AzkarDetailsScreen
+import com.abdok.atmosphere.data.local.sharedPreference.ISharedPreferences
+import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
+import com.example.anees.ui.navigation.ScreenRout.AzkarDetailsScreen
 import com.example.anees.ui.screens.azkar.AdhkarDetailsScreen
 import com.example.anees.ui.screens.azkar.AdhkarScreen
 import com.example.anees.ui.screens.hadith.HadithAuthorsScreen
 import com.example.anees.ui.screens.hadith.HadithScreen
 import com.example.anees.ui.screens.hadith.HadithSectionsScreen
 import com.example.anees.ui.screens.home.HomeScreen
+import com.example.anees.ui.screens.juzIndex.JuzIndexScreen
+import com.example.anees.ui.screens.khatm.KhatmQuranDuaScreen
 import com.example.anees.ui.screens.qibla.QiblaScreen
+import com.example.anees.ui.screens.quranIndex.QuranIndexScreen
 import com.example.anees.ui.screens.quran.QuranPDFViewerScreen
 import com.example.anees.ui.screens.sebha.SebihaScreen
 import com.example.anees.ui.screens.splash.SplashScreen
 import com.example.anees.utils.hadith_helper.AuthorEdition
 import com.google.gson.Gson
+import com.example.anees.utils.Constants
+
 
 @Composable
 fun SetUpNavHost(
@@ -65,6 +73,18 @@ fun SetUpNavHost(
 
         composable<ScreenRoute.CompleteQuranScreen> {
             QuranPDFViewerScreen()
+        composable<ScreenRout.CompleteQuranScreen> {
+           val sharedPref = SharedPreferencesImpl(navController.context)
+            val initPage = sharedPref.fetchData(Constants.CURRENT_PAGE_INDEX, 658)
+            QuranPDFViewerScreen(
+                initPage = initPage,
+                onIndexButtonClick = {
+                navController.navigate(ScreenRout.QuranIndexScreen) },
+                onKhatmButtonClick = {navController.navigate(ScreenRout.KhatmQuranDuaScreen)
+                },
+                onJuzButtonClick = {navController.navigate(ScreenRout.JuzIndexScreen)
+                }
+            )
         }
 
         composable<ScreenRoute.AdhkarScreen> {
@@ -103,6 +123,26 @@ fun SetUpNavHost(
                 navController.popBackStack()
                 navController.navigate(ScreenRoute.HadithScreen(auth, id))
             }
+        }
+        composable<ScreenRout.QuranIndexScreen> {
+            QuranIndexScreen(){
+                navController.popBackStack()
+                navController.popBackStack()
+                navController.navigate(ScreenRout.CompleteQuranScreen)
+            }
+        }
+
+
+        composable<ScreenRout.JuzIndexScreen> {
+            JuzIndexScreen(){
+                navController.popBackStack()
+                navController.popBackStack()
+                navController.navigate(ScreenRout.CompleteQuranScreen)
+            }
+        }
+
+        composable<ScreenRout.KhatmQuranDuaScreen> {
+            KhatmQuranDuaScreen()
         }
 
     }

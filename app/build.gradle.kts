@@ -105,4 +105,11 @@ dependencies {
     //notification
     implementation("androidx.core:core-ktx:1.16.0")
 
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose-android:2.8.7")
+
+    val compose_version = "1.0.0"
+    implementation ("androidx.compose.runtime:runtime-livedata:$compose_version")
+
+
+
 }

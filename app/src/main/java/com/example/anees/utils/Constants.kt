@@ -9,4 +9,11 @@ object Constants {
     const val ONE_HOUR="1"
     const val THREE_HOUR="3"
     const val SIX_HOUR="6"
+
+
+    //PDF Quran
+    const val CURRENT_PAGE_INDEX="CURRENT_PAGE_INDEX"
+    const val PAGE_BOOKMARK="PageBookmark"
+
+
 }

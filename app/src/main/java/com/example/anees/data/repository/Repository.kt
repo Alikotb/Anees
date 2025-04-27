@@ -9,4 +9,7 @@ interface Repository {
     fun getSebiha(): Flow<Sebiha>
 
     suspend fun getAllSections(name: String): Flow<EditionResponse>
+    fun saveData(key: String, value: Any)
+    fun <T> fetchData(key: String, defaultValue: T): T
+
 }

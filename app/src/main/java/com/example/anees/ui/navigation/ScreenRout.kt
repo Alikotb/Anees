@@ -1,0 +1,31 @@
+package com.example.anees.ui.navigation
+
+import kotlinx.serialization.Serializable
+
+
+sealed class ScreenRout {
+    @Serializable
+    object SplashScreen : ScreenRout()
+    @Serializable
+    object HomeScreen : ScreenRout()
+    @Serializable
+    object Sebiha : ScreenRout()
+    @Serializable
+    object QiblaScreen : ScreenRout()
+    @Serializable
+    object CompleteQuranScreen : ScreenRout()
+    @Serializable
+    object AdhkarScreen : ScreenRout()
+    @Serializable
+    data class AzkarDetailsScreen(val category: String) : ScreenRout()
+
+
+    @Serializable
+    object QuranIndexScreen : ScreenRout()
+    @Serializable
+    object JuzIndexScreen : ScreenRout()
+
+    @Serializable
+    object KhatmQuranDuaScreen : ScreenRout()
+
+}
