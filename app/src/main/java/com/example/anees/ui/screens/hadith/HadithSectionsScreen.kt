@@ -66,10 +66,6 @@ fun HadithSectionsScreen(author: AuthorEdition, navToHadithScreen: (String, Stri
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        val filteredSections = sectionsMap.filterKeys {
-            it.contains(searchQuery, ignoreCase = true)
-        }
-
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             modifier = Modifier.weight(1f),
@@ -77,6 +73,10 @@ fun HadithSectionsScreen(author: AuthorEdition, navToHadithScreen: (String, Stri
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
+            val filteredSections = sectionsMap.filterValues {
+                it.contains(searchQuery, ignoreCase = true)
+            }
+
             items(filteredSections.entries.toList()) { (number, title) ->
                 SectionCard(
                     sectionNumber = number,

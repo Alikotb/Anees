@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -41,40 +42,35 @@ import com.example.anees.enums.getAuthorsName
 import com.example.anees.utils.extensions.isInternetAvailable
 import com.google.gson.Gson
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HadithAuthorsScreen(navToHadithsSections: (String) -> Unit) {
     val ctx = LocalContext.current
     val isOnline = ctx.isInternetAvailable()
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(end = 16.dp),
-                            contentAlignment = Alignment.CenterEnd
-                        ) {
-                            Text(
-                                text = "رواه الحديث",
-                                textAlign = TextAlign.Right,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        }
-                    }
-                }
-            )
-        },
-    ) { paddingValues ->
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                Text(
+                    text = "رواه الحديث",
+                    textAlign = TextAlign.Right,
+                    style = MaterialTheme.typography.headlineSmall
+                )
+            }
+        }
+
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
-            contentPadding = paddingValues,
-            modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.fillMaxSize()
         ) {
             items(getAuthorsName(isOnline)) { author ->
                 AuthorCard(author = author, onClick = {
@@ -83,6 +79,7 @@ fun HadithAuthorsScreen(navToHadithsSections: (String) -> Unit) {
             }
         }
     }
+
 }
 
 @Composable
