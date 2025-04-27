@@ -1,4 +1,4 @@
-package com.example.anees.Enums
+package com.example.anees.enums
 
 enum class SuraTypeEnum {
     MECCA,

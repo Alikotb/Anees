@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.anees.data.model.ZekrModelItem
 import com.example.anees.ui.screens.azkar.component.DetailsCard
-import com.example.anees.utils.AzkarUtils
+import com.example.anees.utils.azkar_helper.AzkarUtils
 import kotlinx.coroutines.delay
 
 @Composable

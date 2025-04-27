@@ -1,4 +1,4 @@
-package com.example.anees.utils.hadith_helper
+package com.example.anees.enums
 
 enum class AuthorEdition(
     val apiKey: String,

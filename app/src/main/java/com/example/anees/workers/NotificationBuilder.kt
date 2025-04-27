@@ -11,8 +11,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.anees.R
 import com.example.anees.utils.Constants
-import com.example.anees.utils.azkarList
-import com.example.anees.utils.getRandomZekir
+import com.example.anees.utils.sebha_helper.getRandomZekir
 import java.util.concurrent.TimeUnit
 
 const val CHANNEL_ID = "my_channel_id"

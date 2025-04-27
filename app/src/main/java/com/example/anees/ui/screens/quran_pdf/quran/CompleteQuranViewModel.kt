@@ -1,4 +1,4 @@
-package com.example.anees.ui.screens.quran
+package com.example.anees.ui.screens.quran_pdf.quran
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

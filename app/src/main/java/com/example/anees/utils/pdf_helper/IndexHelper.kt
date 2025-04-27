@@ -1,6 +1,6 @@
-package com.example.anees.utils.PdfHelper
+package com.example.anees.utils.pdf_helper
 
-import com.example.anees.Enums.SuraTypeEnum
+import com.example.anees.enums.SuraTypeEnum
 
 data class SuraIndex(
     val index : Int ,

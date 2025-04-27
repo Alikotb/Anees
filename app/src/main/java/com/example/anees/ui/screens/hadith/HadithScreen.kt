@@ -33,10 +33,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.anees.data.model.EditionResponse
 import com.example.anees.data.model.Response
 import com.example.anees.data.model.toHadith
-import com.example.anees.utils.hadith_helper.AuthorEdition
+import com.example.anees.enums.AuthorEdition
 import com.example.anees.utils.hadith_helper.cardColors
 import com.example.anees.utils.hadith_helper.offline_hadith.OfflineHadithHelper
-import com.example.anees.utils.isInternetAvailable
+import com.example.anees.utils.extensions.isInternetAvailable
 
 
 @Composable

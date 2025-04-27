@@ -1,4 +1,4 @@
-package com.example.anees.ui.screens.quran.components
+package com.example.anees.ui.screens.quran_pdf.quran.components
 
 import android.util.Log
 import androidx.compose.foundation.clickable

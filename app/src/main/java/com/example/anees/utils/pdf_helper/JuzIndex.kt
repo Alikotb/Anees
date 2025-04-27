@@ -1,4 +1,4 @@
-package com.example.anees.utils.PdfHelper
+package com.example.anees.utils.pdf_helper
 
 val juzPageRanges = listOf(
     568 to "الجزء الأول",

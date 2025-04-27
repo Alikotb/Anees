@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.anees.ui.navigation.SetUpNavHost
-import com.example.anees.ui.screens.qibla.LocationProvider
+import com.example.anees.utils.location.LocationProvider
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

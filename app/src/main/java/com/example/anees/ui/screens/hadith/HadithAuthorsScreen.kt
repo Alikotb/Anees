@@ -36,9 +36,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.anees.R
 import com.example.anees.utils.hadith_helper.AuthorAssets
-import com.example.anees.utils.hadith_helper.AuthorEdition
-import com.example.anees.utils.hadith_helper.getAuthorsName
-import com.example.anees.utils.isInternetAvailable
+import com.example.anees.enums.AuthorEdition
+import com.example.anees.enums.getAuthorsName
+import com.example.anees.utils.extensions.isInternetAvailable
 import com.google.gson.Gson
 
 

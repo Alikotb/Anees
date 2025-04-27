@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import com.example.anees.utils.azkarList
+import com.example.anees.utils.sebha_helper.azkarList
 
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons

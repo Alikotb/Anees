@@ -1,4 +1,4 @@
-package com.example.anees.ui.screens.quran.components
+package com.example.anees.ui.screens.quran_pdf.quran.components
 
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.anees.utils.PdfHelper.getSurahAndJuzForPage
+import com.example.anees.utils.pdf_helper.getSurahAndJuzForPage
 
 @Composable
 fun TopControlBar(page: Int) {

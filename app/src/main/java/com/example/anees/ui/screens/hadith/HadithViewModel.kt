@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.anees.data.model.EditionResponse
 import com.example.anees.data.model.Response
 import com.example.anees.data.repository.RepositoryImpl
-import com.example.anees.utils.hadith_helper.AuthorEdition
+import com.example.anees.enums.AuthorEdition
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

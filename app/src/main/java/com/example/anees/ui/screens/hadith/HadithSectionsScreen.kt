@@ -40,9 +40,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.anees.utils.hadith_helper.AuthorEdition
+import com.example.anees.enums.AuthorEdition
 import com.example.anees.utils.hadith_helper.getSections
-import com.example.anees.utils.isInternetAvailable
+import com.example.anees.utils.extensions.isInternetAvailable
 import androidx.compose.ui.unit.sp
 import com.example.anees.R
 import com.google.gson.Gson

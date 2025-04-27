@@ -1,9 +1,10 @@
-package com.example.anees.ui.screens.quranIndex
+package com.example.anees.ui.screens.quran_pdf.quran_index
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,11 +26,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
-import com.example.anees.Enums.SuraTypeEnum
+import com.example.anees.enums.SuraTypeEnum
 import com.example.anees.R
-import com.example.anees.utils.PdfHelper.SuraIndex
-import com.example.anees.utils.PdfHelper.SuraIndexes
+import com.example.anees.utils.pdf_helper.SuraIndex
+import com.example.anees.utils.pdf_helper.SuraIndexes
 
 import androidx.hilt.navigation.compose.hiltViewModel
 
@@ -69,7 +69,7 @@ fun SurahRow(
             .padding(vertical = 8.dp)
             .clickable(
                 indication = null,
-                interactionSource = androidx.compose.foundation.interaction.MutableInteractionSource(),
+                interactionSource = MutableInteractionSource(),
                 onClick = {
                     onClick(sura.pageNumber)
                 }

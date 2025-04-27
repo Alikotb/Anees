@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.anees.ui.screens.azkar.component.ZekrCard
-import com.example.anees.utils.AzkarUtils
+import com.example.anees.utils.azkar_helper.AzkarUtils
 import com.example.anees.utils.Constants
 import com.example.anees.workers.setNotification
 

@@ -1,5 +1,6 @@
-package com.example.anees.ui.screens.qibla
+package com.example.anees.utils.location
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -17,7 +18,6 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
-
 
 class LocationProvider(private val context: Context) {
     private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
@@ -59,10 +59,10 @@ class LocationProvider(private val context: Context) {
 
     private fun checkPermissions(): Boolean {
         return ContextCompat.checkSelfPermission(
-            context, android.Manifest.permission.ACCESS_FINE_LOCATION
+            context, Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(
-                    context, android.Manifest.permission.ACCESS_COARSE_LOCATION
+                    context, Manifest.permission.ACCESS_COARSE_LOCATION
                 ) == PackageManager.PERMISSION_GRANTED
     }
 
@@ -70,8 +70,8 @@ class LocationProvider(private val context: Context) {
         ActivityCompat.requestPermissions(
             activity,
             arrayOf(
-                android.Manifest.permission.ACCESS_FINE_LOCATION,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
             ),
             REQUEST_LOCATION_CODE
         )

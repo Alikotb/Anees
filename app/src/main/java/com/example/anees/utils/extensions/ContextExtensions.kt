@@ -1,4 +1,4 @@
-package com.example.anees.utils
+package com.example.anees.utils.extensions
 
 import android.content.Context
 import android.net.ConnectivityManager

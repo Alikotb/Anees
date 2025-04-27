@@ -1,6 +1,7 @@
 package com.example.anees.utils.hadith_helper
 
 import com.example.anees.R
+import com.example.anees.enums.AuthorEdition
 
 object AuthorAssets {
     private val authorImages = mapOf(

@@ -12,14 +12,14 @@ import com.example.anees.ui.screens.hadith.HadithAuthorsScreen
 import com.example.anees.ui.screens.hadith.HadithScreen
 import com.example.anees.ui.screens.hadith.HadithSectionsScreen
 import com.example.anees.ui.screens.home.HomeScreen
-import com.example.anees.ui.screens.juzIndex.JuzIndexScreen
-import com.example.anees.ui.screens.khatm.KhatmQuranDuaScreen
+import com.example.anees.ui.screens.quran_pdf.juz_index.JuzIndexScreen
+import com.example.anees.ui.screens.quran_pdf.khatm.KhatmQuranDuaScreen
 import com.example.anees.ui.screens.qibla.QiblaScreen
-import com.example.anees.ui.screens.quranIndex.QuranIndexScreen
-import com.example.anees.ui.screens.quran.QuranPDFViewerScreen
+import com.example.anees.ui.screens.quran_pdf.quran_index.QuranIndexScreen
+import com.example.anees.ui.screens.quran_pdf.quran.QuranPDFViewerScreen
 import com.example.anees.ui.screens.sebha.SebihaScreen
 import com.example.anees.ui.screens.splash.SplashScreen
-import com.example.anees.utils.hadith_helper.AuthorEdition
+import com.example.anees.enums.AuthorEdition
 import com.google.gson.Gson
 import com.example.anees.utils.Constants
 

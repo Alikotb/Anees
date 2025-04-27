@@ -1,4 +1,4 @@
-package com.example.anees.ui.screens.khatm
+package com.example.anees.ui.screens.quran_pdf.khatm
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
@@ -45,7 +46,7 @@ fun KhatmQuranDuaScreen() {
             .verticalScroll(scrollState)
             .paint(
                 painter = painterResource(id = R.drawable.khatm_b),
-                contentScale = androidx.compose.ui.layout.ContentScale.FillBounds
+                contentScale = ContentScale.FillBounds
             )
             .padding(40.dp),
         horizontalAlignment = Alignment.CenterHorizontally

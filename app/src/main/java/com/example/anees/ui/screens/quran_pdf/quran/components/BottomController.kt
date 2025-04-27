@@ -1,4 +1,4 @@
-package com.example.anees.ui.screens.quran.components
+package com.example.anees.ui.screens.quran_pdf.quran.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
