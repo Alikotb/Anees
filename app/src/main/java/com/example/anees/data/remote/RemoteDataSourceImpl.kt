@@ -1,7 +1,6 @@
 package com.example.anees.data.remote
 
 import com.example.anees.data.model.EditionResponse
-import com.example.anees.data.model.HadithsResponse
 import javax.inject.Inject
 
 class RemoteDataSourceImpl @Inject constructor(
@@ -11,8 +10,5 @@ class RemoteDataSourceImpl @Inject constructor(
         return hadithApiService.getSections(name)
     }
 
-    override suspend fun getAuthorHadithsBySection(name: String, author: String): HadithsResponse {
-        return hadithApiService.getHadithsBySection(name, author)
-    }
 
 }
