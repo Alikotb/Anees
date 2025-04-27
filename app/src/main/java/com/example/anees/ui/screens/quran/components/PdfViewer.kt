@@ -10,13 +10,19 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.github.barteksc.pdfviewer.PDFView
 
 @Composable
-fun PdfViewerFromAssets(fileName: String, startPage: Int, onPagerChange: (page: Int) -> Unit, onClicks:()-> Unit , ){
-    var pdfView: PDFView? = null
+fun PdfViewerFromAssets(fileName: String,
+                        pdfView: PDFView,
+                        startPage: Int,
+                        onPagerChange: (page: Int) -> Unit,
+                        onClicks:()-> Unit
+){
+
+
+
     AndroidView(
-        factory = { ctx ->
-            PDFView(ctx, null).also { view ->
-                pdfView = view
-                view.fromAsset(fileName)
+        factory = {
+            pdfView.apply {
+                fromAsset(fileName)
                     .swipeHorizontal(true)
                     .enableDoubletap(true)
                     .pageSnap(true)
@@ -24,10 +30,8 @@ fun PdfViewerFromAssets(fileName: String, startPage: Int, onPagerChange: (page: 
                     .defaultPage(startPage)
                     .onPageChange { page, _ ->
                         onPagerChange(page)
-                        Log.d("result", "onPageChanged: $page")
                     }
                     .load()
-
             }
         },
         modifier = Modifier
@@ -35,7 +39,8 @@ fun PdfViewerFromAssets(fileName: String, startPage: Int, onPagerChange: (page: 
             .scale(
                 scaleX = 1.05f,
                 scaleY = 1.6f
-            ).clickable{
+            )
+            .clickable {
                 onClicks()
             }
     )

@@ -5,9 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.anees.ui.navigation.ScreenRoute.AzkarDetailsScreen
-import com.abdok.atmosphere.data.local.sharedPreference.ISharedPreferences
 import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
-import com.example.anees.ui.navigation.ScreenRout.AzkarDetailsScreen
 import com.example.anees.ui.screens.azkar.AdhkarDetailsScreen
 import com.example.anees.ui.screens.azkar.AdhkarScreen
 import com.example.anees.ui.screens.hadith.HadithAuthorsScreen
@@ -72,17 +70,15 @@ fun SetUpNavHost(
         }
 
         composable<ScreenRoute.CompleteQuranScreen> {
-            QuranPDFViewerScreen()
-        composable<ScreenRout.CompleteQuranScreen> {
            val sharedPref = SharedPreferencesImpl(navController.context)
             val initPage = sharedPref.fetchData(Constants.CURRENT_PAGE_INDEX, 658)
             QuranPDFViewerScreen(
                 initPage = initPage,
                 onIndexButtonClick = {
-                navController.navigate(ScreenRout.QuranIndexScreen) },
-                onKhatmButtonClick = {navController.navigate(ScreenRout.KhatmQuranDuaScreen)
+                navController.navigate(ScreenRoute.QuranIndexScreen) },
+                onKhatmButtonClick = {navController.navigate(ScreenRoute.KhatmQuranDuaScreen)
                 },
-                onJuzButtonClick = {navController.navigate(ScreenRout.JuzIndexScreen)
+                onJuzButtonClick = {navController.navigate(ScreenRoute.JuzIndexScreen)
                 }
             )
         }
@@ -124,24 +120,24 @@ fun SetUpNavHost(
                 navController.navigate(ScreenRoute.HadithScreen(auth, id))
             }
         }
-        composable<ScreenRout.QuranIndexScreen> {
+        composable<ScreenRoute.QuranIndexScreen> {
             QuranIndexScreen(){
                 navController.popBackStack()
                 navController.popBackStack()
-                navController.navigate(ScreenRout.CompleteQuranScreen)
+                navController.navigate(ScreenRoute.CompleteQuranScreen)
             }
         }
 
 
-        composable<ScreenRout.JuzIndexScreen> {
+        composable<ScreenRoute.JuzIndexScreen> {
             JuzIndexScreen(){
                 navController.popBackStack()
                 navController.popBackStack()
-                navController.navigate(ScreenRout.CompleteQuranScreen)
+                navController.navigate(ScreenRoute.CompleteQuranScreen)
             }
         }
 
-        composable<ScreenRout.KhatmQuranDuaScreen> {
+        composable<ScreenRoute.KhatmQuranDuaScreen> {
             KhatmQuranDuaScreen()
         }
 
