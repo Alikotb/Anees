@@ -25,21 +25,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.anees.R
-import com.example.anees.utils.AuthorAssets
-import com.example.anees.utils.AuthorEdition
+import com.example.anees.utils.hadith_helper.AuthorAssets
+import com.example.anees.utils.hadith_helper.AuthorEdition
+import com.example.anees.utils.hadith_helper.getAuthorsName
+import com.example.anees.utils.isInternetAvailable
 import com.google.gson.Gson
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HadithAuthorsScreen(navToHadithsSections: (String) -> Unit) {
+    val ctx = LocalContext.current
+    val isOnline = ctx.isInternetAvailable()
     Scaffold(
         topBar = {
             TopAppBar(title = { Box(
@@ -57,7 +60,7 @@ fun HadithAuthorsScreen(navToHadithsSections: (String) -> Unit) {
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(AuthorEdition.entries) { author ->
+            items(getAuthorsName(isOnline)) { author ->
                 AuthorCard(author = author, onClick = {
                     navToHadithsSections(Gson().toJson(author))
                 })

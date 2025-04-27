@@ -15,7 +15,7 @@ import com.example.anees.ui.screens.qibla.QiblaScreen
 import com.example.anees.ui.screens.quran.QuranPDFViewerScreen
 import com.example.anees.ui.screens.sebha.SebihaScreen
 import com.example.anees.ui.screens.splash.SplashScreen
-import com.example.anees.utils.AuthorEdition
+import com.example.anees.utils.hadith_helper.AuthorEdition
 import com.google.gson.Gson
 
 @Composable
