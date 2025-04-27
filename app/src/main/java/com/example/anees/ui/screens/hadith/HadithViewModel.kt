@@ -6,7 +6,7 @@ import com.example.anees.data.model.EditionResponse
 import com.example.anees.data.model.HadithsResponse
 import com.example.anees.data.model.Response
 import com.example.anees.data.repository.RepositoryImpl
-import com.example.anees.utils.AuthorEdition
+import com.example.anees.utils.hadith_helper.AuthorEdition
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,16 +26,23 @@ class HadithViewModel @Inject constructor(private val repo: RepositoryImpl): Vie
     private val _messageState = MutableStateFlow<String?>(null)
     val messageState = _messageState.asStateFlow()
 
+
     fun getSections(author: AuthorEdition) {
+
         viewModelScope.launch(Dispatchers.IO) {
-            repo.getAllSections(author.apiKey)
-                .catch {
-                    _sectionsState.value = Response.Error(it.message.toString())
-                }
-                .collect {
-                    _sectionsState.value = Response.Success(it)
-                }
+            try {
+                repo.getAllSections(author.apiKey)
+                    .catch {
+                        _sectionsState.value = Response.Error(it.message.toString())
+                    }
+                    .collect {
+                        _sectionsState.value = Response.Success(it)
+                    }
+            }catch (e: Exception){
+                _messageState.value = e.message
+            }
         }
+
     }
 
     fun getAuthorHadithsBySection(sectionName: String, author: AuthorEdition) {

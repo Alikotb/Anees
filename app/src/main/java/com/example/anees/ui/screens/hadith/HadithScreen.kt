@@ -1,13 +1,12 @@
 package com.example.anees.ui.screens.hadith
 
-import androidx.compose.foundation.background
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,7 +15,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,56 +23,85 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.anees.data.model.EditionResponse
 import com.example.anees.data.model.Response
-import com.example.anees.utils.AuthorEdition
-import com.example.anees.utils.cardColors
+import com.example.anees.data.model.toHadith
+import com.example.anees.utils.hadith_helper.AuthorEdition
+import com.example.anees.utils.hadith_helper.cardColors
+import com.example.anees.utils.hadith_helper.offline_hadith.OfflineHadithHelper
+import com.example.anees.utils.isInternetAvailable
 
 
 @Composable
 fun HadithScreen(author: AuthorEdition, id: String, viewModel: HadithViewModel = hiltViewModel()) {
 
     val sectionsState by viewModel.sectionsState.collectAsStateWithLifecycle()
+    val ctx = LocalContext.current
+    val isOnline = ctx.isInternetAvailable()
 
     LaunchedEffect(Unit) {
-        viewModel.getSections(author)
+            viewModel.getSections(author)
     }
 
-    Column(modifier = Modifier.padding(16.dp)) {
-        when(val state = sectionsState) {
-            is Response.Loading -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .wrapContentSize()
-                ) {
-                    CircularProgressIndicator()
-                }
-            }
-            is Response.Success -> {
-                val sectionDetail = getSectionDetail(state.data.metadata.sectionDetails, id)
-                if (sectionDetail != null) {
-                    val hadithNumberRange = sectionDetail.hadithnumberFirst to sectionDetail.hadithnumberLast
+    if (!isOnline) {
+        Column {
 
-                    Column {
-                        DisplayHadiths(state.data.hadiths, hadithNumberRange)
+
+            val hadithOffline =
+                OfflineHadithHelper.getAllHadith(ctx, author, id)
+
+            Log.d("TAG", "getAllHadith: ${hadithOffline}")
+            val list = hadithOffline?.hadiths?.map {
+                it.toHadith()
+            } ?: emptyList()
+            Log.d("TAG", "getAllHadith: ${list}")
+
+            DisplayOfflineHadiths(list)
+
+        }
+
+    }else {
+        Column(modifier = Modifier.padding(16.dp)) {
+            when (val state = sectionsState) {
+                is Response.Loading -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .wrapContentSize()
+                    ) {
+                        CircularProgressIndicator()
                     }
                 }
-            }
-            is Response.Error -> {
-                Text(
-                    text = state.message,
-                    color = Color.Red,
-                    fontSize = 16.sp,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
+
+                is Response.Success -> {
+                    val sectionDetail = getSectionDetail(state.data.metadata.sectionDetails, id)
+                    if (sectionDetail != null) {
+                        val hadithNumberRange =
+                            sectionDetail.hadithnumberFirst to sectionDetail.hadithnumberLast
+
+                        Column {
+
+                                DisplayHadiths(state.data.hadiths, hadithNumberRange)
+
+                        }
+                    }
+                }
+
+                is Response.Error -> {
+                    Text(
+                        text = state.message,
+                        color = Color.Red,
+                        fontSize = 16.sp,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                }
             }
         }
     }
@@ -84,6 +111,20 @@ fun HadithScreen(author: AuthorEdition, id: String, viewModel: HadithViewModel =
 @Composable
 fun DisplayHadiths(allHadiths: List<EditionResponse.Hadith>, hadithRange: Pair<Double, Double>) {
     val hadiths = getHadithsForRange(allHadiths, hadithRange.first, hadithRange.second)
+
+    LazyColumn(
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        items(hadiths) { hadith ->
+            HadithCard(hadith)
+        }
+    }
+}
+
+@Composable
+fun DisplayOfflineHadiths(allHadiths: List<EditionResponse.Hadith>) {
+    val hadiths = allHadiths.map { it.text }
 
     LazyColumn(
         contentPadding = PaddingValues(16.dp),
@@ -122,11 +163,18 @@ fun HadithCard(hadithText: String) {
     }
 }
 
-fun getHadithsForRange(allHadiths: List<EditionResponse.Hadith>, start: Double, end: Double): List<String> {
+fun getHadithsForRange(
+    allHadiths: List<EditionResponse.Hadith>,
+    start: Double,
+    end: Double
+): List<String> {
     return allHadiths.filter { it.hadithnumber in start..end }.map { it.text }
 }
 
-fun getSectionDetail(sectionDetails: EditionResponse.Metadata.SectionDetails, id: String): EditionResponse.Metadata.SectionDetails.SectionDetail? {
+fun getSectionDetail(
+    sectionDetails: EditionResponse.Metadata.SectionDetails,
+    id: String
+): EditionResponse.Metadata.SectionDetails.SectionDetail? {
     return when (id) {
         "0" -> sectionDetails.x0
         "1" -> sectionDetails.x1

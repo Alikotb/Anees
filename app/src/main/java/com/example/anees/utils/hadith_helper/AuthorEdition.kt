@@ -1,4 +1,4 @@
-package com.example.anees.utils
+package com.example.anees.utils.hadith_helper
 
 enum class AuthorEdition(
     val apiKey: String,
@@ -16,9 +16,18 @@ enum class AuthorEdition(
     NAWAWI("nawawi", "Imam Nawawi", "الاربعين النوويه"),
     QUDSI("qudsi", "Hadith Qudsi", "الحديث القدسي");
 
-
     companion object {
         fun fromApiKey(key: String): AuthorEdition? =
             entries.find { it.apiKey == key }
+    }
+}
+
+fun getAuthorsName(online: Boolean): List<AuthorEdition> {
+    return if (!online) {
+        AuthorEdition.entries.filter {
+            it.apiKey != "qudsi" && it.apiKey != "nawawi" && it.apiKey!="tirmidhi"&&it.apiKey!="dehlawi"
+        }
+    } else {
+        AuthorEdition.entries
     }
 }

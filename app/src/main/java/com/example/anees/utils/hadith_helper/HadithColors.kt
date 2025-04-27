@@ -1,4 +1,4 @@
-package com.example.anees.utils
+package com.example.anees.utils.hadith_helper
 
 import androidx.compose.ui.graphics.Color
 

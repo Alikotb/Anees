@@ -1,5 +1,4 @@
-package com.example.anees.utils
-
+package com.example.anees.utils.hadith_helper
 object SectionNamesHelper {
     val sectionsByAuthor = mapOf(
         "bukhari" to mapOf(
@@ -325,4 +324,81 @@ object SectionNamesHelper {
             "51" to "كتاب الأشربة"
         )
     )
+}
+
+fun getSections(
+    author: String,
+    online: Boolean,
+): Map<String, String> {
+    val filterBooksByAuthor = mapOf(
+        "bukhari" to mapOf(
+            "1" to "بدء الوحي",
+            "2" to "الإيمان",
+            "4" to "الطهارة",
+            "8" to "الصلاة",
+            "13" to "العيدين",
+            "25" to "الحج",
+            "30" to "الصيام",
+            "34" to "البيع والتجارة",
+            "43" to "القروض، تسديد القروض، تجميد الممتلكات، الإفلاس",
+            "53" to "الصلح",
+            "56" to "الجهاد في سبيل الله",
+            "70" to "الطعام، الوجبات",
+            "75" to "المرضى",
+        ),
+        "muslim" to mapOf(
+            "1" to "كتاب الإيمان",
+            "4" to "كتاب الصلاة",
+            "8" to "كتاب صلاة العيدين",
+            "11" to "كتاب الجنائز",
+            "12" to "كتاب الزكاة",
+            "32" to "كتاب الجهاد والسير",
+            ),
+        "abudawud" to mapOf(
+            "1" to "كتاب الطهارة وسننها",
+            "2" to "كتاب الصلاة",
+            "7" to "كتاب الصيام",
+            "8" to "كتاب الزكاة",
+            "24" to "كتاب الجهاد",
+
+            ),
+
+        "nasai" to mapOf(
+            "1" to "كتاب الطهارة",
+            "5" to "كتاب الصلاة",
+            "21" to "كتاب الجنائز",
+            "22" to "كتاب الصيام",
+            "23" to "كتاب الزكاة",
+            "24" to "كتاب الحج",
+            "25" to "كتاب الجهاد",
+            ),
+        "malik" to mapOf(
+            "2" to "الصلاة",
+            "9" to "صلاة العيدين",
+            "14" to "القرآن",
+            "16" to "الزكاة",
+            "17" to "الصيام",
+            "19" to "الحج",
+            "20" to "الجهاد",
+            "57" to "جهنم",
+            ),
+        "ibnmajah" to mapOf(
+            "9" to "كتاب الزكاة",
+            "2" to "كتاب الصلاة",
+            "14" to "كتاب الصيام",
+            "21" to "كتاب الجنائز",
+            "42" to "كتاب السنة",
+            )
+    )
+
+    val sections = SectionNamesHelper.sectionsByAuthor[author] ?: return emptyMap()
+
+    return if (online) {
+        sections
+    } else {
+        val filterBooks = filterBooksByAuthor[author] ?: emptyMap()
+        sections.filter { (_, bookName) ->
+            filterBooks.containsValue(bookName)
+        }
+    }
 }

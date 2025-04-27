@@ -6,17 +6,9 @@ import com.example.anees.data.model.adhkarItem
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-object AzkarUtils {
-    private fun loadJSONFromAssets(context: Context): String? {
-        return try {
-            context.assets.open(Constants.AZKAR_FILE_NAME).bufferedReader().use { it.readText() }
-        } catch (e: Exception) {
-            null
-        }
-    }
-
+object AzkarUtils{
     fun parseAdhkar(context: Context): List<adhkarItem> {
-        val jsonString = loadJSONFromAssets(context) ?: return emptyList()
+        val jsonString = context.loadJSONFromAssets(Constants.AZKAR_FILE_NAME) ?: return emptyList()
         return try {
             val gson = Gson()
             val type = object : TypeToken<List<adhkarItem>>() {}.type
