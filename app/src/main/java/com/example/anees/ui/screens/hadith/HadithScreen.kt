@@ -152,7 +152,7 @@ fun HadithCard(hadithText: String) {
                 .padding(16.dp)
         ) {
             Text(
-                text = hadithText,
+                text = hadithText.replace("<br>", "\n"),
                 style = TextStyle(
                     fontSize = 24.sp,
                     color = Color.Black,
@@ -230,6 +230,8 @@ fun getSectionDetail(sectionDetails: EditionResponse.Metadata.SectionDetails, id
         "57" -> sectionDetails.x57
         "58" -> sectionDetails.x58
         "59" -> sectionDetails.x59
+        "60" -> sectionDetails.x60
+        "61" -> sectionDetails.x61
         else -> null
     }
 }

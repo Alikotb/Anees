@@ -12,7 +12,6 @@ enum class AuthorEdition(
     NASAI("nasai", "An-Nasā’ī", "الإمام النسائي"),
     IBN_MAJAH("ibnmajah", "Ibn Majah", "ابن ماجه"),
     MALIK("malik", "Imam Malik", "الإمام مالك"),
-    DEHLAWI("dehlawi", "Shah Waliullah Dehlawi", "شاه ولي الله الدهلوي"),
     NAWAWI("nawawi", "Imam Nawawi", "الاربعين النوويه"),
     QUDSI("qudsi", "Hadith Qudsi", "الحديث القدسي");
 
