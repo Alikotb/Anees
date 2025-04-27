@@ -24,6 +24,7 @@ fun PdfViewerFromAssets(fileName: String, startPage: Int, onPagerChange: (page: 
                     .defaultPage(startPage)
                     .onPageChange { page, _ ->
                         onPagerChange(page)
+                        Log.d("result", "onPageChanged: $page")
                     }
                     .load()
 

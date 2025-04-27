@@ -1,10 +1,13 @@
 package com.example.anees.ui.screens.hadith
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -13,16 +16,31 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.anees.R
 import com.example.anees.utils.AuthorEdition
 import com.example.anees.utils.SectionNamesHelper
 import com.example.anees.utils.cardColors
@@ -31,20 +49,38 @@ import com.google.gson.Gson
 @Composable
 fun HadithSectionsScreen(author: AuthorEdition, navToHadithScreen: (String, String) -> Unit) {
     val sectionsMap = SectionNamesHelper.sectionsByAuthor[author.apiKey] ?: emptyMap()
+    var searchQuery by remember { mutableStateOf("") }
 
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        modifier = Modifier.padding(16.dp),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
     ) {
-        items(sectionsMap.entries.toList()) { (number, title) ->
-            SectionCard(
-                sectionNumber = number,
-                sectionTitle = title
-            ) { selectedNumber ->
-                navToHadithScreen(Gson().toJson(author), selectedNumber)
+        HadithSearchBar(
+            query = searchQuery,
+            onQueryChange = { searchQuery = it }
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        val filteredSections = sectionsMap.filterKeys {
+            it.contains(searchQuery, ignoreCase = true)
+        }
+
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            modifier = Modifier.weight(1f),
+            contentPadding = PaddingValues(8.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            items(filteredSections.entries.toList()) { (number, title) ->
+                SectionCard(
+                    sectionNumber = number,
+                    sectionTitle = title
+                ) { selectedNumber ->
+                    navToHadithScreen(Gson().toJson(author), selectedNumber)
+                }
             }
         }
     }
@@ -56,8 +92,6 @@ fun SectionCard(
     sectionTitle: String,
     onClick: (String) -> Unit
 ) {
-    val backgroundColor = remember { cardColors.random() }
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -66,20 +100,72 @@ fun SectionCard(
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(6.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(backgroundColor)
-                .align(Alignment.CenterHorizontally),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = sectionTitle,
-                style = MaterialTheme.typography.titleMedium,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(bottom = 8.dp)
+        Box(modifier = Modifier.fillMaxSize()) {
+            Image(
+                painter = painterResource(id = R.drawable.sectionsbg),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
             )
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color(0x66000000))
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = sectionTitle,
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        color = Color.White,
+                        fontSize = 18.sp
+                    ),
+                    textAlign = TextAlign.Center
+                )
+            }
         }
     }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HadithSearchBar(
+    query: String,
+    onQueryChange: (String) -> Unit
+) {
+    OutlinedTextField(
+        value = query,
+        onValueChange = onQueryChange,
+        placeholder = {
+            Text(
+                text = "...ابحث عن القسم",
+                textAlign = TextAlign.Right,
+                modifier = Modifier.fillMaxWidth()
+            )
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        singleLine = true,
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = "بحث",
+                tint = Color(0xFF3B3B3B)
+            )
+        },
+        shape = RoundedCornerShape(24.dp),
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = Color(0xFF3B3B3B),
+            unfocusedBorderColor = Color.Gray,
+            cursorColor = Color(0xFF3B3B3B)
+        ),
+        textStyle = TextStyle(
+            textAlign = TextAlign.Right,
+            fontSize = 18.sp
+        )
+    )
 }

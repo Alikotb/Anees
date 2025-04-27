@@ -7,9 +7,9 @@ enum class AuthorEdition(
 ) {
     MUSLIM("muslim", "Imam Muslim", "الإمام مسلم"),
     BUKHARI("bukhari", "Imam Bukhari", "الإمام البخاري"),
-    ABU_DAWUD("abudawud", "Abu Dawud", "أبو داود"),
-    TIRMIDHI("tirmidhi", "At-Tirmidhi", "الترمذي"),
-    NASAI("nasai", "An-Nasā’ī", "النسائي"),
+    ABU_DAWUD("abudawud", "Abu Dawud", "الإمام أبو داود"),
+    TIRMIDHI("tirmidhi", "At-Tirmidhi", "الإمام الترمذي"),
+    NASAI("nasai", "An-Nasā’ī", "الإمام النسائي"),
     IBN_MAJAH("ibnmajah", "Ibn Majah", "ابن ماجه"),
     MALIK("malik", "Imam Malik", "الإمام مالك"),
     DEHLAWI("dehlawi", "Shah Waliullah Dehlawi", "شاه ولي الله الدهلوي"),

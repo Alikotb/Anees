@@ -42,7 +42,12 @@ import com.google.gson.Gson
 fun HadithAuthorsScreen(navToHadithsSections: (String) -> Unit) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("رواه الحديث") })
+            TopAppBar(title = { Box(
+                modifier = Modifier.fillMaxWidth().padding(end = 16.dp),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                Text("رواه الحديث")
+            } })
         },
     ) { paddingValues ->
         LazyVerticalGrid(

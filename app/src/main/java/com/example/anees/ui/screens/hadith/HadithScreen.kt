@@ -1,13 +1,11 @@
 package com.example.anees.ui.screens.hadith
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,7 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.anees.data.model.EditionResponse
 import com.example.anees.data.model.Response
 import com.example.anees.utils.AuthorEdition
@@ -123,7 +119,8 @@ fun HadithCard(hadithText: String) {
 }
 
 fun getHadithsForRange(allHadiths: List<EditionResponse.Hadith>, start: Double, end: Double): List<String> {
-    return allHadiths.filter { it.hadithnumber in start..end }.map { it.text }
+    return allHadiths.filter { it.hadithnumber in start..end && it.text.isNotBlank() }
+        .map { it.text }
 }
 
 fun getSectionDetail(sectionDetails: EditionResponse.Metadata.SectionDetails, id: String): EditionResponse.Metadata.SectionDetails.SectionDetail? {
