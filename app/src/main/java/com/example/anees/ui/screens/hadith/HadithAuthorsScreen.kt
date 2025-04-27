@@ -22,12 +22,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.anees.R
@@ -45,12 +49,24 @@ fun HadithAuthorsScreen(navToHadithsSections: (String) -> Unit) {
     val isOnline = ctx.isInternetAvailable()
     Scaffold(
         topBar = {
-            TopAppBar(title = { Box(
-                modifier = Modifier.fillMaxWidth().padding(end = 16.dp),
-                contentAlignment = Alignment.CenterEnd
-            ) {
-                Text("رواه الحديث")
-            } })
+            TopAppBar(
+                title = {
+                    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(end = 16.dp),
+                            contentAlignment = Alignment.CenterEnd
+                        ) {
+                            Text(
+                                text = "رواه الحديث",
+                                textAlign = TextAlign.Right,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                    }
+                }
+            )
         },
     ) { paddingValues ->
         LazyVerticalGrid(

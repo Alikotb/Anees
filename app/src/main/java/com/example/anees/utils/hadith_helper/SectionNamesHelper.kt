@@ -463,16 +463,17 @@ fun getSections(
             "24" to "كتاب الحج",
             "25" to "كتاب الجهاد",
             ),
+
         "malik" to mapOf(
-            "2" to "الصلاة",
-            "9" to "صلاة العيدين",
-            "14" to "القرآن",
-            "16" to "الزكاة",
-            "17" to "الصيام",
-            "19" to "الحج",
-            "20" to "الجهاد",
+            "3" to "الصلاة",
+            "10" to "صلاة العيدين",
+            "15" to "القرآن",
+            "17" to "الزكاة",
+            "18" to "الصيام",
+            "20" to "الحج",
+            "21" to "الجهاد",
             "57" to "جهنم",
-            ),
+        ),
         "ibnmajah" to mapOf(
             "0" to "كتاب السنة",
             "2" to "كتاب الصلاة",
@@ -481,6 +482,8 @@ fun getSections(
             "8" to "كتاب الزكاة",
         )
     )
+
+
 
     val sections = SectionNamesHelper.sectionsByAuthor[author] ?: return emptyMap()
 
