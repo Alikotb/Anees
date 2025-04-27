@@ -7,7 +7,6 @@ object AuthorAssets {
     private val authorImages = mapOf(
         AuthorEdition.ABU_DAWUD to R.drawable.abu_dawud,
         AuthorEdition.BUKHARI to R.drawable.bukhari,
-        AuthorEdition.DEHLAWI to R.drawable.dehlawi,
         AuthorEdition.IBN_MAJAH to R.drawable.ibn_majah,
         AuthorEdition.MALIK to R.drawable.malik,
         AuthorEdition.MUSLIM to R.drawable.muslim,

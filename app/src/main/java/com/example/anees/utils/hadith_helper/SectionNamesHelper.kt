@@ -416,6 +416,14 @@ object SectionNamesHelper {
             "42" to "كتاب السنة",
             "43" to "كتاب الأدب"
         ),
+
+        "nawawi" to mapOf(
+            "1" to "الأربعون النووية",
+        ),
+
+        "qudsi" to mapOf(
+            "1" to "الأربعون القدسية",
+        ),
     )
 }
 
