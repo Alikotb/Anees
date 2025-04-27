@@ -60,11 +60,11 @@ fun HadithScreen(author: AuthorEdition, id: String, viewModel: HadithViewModel =
             val hadithOffline =
                 OfflineHadithHelper.getAllHadith(ctx, author, id)
 
-            Log.d("TAG", "getAllHadith: ${hadithOffline}")
+//            Log.d("TAG", "getAllHadith: ${hadithOffline}")
             val list = hadithOffline?.hadiths?.map {
                 it.toHadith()
             } ?: emptyList()
-            Log.d("TAG", "getAllHadith: ${list}")
+//            Log.d("TAG", "getAllHadith: ${list}")
 
             DisplayOfflineHadiths(list)
 

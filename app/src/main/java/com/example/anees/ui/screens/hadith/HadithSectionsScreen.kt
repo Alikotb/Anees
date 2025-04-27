@@ -41,22 +41,17 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.anees.utils.hadith_helper.AuthorEdition
-import com.example.anees.utils.hadith_helper.cardColors
 import com.example.anees.utils.hadith_helper.getSections
 import com.example.anees.utils.isInternetAvailable
 import androidx.compose.ui.unit.sp
 import com.example.anees.R
-import com.example.anees.utils.AuthorEdition
-import com.example.anees.utils.SectionNamesHelper
-import com.example.anees.utils.cardColors
 import com.google.gson.Gson
 
 @Composable
 fun HadithSectionsScreen(author: AuthorEdition, navToHadithScreen: (String, String) -> Unit) {
     val ctx = LocalContext.current
     val isOnline = ctx.isInternetAvailable()
-    val sectionsMap = getSections(author.apiKey,isOnline)//SectionNamesHelper.sectionsByAuthor[author.apiKey] ?: emptyMap()
-    //val sectionsMap = SectionNamesHelper.sectionsByAuthor[author.apiKey] ?: emptyMap()
+    val sectionsMap = getSections(author.apiKey,isOnline)
     var searchQuery by remember { mutableStateOf("") }
 
     Column(
