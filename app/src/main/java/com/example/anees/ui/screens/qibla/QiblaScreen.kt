@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -24,6 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.anees.R
 import com.example.anees.utils.location.LocationProvider
@@ -95,7 +97,7 @@ fun QiblaScreen() {
             painter = painterResource(id = R.drawable.qiblaa),
             contentDescription = "Qibla Compass Needle",
             modifier = Modifier
-                .rotate(animatedDeviceRotation)
+                .rotate(-animatedDeviceRotation)
                 .align(Alignment.Center)
         )
 
@@ -115,5 +117,14 @@ fun QiblaScreen() {
                     .align(Alignment.TopCenter)
             )
         }
+        val displayAngle = ((bearingToQibla % 360) + 360) % 360
+        Text(
+            text = "${displayAngle.toInt()}°",
+            color = Color.White,
+            style = androidx.compose.ui.text.TextStyle(fontSize = 20.sp),
+            modifier = Modifier
+                .align(Alignment.Center)
+                .padding(top = 20.dp) // Adjust the position if needed
+        )
     }
 }
