@@ -277,8 +277,8 @@ fun Ssebha(
 
                 Text(
                     text = "$counter",
-                    color = Color.Green,
-                    fontSize = 28.sp,
+                    color = Color(0xFF1A8642),
+                    fontSize = 30.sp,
                     fontFamily = FontFamily(
                         Font(R.font.degital),
                         Font(R.font.degital, FontWeight.Bold)
