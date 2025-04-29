@@ -70,7 +70,7 @@ fun SebihaScreen(
     LaunchedEffect(rounds) {
         if (rounds % 2 == 0 && rounds != 0) {
             isLottieVisible = true
-            delay(4000)
+            delay(3000)
             isLottieVisible = false
         }
     }
@@ -93,7 +93,7 @@ fun SebihaScreen(
             )
         }
 
-        Ssebha(sebiha,viewModel,navToHome)
+        Ssebha(sebiha,viewModel,navToHome,isLottieVisible)
 
 
     }
@@ -105,13 +105,13 @@ fun SebihaScreen(
 fun Ssebha(
     sebiha: State<Sebiha>,
     viewModel: SebihaViewModel,
-    navToHome: () -> Unit = {}
+    navToHome: () -> Unit = {},
+    isLottieVisible: Boolean
 ) {
     var showBottomSheet by remember { mutableStateOf(false) }
     var counter = sebiha.value.count
     var rounds = sebiha.value.rounds
-    var mainZekir by remember { mutableStateOf("سبحان الله") }
-
+    var mainZekir =sebiha.value.name
     Column ( modifier = Modifier
         .fillMaxSize()
         .background(color = Color(0xFFF5F5DB))){
@@ -181,21 +181,23 @@ fun Ssebha(
                             fontSize = 22.sp
                         )
                         Spacer(modifier = Modifier.width(8.dp))
-                        IconButton(
-                            onClick = {
-                                rounds=0
-                                counter=0
-                                viewModel.addSebiha(Sebiha(0, counter, rounds))
-                            },
-                            modifier = Modifier
-                                .size(32.dp)
-                                .background(Color.Transparent, shape = CircleShape)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Replay,
-                                contentDescription = null,
-                                tint = Color.Black
-                            )
+                        if(!isLottieVisible) {
+                            IconButton(
+                                onClick = {
+                                    rounds = 0
+                                    counter = 0
+                                    viewModel.addSebiha(Sebiha(0, counter, rounds,mainZekir.toString()))
+                                },
+                                modifier = Modifier
+                                    .size(32.dp)
+                                    .background(Color.Transparent, shape = CircleShape)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Replay,
+                                    contentDescription = null,
+                                    tint = Color.Black
+                                )
+                            }
                         }
                     }
                 }
@@ -252,7 +254,7 @@ fun Ssebha(
                                     counter = 0
                                     rounds++
                                 }
-                                viewModel.addSebiha(Sebiha(0, counter, rounds))
+                                viewModel.addSebiha(Sebiha(0, counter, rounds,mainZekir.toString()))
                             }
 
                         )
@@ -268,7 +270,7 @@ fun Ssebha(
                             indication = rememberRipple(bounded = true, radius = 15.dp),
                             onClick = {
                                 counter = 0
-                            viewModel.addSebiha(Sebiha(0, counter, rounds))
+                            viewModel.addSebiha(Sebiha(0, counter, rounds,mainZekir.toString()))
                             }
                         )
                 )
@@ -295,7 +297,7 @@ fun Ssebha(
                 mainZekir = it
                 rounds=0
                 counter=0
-                viewModel.addSebiha(Sebiha(0, counter, rounds))
+                viewModel.addSebiha(Sebiha(0, counter, rounds,mainZekir.toString()))
             }
         }
 

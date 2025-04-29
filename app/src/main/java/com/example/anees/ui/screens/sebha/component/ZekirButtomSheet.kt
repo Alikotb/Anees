@@ -11,6 +11,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,7 +29,7 @@ fun AzkarButtomSheet(
     onZekirClick: (String) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
-
+    var selectedZekir by remember { mutableStateOf(mainZekir) }
     ModalBottomSheet(
         onDismissRequest = { onClose() },
         sheetState = sheetState,
@@ -40,12 +44,12 @@ fun AzkarButtomSheet(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             azkarList.forEach {
-                ZekirSheetCard(it,mainZekir){
+                ZekirSheetCard(it, isSelected = it.arabicName == selectedZekir){
+                    selectedZekir = it
                     onZekirClick(it)
                     onClose()
                 }
             }
-
             Spacer(Modifier.height(24.dp))
 
 

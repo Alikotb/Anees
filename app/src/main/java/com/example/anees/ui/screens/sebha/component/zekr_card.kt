@@ -20,7 +20,9 @@ import androidx.compose.ui.unit.sp
 import com.example.anees.R
 import com.example.anees.data.model.Zekir
 @Composable
-fun ZekirSheetCard(zekir: Zekir, mainZekir: String, onZekirClick: (String) -> Unit){
+fun ZekirSheetCard(zekir: Zekir, isSelected: Boolean, onZekirClick: (String) -> Unit){
+    val backgroundColor = if (isSelected) Color(0xFFe3fff0) else Color(0xFFe9e9d1)
+    val textColor = if (isSelected) Color(0xFF62cc91) else Color(0xFF2E2E2E)
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -31,14 +33,14 @@ fun ZekirSheetCard(zekir: Zekir, mainZekir: String, onZekirClick: (String) -> Un
             )
             .padding(horizontal = 24.dp, vertical = 8.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(Color(0xFFe9e9d1))
+            .background(backgroundColor )
             .border(1.dp, Color.White, RoundedCornerShape(16.dp))
             .padding( vertical = 12.dp)
     ) {
         Text(
             text = zekir.arabicName,
             fontSize = 22.sp,
-            color = Color(0xFF2E2E2E),
+            color = textColor,
             textAlign = TextAlign.Center,
             fontFamily = FontFamily(Font(R.font.othmani)),
             modifier = Modifier.fillMaxWidth().padding( 8.dp)
