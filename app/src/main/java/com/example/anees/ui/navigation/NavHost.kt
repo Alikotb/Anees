@@ -106,7 +106,6 @@ fun SetUpNavHost(
         }
         composable<ScreenRoute.HadithAuthorsScreen> {
             HadithAuthorsScreen() { author ->
-                navController.popBackStack()
                 navController.navigate(ScreenRoute.HadithSectionsScreen(author))
             }
         }
@@ -116,7 +115,6 @@ fun SetUpNavHost(
                 AuthorEdition::class.java
             )
             HadithSectionsScreen(author) { auth, id ->
-                navController.popBackStack()
                 navController.navigate(ScreenRoute.HadithScreen(auth, id))
             }
         }
