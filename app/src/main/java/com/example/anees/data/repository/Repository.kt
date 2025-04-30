@@ -2,6 +2,7 @@ package com.example.anees.data.repository
 
 import com.example.anees.data.model.EditionResponse
 import com.example.anees.data.model.Sebiha
+import com.example.anees.data.model.TafsierModel
 import kotlinx.coroutines.flow.Flow
 
 interface Repository {
@@ -9,6 +10,7 @@ interface Repository {
     fun getSebiha(): Flow<Sebiha>
 
     suspend fun getAllSections(name: String): Flow<EditionResponse>
+    suspend fun getAllTafsier(name: String): Flow<TafsierModel>
     fun saveData(key: String, value: Any)
     fun <T> fetchData(key: String, defaultValue: T): T
 

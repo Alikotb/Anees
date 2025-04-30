@@ -3,6 +3,7 @@ package com.example.anees.data.repository
 import com.example.anees.data.local.LocalDataSource
 import com.example.anees.data.model.EditionResponse
 import com.example.anees.data.model.Sebiha
+import com.example.anees.data.model.TafsierModel
 import com.example.anees.data.remote.RemoteDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -26,6 +27,9 @@ class RepositoryImpl @Inject constructor(
         return flowOf(remoteDataSource.getAllSections(name))
     }
 
+    override suspend fun getAllTafsier(name: String): Flow<TafsierModel> {
+        return flowOf(remoteDataSource.getAllTafsier(name))
+    }
 
 
     override fun saveData(key: String, value: Any) {

@@ -1,4 +1,4 @@
-package com.example.anees.data.remote
+package com.example.anees.data.remote.service
 
 import com.example.anees.data.model.EditionResponse
 import retrofit2.http.GET
