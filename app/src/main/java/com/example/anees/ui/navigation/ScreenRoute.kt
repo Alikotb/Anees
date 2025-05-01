@@ -32,6 +32,10 @@ sealed class ScreenRoute {
 
     @Serializable
     object KhatmQuranDuaScreen : ScreenRoute()
+
+    @Serializable
+    object RadioScreen : ScreenRoute()
+
     @Serializable
     object TafsirScreen : ScreenRoute()
     @Serializable

@@ -22,16 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun HomeScreen(
-    navToSebiha: () -> Unit = {},
-    navToQibla: () -> Unit = {},
-    navToQuran: () -> Unit = {},
-    navToAzkar: () -> Unit = {},
-    navToHadith: () -> Unit = {},
-    navToTafsir: () -> Unit
-) {
+fun HomeScreen(navToSebiha: () -> Unit = {}, navToQibla: () -> Unit = {}, navToQuran: () -> Unit = {},navToAzkar: () -> Unit = {}, navToHadith: () -> Unit = {}, navToRadio: () -> Unit, navToTafsir: () -> Unit) {
     val screenHeight =LocalConfiguration.current.screenHeightDp.dp
-
 
     Box(
         modifier = Modifier
@@ -63,6 +55,10 @@ fun HomeScreen(
             HomeButton("Hadith") {
                 navToHadith()
             }
+            HomeButton("Radio") {
+                navToRadio()
+            }
+
             HomeButton("Tafsir") {
                 navToTafsir()
             }
