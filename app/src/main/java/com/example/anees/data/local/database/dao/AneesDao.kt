@@ -1,4 +1,4 @@
-package com.example.anees.data.local.database
+package com.example.anees.data.local.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AneesDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
     suspend fun insertSebha(sebha: Sebiha)
     @Query("SELECT * FROM sebha")
     fun getAllSebha(): Flow<Sebiha>

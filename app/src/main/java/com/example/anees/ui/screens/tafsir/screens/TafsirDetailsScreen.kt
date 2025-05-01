@@ -30,6 +30,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.anees.enums.QuranSurah
 import com.example.anees.ui.screens.tafsir.component.TafsirDeatilsCard
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.text.style.TextAlign
 import com.example.anees.data.model.Response
 import com.example.anees.data.model.TafsierModel
 import com.example.anees.ui.screens.tafsir.TafsirViewModel
@@ -41,7 +42,7 @@ fun TafsirDetailsScreen(surah: QuranSurah) {
     val tafsir by viewModel.tafsirSurah.collectAsStateWithLifecycle()
 
     LaunchedEffect(surah.number) {
-        viewModel.getTafsirSurah(surah.number)
+        viewModel.loadTafsir(surah.number.toInt())
     }
 
     when (val state = tafsir) {
@@ -60,11 +61,19 @@ fun TafsirDetailsScreen(surah: QuranSurah) {
         }
 
         is Response.Error -> {
-            Text(
-                text = state.message,
-                color = Color.Red,
-                fontSize = 16.sp,
-            )
+            Box (
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
+
+            ){
+                Text(
+                    text = state.message,
+                    color = Color.Red,
+                    textAlign = TextAlign.Center,
+                    fontSize = 24.sp,
+                    modifier = Modifier.padding(horizontal = 32.dp)
+                )
+            }
         }
 
     }

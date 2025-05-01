@@ -13,5 +13,7 @@ interface Repository {
     suspend fun getAllTafsier(name: String): Flow<TafsierModel>
     fun saveData(key: String, value: Any)
     fun <T> fetchData(key: String, defaultValue: T): T
+    suspend fun addTafsir(tafsir: TafsierModel)
+    fun getTafsir(id: Int): Flow<TafsierModel?>
 
 }

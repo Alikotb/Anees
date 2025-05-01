@@ -4,12 +4,19 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.example.anees.data.local.database.dao.AneesDao
+import com.example.anees.data.local.database.dao.TafsirDao
 import com.example.anees.data.model.Sebiha
+import com.example.anees.data.model.TafsierModel
+import com.example.anees.data.model.converter.TafsierConverter
 import com.example.anees.utils.Constants
 
-@Database(entities =  [Sebiha::class, ], version =1 )
+@TypeConverters(TafsierConverter::class)
+@Database(entities =  [Sebiha::class,TafsierModel::class ], version =1 )
 abstract class AneesDatabase : RoomDatabase(){
     abstract fun getDao(): AneesDao
+    abstract fun getTafsirDao(): TafsirDao
     companion object{
         @Volatile
         private var instance: AneesDatabase? = null
