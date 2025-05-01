@@ -22,7 +22,7 @@ abstract class AneesDatabase : RoomDatabase(){
         private var instance: AneesDatabase? = null
         fun getInstance(context: Context): AneesDatabase {
             return instance ?: synchronized(this){
-                val INSTANCE = Room.databaseBuilder(context, AneesDatabase::class.java, Constants.ROOM_DATABASE).build()
+                val INSTANCE = Room.databaseBuilder(context, AneesDatabase::class.java, Constants.ROOM_DATABASE).fallbackToDestructiveMigration().build()
                 instance = INSTANCE
                 INSTANCE
             }
