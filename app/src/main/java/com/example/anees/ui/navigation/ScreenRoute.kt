@@ -32,4 +32,7 @@ sealed class ScreenRoute {
 
     @Serializable
     object KhatmQuranDuaScreen : ScreenRoute()
+
+    @Serializable
+    object PrayerTimesScreen : ScreenRoute()
 }

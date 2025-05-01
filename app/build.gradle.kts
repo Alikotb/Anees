@@ -110,6 +110,13 @@ dependencies {
     val compose_version = "1.0.0"
     implementation ("androidx.compose.runtime:runtime-livedata:$compose_version")
 
+    implementation ("com.batoulapps.adhan:adhan:1.2.1")
+
+    implementation ("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
+
+
+
+
 
 
 }

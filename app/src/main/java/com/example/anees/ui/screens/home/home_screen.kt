@@ -3,7 +3,6 @@ package com.example.anees.ui.screens.home
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,10 +20,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.anees.ui.screens.prayer.component.PrayerCardWithTimer
+
+import com.example.anees.utils.prayer_helper.PrayerTimesHelper
 
 @Preview(showBackground = true)
 @Composable
-fun HomeScreen(navToSebiha: () -> Unit = {}, navToQibla: () -> Unit = {}, navToQuran: () -> Unit = {},navToAzkar: () -> Unit = {}, navToHadith: () -> Unit = {}) {
+fun HomeScreen(navToSebiha: () -> Unit = {},
+               navToQibla: () -> Unit = {},
+               navToQuran: () -> Unit = {},
+               navToAzkar: () -> Unit = {},
+               navToPrayer: () -> Unit = {},
+               navToHadith: () -> Unit = {}) {
     val screenHeight =LocalConfiguration.current.screenHeightDp.dp
 
     Box(
@@ -37,11 +44,13 @@ fun HomeScreen(navToSebiha: () -> Unit = {}, navToQibla: () -> Unit = {}, navToQ
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(
-                Modifier.height(
-                    screenHeight / 4
-                )
-            )
+            val city = "زفتي"
+            val country = "مصر"
+
+
+            PrayerCardWithTimer{
+                navToPrayer()
+            }
             HomeButton("Azkar") {
                 navToSebiha()
             }
