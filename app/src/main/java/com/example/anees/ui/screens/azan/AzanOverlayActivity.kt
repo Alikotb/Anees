@@ -1,5 +1,6 @@
 package com.example.anees.ui.screens.azan
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,6 +14,7 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,13 +34,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -59,18 +66,44 @@ class AzanOverlayActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            AzanScreen()
+            AzanScreen(){
+                finish()
+            }
         }
     }
 
     @Preview
     @Composable
     fun AzanScreen(
+        prayEnum : PrayEnum  = PrayEnum.MAGHRIB,
         onStopClicked: () -> Unit = {},
-        prayEnum : PrayEnum  = PrayEnum.FAJR
     ) {
 
-        val systemUiController = rememberSystemUiController()
+        val context = LocalContext.current
+
+        val mediaPlayer = remember { MediaPlayer.create(context, if(prayEnum== PrayEnum.FAJR) R.raw.azan_fajr else R.raw.azan2) }
+        val isPlaying = remember { mutableStateOf(false) }
+
+        LaunchedEffect(Unit) {
+            mediaPlayer.setOnCompletionListener {
+                isPlaying.value = false
+                onStopClicked()
+            }
+            mediaPlayer.start()
+            isPlaying.value = true
+        }
+
+        DisposableEffect(Unit) {
+            onDispose {
+                if (mediaPlayer.isPlaying) {
+                    mediaPlayer.stop()
+                }
+                mediaPlayer.release()
+            }
+        }
+
+
+            val systemUiController = rememberSystemUiController()
 
         SideEffect {
             systemUiController.setStatusBarColor(
@@ -101,7 +134,14 @@ class AzanOverlayActivity : ComponentActivity() {
                         .size(32.dp)
                         .background(
                             Color.DarkGray.copy(alpha = 0.4f) , shape = RoundedCornerShape(50.dp)
-                        ).padding(4.dp)
+                        ).padding(4.dp).clickable{
+                            if (mediaPlayer.isPlaying) {
+                               // mediaPlayer.stop()
+                                //mediaPlayer.release()
+                            }
+                            onStopClicked()
+                        }
+
                 )
 
                 Column(
@@ -115,9 +155,32 @@ class AzanOverlayActivity : ComponentActivity() {
                         modifier = Modifier.padding(top = 64.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        AzanPulseView(prayerName = prayEnum.value , prayerTime = "5:37 ص".convertNumbersToArabic())
+                        AzanPulseView(prayerName = prayEnum.value
+                            , prayerTime = "5:37 ص".convertNumbersToArabic(),
+                            isDay = if(prayEnum == PrayEnum.ZUHR || prayEnum == PrayEnum.ASR) true else false
+                        )
 
                     }
+                    Column {
+                        Text(text = "${prayEnum.hadith}" ,
+                            color = Color.White , fontSize = 14.sp ,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily =FontFamily(Font(R.font.othmani)
+                            )
+                            , modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center
+                        )
+                        Spacer(Modifier.height(8.dp))
+                        Text(text = "${prayEnum.author}" ,
+                            color = Color.LightGray , fontSize = 12.sp ,
+                            fontWeight = FontWeight.Normal,
+                            fontFamily =FontFamily(Font(R.font.othmani))
+                            , modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
+
                     Text(text = "انــيــس الـمــســلــم" ,
                         color = Color.White , fontSize = 32.sp ,
                         fontWeight = FontWeight.Bold,

@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
             navController = rememberNavController()
             SetUpNavHost(navController = navController)
 
-            val tenSecondsLater = System.currentTimeMillis() + 5_000
+            val tenSecondsLater = System.currentTimeMillis() + 2_000
             setAlarm(tenSecondsLater)
 
 
