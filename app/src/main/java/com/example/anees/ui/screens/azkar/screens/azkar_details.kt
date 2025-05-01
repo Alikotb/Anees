@@ -1,4 +1,4 @@
-package com.example.anees.ui.screens.azkar
+package com.example.anees.ui.screens.azkar.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement

@@ -1,4 +1,4 @@
-package com.example.anees.ui.screens.azkar
+package com.example.anees.ui.screens.azkar.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -69,7 +69,7 @@ fun AdhkarScreen(navToDetails: (String) -> Unit = {}) {
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -83,7 +83,7 @@ fun AdhkarScreen(navToDetails: (String) -> Unit = {}) {
                     color = Color(0xFF3B3B3B),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 8.dp, bottom = 16.dp, end = 12.dp)                )
+                        .padding(top = 16.dp, bottom = 4.dp, start = 12.dp)                )
             }
         }
         OutlinedTextField(
@@ -98,7 +98,7 @@ fun AdhkarScreen(navToDetails: (String) -> Unit = {}) {
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 16.dp),
+                .padding(bottom = 12.dp),
             singleLine = true,
             leadingIcon = {
                 Icon(

@@ -32,4 +32,11 @@ sealed class ScreenRoute {
 
     @Serializable
     object KhatmQuranDuaScreen : ScreenRoute()
+    @Serializable
+    object TafsirScreen : ScreenRoute()
+    @Serializable
+    data class TafsirDetailsScreen (val surah: String): ScreenRoute()
+
+
+
 }
