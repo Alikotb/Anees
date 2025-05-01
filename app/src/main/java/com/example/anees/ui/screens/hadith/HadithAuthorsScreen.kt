@@ -1,6 +1,7 @@
 package com.example.anees.ui.screens.hadith
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,10 +27,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
@@ -46,22 +55,41 @@ import com.google.gson.Gson
 fun HadithAuthorsScreen(navToHadithsSections: (String) -> Unit) {
     val ctx = LocalContext.current
     val isOnline = ctx.isInternetAvailable()
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        Image(
+            painter = painterResource(id = R.drawable.zekrback),
+            contentDescription = "Background Image",
+            modifier = Modifier.fillMaxSize().alpha(.22f),
+            contentScale = ContentScale.Crop
+        )
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(18.dp)
     ) {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp),
+                    .padding(bottom = 18.dp),
                 contentAlignment = Alignment.CenterEnd
             ) {
                 Text(
-                    text = "رواه الحديث",
+                    text = "رواة الحديث",
+                    color = Color(0xFF3B3B3B),
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily(Font(R.font.othmani)),
                     textAlign = TextAlign.Right,
-                    style = MaterialTheme.typography.headlineSmall
+                    style = TextStyle(
+                        shadow = Shadow(
+                            color = Color.Black.copy(alpha = 0.3f),
+                            offset = Offset(2f, 2f),
+                            blurRadius = 4f
+                        )
+                    )
                 )
             }
         }
@@ -90,16 +118,18 @@ fun AuthorCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(200.dp)
+            .height(180.dp)
+            .border(1.dp, Color(0xEB803F0B), RoundedCornerShape(16.dp))
             .clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
     ) {
         Box{
             Image(
                 painter = painterResource(id = R.drawable.authorbg),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
+                colorFilter = ColorFilter.tint(Color(0xEBE7D3BB)),
                 modifier = Modifier.fillMaxSize()
             )
 
@@ -121,6 +151,7 @@ fun AuthorCard(
                 Text(
                     text = author.displayNameAr,
                     fontSize = 20.sp,
+                    fontFamily = FontFamily(Font(R.font.othmani)),
                     fontWeight = FontWeight.Bold
                 )
             }

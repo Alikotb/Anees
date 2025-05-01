@@ -1,6 +1,9 @@
 package com.example.anees.ui.screens.hadith
 
 import android.util.Log
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,19 +20,31 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.anees.R
 import com.example.anees.data.model.EditionResponse
 import com.example.anees.data.model.Response
 import com.example.anees.data.model.toHadith
@@ -50,25 +65,28 @@ fun HadithScreen(author: AuthorEdition, id: String, viewModel: HadithViewModel =
         viewModel.getSections(author)
     }
 
+    Box(modifier = Modifier.fillMaxSize()) {
+        Image(
+            painter = painterResource(id = R.drawable.zekrback),
+            contentDescription = "Background Image",
+            modifier = Modifier.fillMaxSize().alpha(.22f),
+            contentScale = ContentScale.Crop
+        )
+    }
     if (!isOnline) {
         Column {
-
-
             val hadithOffline =
                 OfflineHadithHelper.getAllHadith(ctx, author, id)
 
-            Log.d("TAG", "getAllHadith: ${hadithOffline}")
             val list = hadithOffline?.hadiths?.map {
                 it.toHadith()
             } ?: emptyList()
-            Log.d("TAG", "getAllHadith: ${list}")
 
             DisplayOfflineHadiths(list)
-
         }
 
     }else {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(8.dp)) {
             when (val state = sectionsState) {
                 is Response.Loading -> {
                     Box(
@@ -138,27 +156,43 @@ fun DisplayOfflineHadiths(allHadiths: List<EditionResponse.Hadith>) {
 
 @Composable
 fun HadithCard(hadithText: String) {
-    val backgroundColor = remember { cardColors.random() }
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = backgroundColor)
-    ) {
-        Column(
+    val highlightedText = buildAnnotatedString {
+        val words = hadithText.replace("<br>", "\n").split(" ")
+        for (word in words) {
+            if (word.contains("الله")) {
+                withStyle(style = SpanStyle(color = Color.Red)) {
+                    append("$word ")
+                }
+            } else {
+                withStyle(style = SpanStyle(color = Color(0xFF6F3A18))) {
+                    append("$word ")
+                }
+            }
+        }
+    }
+
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+        Card(
             modifier = Modifier
-                .padding(16.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp)
+                .border(1.dp, Color(0xEB803F0B), RoundedCornerShape(16.dp)),
+            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+            shape = RoundedCornerShape(16.dp),
         ) {
-            Text(
-                text = hadithText.replace("<br>", "\n"),
-                style = TextStyle(
-                    fontSize = 24.sp,
-                    color = Color.Black,
-                    textAlign = TextAlign.Right
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+
+            ) {
+                Text(
+                    text = highlightedText,
+                    fontSize = 16.sp,
+                    color = Color(0xFF281102),
+                    fontFamily = FontFamily(Font(R.font.othmani)),
+                    textAlign = TextAlign.Justify,
                 )
-            )
+            }
         }
     }
 }

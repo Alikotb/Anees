@@ -14,11 +14,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SebihaViewModel @Inject constructor(private val repo: RepositoryImpl): ViewModel() {
-    private val _sebiha= MutableStateFlow(Sebiha(0,0,0))
+    private val _sebiha= MutableStateFlow(Sebiha(0,0,0,"سبحان الله"))
     val sebiha=_sebiha.asStateFlow()
     private val _error= MutableStateFlow("")
     val error=_error.asStateFlow()
-
     init {
         getSebiha()
     }
@@ -28,7 +27,7 @@ class SebihaViewModel @Inject constructor(private val repo: RepositoryImpl): Vie
              repo.getSebiha().catch {
                  _error.value=it.message.toString()
              }.collect {
-                 _sebiha.value = it ?: Sebiha(0,0,0)
+                 _sebiha.value = it ?: Sebiha(0,0,0,"سبحان الله")
              }
          }
     }
@@ -37,6 +36,7 @@ class SebihaViewModel @Inject constructor(private val repo: RepositoryImpl): Vie
             repo.addSebiha(sebiha)
         }
     }
+
 
 
 }

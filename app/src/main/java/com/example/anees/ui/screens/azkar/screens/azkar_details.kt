@@ -1,6 +1,6 @@
-package com.example.anees.ui.screens.azkar
+package com.example.anees.ui.screens.azkar.screens
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,13 +21,17 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.anees.R
 import com.example.anees.data.model.ZekrModelItem
 import com.example.anees.ui.screens.azkar.component.DetailsCard
 import com.example.anees.utils.azkar_helper.AzkarUtils
@@ -38,7 +42,6 @@ fun AdhkarDetailsScreen(selectedCategory: String,navToAzkar:  () -> Unit = {}) {
     val context = LocalContext.current
     val azkarList = remember { AzkarUtils.parseAdhkar(context) }
     val originalList: List<ZekrModelItem> = remember { AzkarUtils.getAzkarByCategory(azkarList, selectedCategory) }
-
     val azkar = remember {
         mutableStateListOf<ZekrModelItem>().apply {
             addAll(originalList)
@@ -50,17 +53,23 @@ fun AdhkarDetailsScreen(selectedCategory: String,navToAzkar:  () -> Unit = {}) {
             navToAzkar()
         }
     }
+    Box(modifier = Modifier.fillMaxSize()) {
+        Image(
+            painter = painterResource(id = R.drawable.zekrback),
+            contentDescription = "Background Image",
+            modifier = Modifier.fillMaxSize().alpha(.22f),
+            contentScale = ContentScale.Crop
+        )
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF9F9F9))
             .padding(16.dp)
     ) {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(end = 16.dp),
+                    .padding(top = 16.dp, end = 16.dp),
                 contentAlignment = Alignment.CenterEnd
             ) {
                 Text(
@@ -71,7 +80,7 @@ fun AdhkarDetailsScreen(selectedCategory: String,navToAzkar:  () -> Unit = {}) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentWidth(Alignment.End)
-                        .padding(top = 56.dp, bottom = 24.dp, end = 12.dp)              )
+                        .padding( bottom = 12.dp)              )
             }
         }
 
@@ -99,6 +108,6 @@ fun AdhkarDetailsScreen(selectedCategory: String,navToAzkar:  () -> Unit = {}) {
                 Spacer(modifier = Modifier.height(24.dp))
             }
         }
-    }
+    }}
 }
 

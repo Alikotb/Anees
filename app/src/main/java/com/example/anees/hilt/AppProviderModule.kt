@@ -4,7 +4,8 @@ package com.example.anees.hilt
 import android.content.Context
 import com.example.anees.data.local.database.AneesDao
 import com.example.anees.data.local.database.AneesDatabase
-import com.example.anees.data.remote.HadithApiService
+import com.example.anees.data.remote.service.HadithApiService
+import com.example.anees.data.remote.service.TafsirService
 import com.example.anees.utils.Constants
 import dagger.Module
 import dagger.Provides
@@ -37,9 +38,22 @@ object AppProviderModule  {
             .baseUrl(Constants.API_HADITH_)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-
     @Provides
     @Singleton
     fun provideHadithApiService(@Named("HadithApi") retrofit: Retrofit): HadithApiService =
         retrofit.create(HadithApiService::class.java)
+    @Provides
+    @Singleton
+    @Named("TafsirApi")
+    fun provideTafsir(): Retrofit =
+        Retrofit.Builder()
+            .baseUrl(Constants.API_Tafsir_)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    @Provides
+    @Singleton
+    fun provideTafsirApiService(@Named("TafsirApi") retrofit: Retrofit): TafsirService =
+        retrofit.create(TafsirService::class.java)
+
+
 }

@@ -18,13 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-@Preview(showBackground = true)
 @Composable
-fun HomeScreen(navToSebiha: () -> Unit = {}, navToQibla: () -> Unit = {}, navToQuran: () -> Unit = {},navToAzkar: () -> Unit = {}, navToHadith: () -> Unit = {}, navToRadio: () -> Unit) {
+fun HomeScreen(navToSebiha: () -> Unit = {}, navToQibla: () -> Unit = {}, navToQuran: () -> Unit = {},navToAzkar: () -> Unit = {}, navToHadith: () -> Unit = {}, navToRadio: () -> Unit, navToTafsir: () -> Unit) {
     val screenHeight =LocalConfiguration.current.screenHeightDp.dp
 
     Box(
@@ -42,7 +40,7 @@ fun HomeScreen(navToSebiha: () -> Unit = {}, navToQibla: () -> Unit = {}, navToQ
                     screenHeight / 4
                 )
             )
-            HomeButton("Azkar") {
+            HomeButton("Tasbih") {
                 navToSebiha()
             }
             HomeButton("Qibla") {
@@ -59,6 +57,10 @@ fun HomeScreen(navToSebiha: () -> Unit = {}, navToQibla: () -> Unit = {}, navToQ
             }
             HomeButton("Radio") {
                 navToRadio()
+            }
+
+            HomeButton("Tafsir") {
+                navToTafsir()
             }
 
         }

@@ -1,6 +1,6 @@
-package com.example.anees.ui.screens.azkar
+package com.example.anees.ui.screens.azkar.screens
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,18 +28,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.anees.R
 import com.example.anees.ui.screens.azkar.component.ZekrCard
-import com.example.anees.utils.azkar_helper.AzkarUtils
 import com.example.anees.utils.Constants
+import com.example.anees.utils.azkar_helper.AzkarUtils
 import com.example.anees.workers.setNotification
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,23 +52,27 @@ fun AdhkarScreen(navToDetails: (String) -> Unit = {}) {
     val context = LocalContext.current
     val azkarList = remember { AzkarUtils.parseAdhkar(context) }
     val categories = remember { AzkarUtils.getAdhkarCategories(azkarList) }
-    val selectedCategory = remember { mutableStateOf("") }
     var searchQuery by remember { mutableStateOf("") }
     val hmada = Constants.ONE_HOUR
     LaunchedEffect(Unit) {
         setNotification(context, hmada)
     }
+    Box(modifier = Modifier.fillMaxSize()) {
+        Image(
+            painter = painterResource(id = R.drawable.zekrback),
+            contentDescription = "Background Image",
+            modifier = Modifier.fillMaxSize().alpha(.22f),
+            contentScale = ContentScale.Crop
+        )
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF9F9F9))
             .padding(16.dp)
     ) {
-        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 16.dp),
+                    .fillMaxWidth(),
                 contentAlignment = Alignment.CenterEnd
             ) {
                 Text(
@@ -75,7 +83,7 @@ fun AdhkarScreen(navToDetails: (String) -> Unit = {}) {
                     color = Color(0xFF3B3B3B),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 48.dp, bottom = 16.dp, end = 12.dp)                )
+                        .padding(top = 16.dp, bottom = 4.dp, start = 12.dp)                )
             }
         }
         OutlinedTextField(
@@ -90,7 +98,7 @@ fun AdhkarScreen(navToDetails: (String) -> Unit = {}) {
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 16.dp),
+                .padding(bottom = 12.dp),
             singleLine = true,
             leadingIcon = {
                 Icon(
@@ -110,7 +118,7 @@ fun AdhkarScreen(navToDetails: (String) -> Unit = {}) {
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             contentPadding = PaddingValues(bottom = 16.dp),
-            modifier = Modifier.padding(bottom = 32.dp)
+            modifier = Modifier.padding(bottom = 12.dp)
         ) {
             val filteredCategories = categories.filter {
                 it.contains(searchQuery, ignoreCase = true)
@@ -118,9 +126,7 @@ fun AdhkarScreen(navToDetails: (String) -> Unit = {}) {
             items(filteredCategories) { category ->
                 ZekrCard(
                     text = category,
-                    isSelected = selectedCategory.value == category,
                     onClick = {
-                        selectedCategory.value = category
                         navToDetails(category)
                     }
                 )
@@ -141,6 +147,6 @@ fun AdhkarScreen(navToDetails: (String) -> Unit = {}) {
                 }
             }
         }
-    }
+    }}
 
 }
