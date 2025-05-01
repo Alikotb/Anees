@@ -112,7 +112,7 @@ fun RadioScreen(viewModel: RadioViewModel = hiltViewModel()) {
                                 if (context.isInternetAvailable()) {
                                     viewModel.playPauseRadio()
                                 } else {
-                                    snackbarMessage.value = "No internet connection"
+                                    snackbarMessage.value = "لا يوجد اتصال بالإنترنت"
                                 }
                             },
                         contentAlignment = Alignment.Center
