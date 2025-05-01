@@ -31,6 +31,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,11 +42,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -82,84 +85,86 @@ fun RadioScreen(viewModel: RadioViewModel = hiltViewModel()) {
             elevation = CardDefaults.cardElevation(defaultElevation = 12.dp),
             modifier = Modifier.padding(8.dp)
         ) {
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(12.dp)
             ) {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(96.dp)
-                            .clip(CircleShape)
-                            .clickable { viewModel.previousStation() },
-                        contentAlignment = Alignment.Center
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.back),
-                            contentDescription = "Previous",
-                            modifier = Modifier.size(64.dp)
-                        )
-                    }
+                        Box(
+                            modifier = Modifier
+                                .size(96.dp)
+                                .clip(CircleShape)
+                                .clickable { viewModel.previousStation() },
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.back),
+                                contentDescription = "Previous",
+                                modifier = Modifier.size(64.dp)
+                            )
+                        }
 
-                    Box(
-                        modifier = Modifier
-                            .size(96.dp)
-                            .clip(CircleShape)
-                            .clickable {
-                                if (context.isInternetAvailable()) {
-                                    viewModel.playPauseRadio()
-                                } else {
-                                    snackbarMessage.value = "لا يوجد اتصال بالإنترنت"
-                                }
-                            },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Image(
-                            painter = painterResource(id = if (isPlaying) R.drawable.play else R.drawable.pause),
-                            contentDescription = "Play/Pause",
-                            modifier = Modifier.size(64.dp)
-                        )
-                    }
+                        Box(
+                            modifier = Modifier
+                                .size(96.dp)
+                                .clip(CircleShape)
+                                .clickable {
+                                    if (context.isInternetAvailable()) {
+                                        viewModel.playPauseRadio()
+                                    } else {
+                                        snackbarMessage.value = "لا يوجد اتصال بالإنترنت"
+                                    }
+                                },
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Image(
+                                painter = painterResource(id = if (isPlaying) R.drawable.play else R.drawable.pause),
+                                contentDescription = "Play/Pause",
+                                modifier = Modifier.size(64.dp)
+                            )
+                        }
 
-                    Box(
-                        modifier = Modifier
-                            .size(96.dp)
-                            .clip(CircleShape)
-                            .clickable { viewModel.nextStation() },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.right),
-                            contentDescription = "Next",
-                            modifier = Modifier.size(64.dp)
-                        )
+                        Box(
+                            modifier = Modifier
+                                .size(96.dp)
+                                .clip(CircleShape)
+                                .clickable { viewModel.nextStation() },
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.right),
+                                contentDescription = "Next",
+                                modifier = Modifier.size(64.dp)
+                            )
+                        }
                     }
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text(
+                        text = currentStation.name,
+                        fontSize = 26.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White,
+                        fontFamily = FontFamily(Font(R.font.othmani)),
+                        modifier = Modifier.align(Alignment.End),
+                        textAlign = TextAlign.Right
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        text = currentStation.description,
+                        fontSize = 18.sp,
+                        color = Color.LightGray,
+                        fontFamily = FontFamily(Font(R.font.othmani)),
+                        modifier = Modifier.align(Alignment.End),
+                        textAlign = TextAlign.Right
+                    )
                 }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text(
-                    text = currentStation.name,
-                    fontSize = 26.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily(Font(R.font.othmani)),
-                    modifier = Modifier.align(Alignment.End),
-                    color = Color.White
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Text(
-                    text = currentStation.description,
-                    fontSize = 18.sp,
-                    color = Color.LightGray,
-                    modifier = Modifier.align(Alignment.End),
-                    fontFamily = FontFamily(Font(R.font.othmani)),
-                    textAlign = TextAlign.Right
-                )
             }
         }
     }

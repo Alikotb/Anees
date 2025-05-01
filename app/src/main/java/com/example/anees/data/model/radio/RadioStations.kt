@@ -88,11 +88,6 @@ object RadioStations {
             "قارئ مصري متميز بصوته الرخيم وأدائه المؤثر."
         ),
         RadioStation(
-            "مشاري العفاسي",
-            "https://backup.qurango.net/radio/mishary_alafasi",
-            "قارئ كويتي شهير، يتميز بجمال صوته وأناقة تلاوته"
-        ),
-        RadioStation(
             "مصطفى اللاهوني",
             "https://backup.qurango.net/radio/mustafa_allahoni",
             "قارئ مصري له تلاوات جميلة بصوت مؤثر"
