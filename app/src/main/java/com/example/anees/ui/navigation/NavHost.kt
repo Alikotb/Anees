@@ -6,8 +6,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.anees.ui.navigation.ScreenRoute.AzkarDetailsScreen
 import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
-import com.example.anees.ui.screens.azkar.AdhkarDetailsScreen
-import com.example.anees.ui.screens.azkar.AdhkarScreen
+import com.example.anees.ui.screens.azkar.screens.AdhkarDetailsScreen
+import com.example.anees.ui.screens.azkar.screens.AdhkarScreen
 import com.example.anees.ui.screens.hadith.HadithAuthorsScreen
 import com.example.anees.ui.screens.hadith.HadithScreen
 import com.example.anees.ui.screens.hadith.HadithSectionsScreen
@@ -20,6 +20,9 @@ import com.example.anees.ui.screens.quran_pdf.quran.QuranPDFViewerScreen
 import com.example.anees.ui.screens.sebha.SebihaScreen
 import com.example.anees.ui.screens.splash.SplashScreen
 import com.example.anees.enums.AuthorEdition
+import com.example.anees.enums.QuranSurah
+import com.example.anees.ui.screens.tafsir.screens.TafsirDetailsScreen
+import com.example.anees.ui.screens.tafsir.screens.TafsirScreen
 import com.google.gson.Gson
 import com.example.anees.utils.Constants
 
@@ -56,6 +59,9 @@ fun SetUpNavHost(
                 },
                 navToHadith = {
                     navController.navigate(ScreenRoute.HadithAuthorsScreen)
+                },
+                navToTafsir = {
+                    navController.navigate(ScreenRoute.TafsirScreen)
                 }
             )
         }
@@ -85,7 +91,6 @@ fun SetUpNavHost(
 
         composable<ScreenRoute.AdhkarScreen> {
             AdhkarScreen { cat ->
-                navController.popBackStack()
                 navController.navigate(AzkarDetailsScreen(cat))
             }
         }
@@ -130,7 +135,7 @@ fun SetUpNavHost(
 
 
         composable<ScreenRoute.JuzIndexScreen> {
-            JuzIndexScreen(){
+            JuzIndexScreen{
                 navController.popBackStack()
                 navController.popBackStack()
                 navController.navigate(ScreenRoute.CompleteQuranScreen)
@@ -140,6 +145,17 @@ fun SetUpNavHost(
         composable<ScreenRoute.KhatmQuranDuaScreen> {
             KhatmQuranDuaScreen()
         }
-
+        composable<ScreenRoute.TafsirScreen> {
+           TafsirScreen{
+               navController.navigate(ScreenRoute.TafsirDetailsScreen(it))
+           }
+        }
+        composable<ScreenRoute.TafsirDetailsScreen> {
+            val surah = Gson().fromJson(
+                it.arguments?.getString("surah"),
+                QuranSurah::class.java
+            )
+            TafsirDetailsScreen(surah)
+        }
     }
 }
