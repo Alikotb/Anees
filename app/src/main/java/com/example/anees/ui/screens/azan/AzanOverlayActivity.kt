@@ -181,7 +181,7 @@ class AzanOverlayActivity : ComponentActivity() {
                     }
 
 
-                    Text(text = "انــيــس الـمــســلــم" ,
+                    Text(text = "أنــيــس الـمــســلــم" ,
                         color = Color.White , fontSize = 32.sp ,
                         fontWeight = FontWeight.Bold,
                         fontFamily =FontFamily(Font(R.font.othmani))
