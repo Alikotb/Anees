@@ -8,7 +8,6 @@ import com.example.anees.data.repository.RepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,17 +17,31 @@ class TafsirViewModel @Inject constructor(private val repo: RepositoryImpl) : Vi
     val tafsirSurah = _tafsirSurah.asStateFlow()
 
 
-    fun getTafsirSurah(number: String) {
+    fun addTafsir(id: Int,tafsir: TafsierModel){
         viewModelScope.launch {
-            try {
-                repo.getAllTafsier(number).catch {
-                    _tafsirSurah.value = Response.Error(it.message.toString())
-                }.collect {
-                    _tafsirSurah.value = Response.Success(it)
+            tafsir.id = id
+            repo.addTafsir(tafsir)
+        }
+    }
+
+    fun loadTafsir(id: Int) {
+        viewModelScope.launch {
+            repo.getTafsir(id).collect { localData ->
+                if (localData != null && localData.result.isNotEmpty()) {
+                    _tafsirSurah.value = Response.Success(localData)
+                } else {
+                    try {
+                        repo.getAllTafsier(id.toString()).collect { apiData ->
+                            addTafsir(id, apiData)
+                            _tafsirSurah.value = Response.Success(apiData)
+                        }
+                    } catch (e: Exception) {
+                        _tafsirSurah.value = Response.Error("يرجى الاتصال بالإنترنت للحصول على البيانات لأول مرة")
+                    }
                 }
-            } catch (e: Exception) {
-                _tafsirSurah.value = Response.Error(e.message.toString())
             }
         }
     }
+
+
 }
