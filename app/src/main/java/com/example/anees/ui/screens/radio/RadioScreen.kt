@@ -31,12 +31,16 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -47,9 +51,17 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.anees.R
+import com.example.anees.utils.extensions.isInternetAvailable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun RadioScreen(viewModel: RadioViewModel = hiltViewModel()) {
+    val context = LocalContext.current
+    val snackbarMessage = remember { mutableStateOf<String?>(null) }
+
     val isPlaying by viewModel.isPlaying.collectAsStateWithLifecycle()
     val currentStation by viewModel.currentStation.collectAsStateWithLifecycle()
 
@@ -71,11 +83,11 @@ fun RadioScreen(viewModel: RadioViewModel = hiltViewModel()) {
             modifier = Modifier.padding(8.dp)
         ) {
             Column(
-                horizontalAlignment = Alignment.End,
+                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(12.dp)
             ) {
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(24.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Box(
@@ -94,15 +106,21 @@ fun RadioScreen(viewModel: RadioViewModel = hiltViewModel()) {
 
                     Box(
                         modifier = Modifier
-                            .size(120.dp)
+                            .size(96.dp)
                             .clip(CircleShape)
-                            .clickable { viewModel.playPauseRadio() },
+                            .clickable {
+                                if (context.isInternetAvailable()) {
+                                    viewModel.playPauseRadio()
+                                } else {
+                                    snackbarMessage.value = "No internet connection"
+                                }
+                            },
                         contentAlignment = Alignment.Center
                     ) {
                         Image(
                             painter = painterResource(id = if (isPlaying) R.drawable.play else R.drawable.pause),
                             contentDescription = "Play/Pause",
-                            modifier = Modifier.size(72.dp)
+                            modifier = Modifier.size(64.dp)
                         )
                     }
 
@@ -128,6 +146,7 @@ fun RadioScreen(viewModel: RadioViewModel = hiltViewModel()) {
                     fontSize = 26.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = FontFamily(Font(R.font.othmani)),
+                    modifier = Modifier.align(Alignment.End),
                     color = Color.White
                 )
 
@@ -137,10 +156,16 @@ fun RadioScreen(viewModel: RadioViewModel = hiltViewModel()) {
                     text = currentStation.description,
                     fontSize = 18.sp,
                     color = Color.LightGray,
+                    modifier = Modifier.align(Alignment.End),
                     fontFamily = FontFamily(Font(R.font.othmani)),
                     textAlign = TextAlign.Right
                 )
             }
+        }
+    }
+    snackbarMessage.value?.let {
+        CustomSnackbar(message = it) {
+            snackbarMessage.value = null
         }
     }
 }
@@ -204,12 +229,12 @@ fun CircularPulseVisualizer(isPlaying: Boolean) {
     )
 
     Box(
-        modifier = Modifier.size(400.dp),
+        modifier = Modifier.size(300.dp),
         contentAlignment = Alignment.Center
     ) {
         Box(
             modifier = Modifier
-                .size(400.dp)
+                .size(300.dp)
                 .clip(CircleShape),
             contentAlignment = Alignment.Center
         ) {
@@ -242,6 +267,36 @@ fun CircularPulseVisualizer(isPlaying: Boolean) {
         }
     }
 }
+
+@Composable
+fun CustomSnackbar(
+    message: String,
+    onDismiss: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 32.dp),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        Card(
+            colors = CardDefaults.cardColors(containerColor = Color(0xFF323232)),
+            elevation = CardDefaults.cardElevation(8.dp)
+        ) {
+            Text(
+                text = message,
+                modifier = Modifier.padding(16.dp),
+                color = Color.White
+            )
+        }
+    }
+
+    LaunchedEffect(message) {
+        delay(2500)
+        onDismiss()
+    }
+}
+
 
 
 
