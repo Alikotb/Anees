@@ -18,6 +18,16 @@ object RadioStations {
             "من أشهر قراء العالم الإسلامي، تميز بصوت قوي وأداء متقن"
         ),
         RadioStation(
+            "محمد صديق المنشاوي",
+            "https://backup.qurango.net/radio/mohammed_siddiq_alminshawi",
+            "أحد أشهر قراء مصر والعالم الإسلامي، تميز بأسلوب شجي وخاشع."
+        ),
+        RadioStation(
+            "محمود خليل الحصري",
+            "https://backup.qurango.net/radio/mahmoud_khalil_alhussary_mojawwad",
+            "علم من أعلام قراء مصر، معروف بدقته في الأداء وأسلوبه المميز."
+        ),
+        RadioStation(
             "محمد اللحيدان",
             "https://backup.qurango.net/radio/mohammed_allohaidan",
             "قارئ سعودي يتميز بصوت خاشع وأداء مميز في تلاوة القرآن"
@@ -48,9 +58,74 @@ object RadioStations {
             "قارئ سعودي متميز بصوته العذب وأسلوبه المؤثر"
         ),
         RadioStation(
+            "حاتم فريد الواعر",
+            "https://backup.qurango.net/radio/hatem_fareed_alwaer",
+            "قارئ مصري عرف بصوته الهادئ والخاشع."
+        ),
+        RadioStation(
             "سعود الشريم",
             "https://backup.qurango.net/radio/saud_alshuraim",
             "إمام المسجد الحرام بمكة المكرمة، له تسجيلات مؤثرة"
+        ),
+        RadioStation(
+            "خالد الجليل",
+            "https://backup.qurango.net/radio/khalid_aljileel",
+            "إمام جامع الملك خالد بالرياض، معروف بتلاوته الخاشعة"
+        ),
+        RadioStation(
+            "محمد الطبلاوي",
+            "https://backup.qurango.net/radio/mohammad_altablaway",
+            "من كبار قراء مصر، اشتهر بأسلوبه المؤثر وصوته العذب."
+        ),
+        RadioStation(
+            "محمد أيوب",
+            "https://backup.qurango.net/radio/mohammed_ayyub",
+            "إمام المسجد النبوي سابقًا، له تلاوات مميزة بصوت هادئ."
+        ),
+        RadioStation(
+            "محمد جبريل",
+            "https://backup.qurango.net/radio/mohammed_jibreel",
+            "قارئ مصري معروف بجمال صوته وخشوع تلاوته."
+        ),
+        RadioStation(
+            "محمود علي البنا",
+            "https://backup.qurango.net/radio/mahmoud_ali__albanna_mojawwad",
+            "قارئ مصري متميز بصوته الرخيم وأدائه المؤثر."
+        ),
+        RadioStation(
+            "مشاري العفاسي",
+            "https://backup.qurango.net/radio/mishary_alafasi",
+            "قارئ كويتي شهير، يتميز بجمال صوته وأناقة تلاوته."
+        ),
+        RadioStation(
+            "مصطفى اللاهوني",
+            "https://backup.qurango.net/radio/mustafa_allahoni",
+            "قارئ مصري له تلاوات جميلة بصوت مؤثر."
+        ),
+        RadioStation(
+            "مصطفى رعد العزاوي",
+            "https://backup.qurango.net/radio/mustafa_raad_alazawy",
+            "قارئ عراقي، له تلاوات بأسلوب مميز وخاشع."
+        ),
+        RadioStation(
+            "جمعان العصيمي",
+            "https://backup.qurango.net/radio/jamaan_alosaimi",
+            "قارئ سعودي يتميز بأداء مؤثر وخاشع."
+        ),
+        RadioStation(
+            "معيض الحارثي",
+            "https://backup.qurango.net/radio/moeedh_alharthi",
+            "قارئ سعودي، له تلاوات متميزة."
+        ),
+        RadioStation(
+            "أحمد الطرابلسي",
+            "https://backup.qurango.net/radio/ahmed_altrabulsi",
+            "قارئ كويتي، يتميز بصوت مؤثر وأداء مميز."
+        ),
+        RadioStation(
+            "تلاوات خاشعة",
+            "https://backup.qurango.net/radio/salma",
+            "باقة مختارة من أجمل وأعذب تلاوات القراء."
         ),
         RadioStation(
             "الفتاوى",
@@ -66,11 +141,6 @@ object RadioStations {
             "تفسير القرآن",
             "https://backup.qurango.net/radio/tafseer",
             "بث مباشر لتفسير آيات القرآن الكريم من كبار العلماء"
-        ),
-        RadioStation(
-            "خالد الجليل",
-            "https://backup.qurango.net/radio/khalid_aljileel",
-            "إمام جامع الملك خالد بالرياض، معروف بتلاوته الخاشعة"
         ),
         RadioStation(
             "إذاعة رمضان",
