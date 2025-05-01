@@ -12,11 +12,9 @@ object OfflineHadithHelper{
     fun getAllHadith(context: Context,author: AuthorEdition,selectedEdition: String): HadithOffline? {
         val gson = Gson()
         val path="hadith/${author.apiKey}/${selectedEdition}.json"
-        Log.d("TAG", "getAllHadith: ${path}")
         val jsonString = context.loadJSONFromAssets( path) ?: return null
         val type = object : TypeToken<HadithOffline>() {}.type
         val asd=Gson().fromJson<HadithOffline>(jsonString, type)
-        Log.d("TAG", "pars: ${asd}")
 
         return try {
             val type = object : TypeToken<HadithOffline>() {}.type

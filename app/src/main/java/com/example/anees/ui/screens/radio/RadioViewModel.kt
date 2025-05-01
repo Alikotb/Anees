@@ -51,7 +51,9 @@ class RadioViewModel @Inject constructor(private val context: Application) : And
     }
 
     private fun initializePlayer() {
-        _player = ExoPlayer.Builder(context).build()
+        _player = ExoPlayer.Builder(context).build().apply {
+            playWhenReady = false
+        }
         playCurrentStation()
     }
 
@@ -62,8 +64,8 @@ class RadioViewModel @Inject constructor(private val context: Application) : And
             val mediaItem = MediaItem.fromUri(_currentStation.value.url)
             setMediaItem(mediaItem)
             prepare()
-            play()
-            _isPlaying.value = true
+            playWhenReady = false
+            _isPlaying.value = false
         }
     }
 
