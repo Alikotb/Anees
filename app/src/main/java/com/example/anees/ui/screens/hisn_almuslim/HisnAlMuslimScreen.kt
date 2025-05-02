@@ -57,24 +57,26 @@ fun HisnAlMuslimScreen(onBackClick: () -> Unit) {
                 onBackClick = onBackClick
             )
         }
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            titlesWithTexts.forEach { (title, texts) ->
-                item {
-                    Text(
-                        text = title,
-                        style = MaterialTheme.typography.headlineMedium,
-                        fontFamily = FontFamily(Font(R.font.othmani)),
-                        textAlign = TextAlign.Start,
-                        modifier = Modifier.padding(vertical = 16.dp, horizontal = 8.dp)
-                    )
-                }
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                titlesWithTexts.forEach { (title, texts) ->
+                    item {
+                        Text(
+                            text = title,
+                            style = MaterialTheme.typography.headlineMedium,
+                            fontFamily = FontFamily(Font(R.font.othmani)),
+                            textAlign = TextAlign.Start,
+                            modifier = Modifier.padding(vertical = 16.dp, horizontal = 8.dp)
+                        )
+                    }
 
-                items(texts.size) { index ->
-                    HisnAlMuslimTextCard(textContent = texts[index])
+                    items(texts.size) { index ->
+                        HisnAlMuslimTextCard(textContent = texts[index])
+                    }
                 }
             }
         }

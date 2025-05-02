@@ -78,7 +78,7 @@ fun HadithAuthorsScreen(navToHadithsSections: (String) -> Unit, onBackClick: () 
             columns = GridCells.Fixed(2),
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.fillMaxSize()
+            //modifier = Modifier.fillMaxSize()
         ) {
             items(getAuthorsName(isOnline)) { author ->
                 AuthorCard(author = author, onClick = {

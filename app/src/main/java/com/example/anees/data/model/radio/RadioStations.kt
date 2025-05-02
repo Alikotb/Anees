@@ -101,6 +101,12 @@ object RadioStations {
             R.drawable.gebril
         ),
         RadioStation(
+            "أبو بكر الشاطري",
+            "https://backup.qurango.net/radio/shaik_abu_bakr_al_shatri",
+            "تلاوات عذبة بصوت الشيخ أبو بكر الشاطري، يتميز بجمال الأداء وجودة الترتيل.",
+            R.drawable.shatri
+        ),
+        RadioStation(
             "محمود علي البنا",
             "https://backup.qurango.net/radio/mahmoud_ali__albanna_mojawwad",
             "قارئ مصري متميز بصوته الرخيم وأدائه المؤثر.",
