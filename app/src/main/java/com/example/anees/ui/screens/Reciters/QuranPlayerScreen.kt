@@ -153,10 +153,16 @@ fun Mp3Playback(
             val position = RadioPlayer.getCurrentPosition()
             if (duration > 0) {
                 progress = position / duration.toFloat()
+                if (position >= duration - 500 && isPlaying) {
+                    if (currentSuraIndex < 113) {
+                        onNext()
+                    }
+                }
             }
             delay(500)
         }
     }
+
 
     DisposableEffect(Unit) {
         onDispose {
