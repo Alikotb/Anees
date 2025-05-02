@@ -17,11 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.anees.enums.RecitersEnum
@@ -45,9 +47,10 @@ fun QuranPlayerScreen(
     val suraTypeIcon = SuraIndexes[currentSuraIndex].type
     val audioUrl = reciter.url + suraUrls[currentSuraIndex].second
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        ScreenBackground()
-        IconButton(
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            ScreenBackground()
+            IconButton(
                 onClick = {
                     onBackClick()
                 },
@@ -55,74 +58,76 @@ fun QuranPlayerScreen(
             ){
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
             }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-
-            Card(
-                shape = CircleShape,
-                modifier = Modifier.size(160.dp),
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
-                Image(
-                    painter = painterResource(id = reciter.image),
-                    contentDescription = "صورة القارئ",
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = reciter.reciter,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.ExtraBold
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(id = if (suraTypeIcon == SuraTypeEnum.MECCA) R.drawable.kaaba else R.drawable.mosque),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp)
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Text(
-                    text = "سُورَةٌ $suraName",
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = FontFamily(Font(R.font.othmani))
-                )
-            }
-
-            Text(
-                text = reciter.description,
-                fontSize = 16.sp,
-                color = Color.Gray
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Mp3Playback(
-                audioUrl = audioUrl,
-                currentSuraIndex = currentSuraIndex,
-                onNext = {
-                    if (currentSuraIndex < 113) currentSuraIndex++
-                },
-                onPrevious = {
-                    if (currentSuraIndex > 0) currentSuraIndex--
+                Card(
+                    shape = CircleShape,
+                    modifier = Modifier.size(160.dp),
+                ) {
+                    Image(
+                        painter = painterResource(id = reciter.image),
+                        contentDescription = "صورة القارئ",
+                        modifier = Modifier.fillMaxSize()
+                    )
                 }
-            )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = reciter.reciter,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.ExtraBold
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        painter = painterResource(id = if (suraTypeIcon == SuraTypeEnum.MECCA) R.drawable.kaaba else R.drawable.mosque),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Text(
+                        text = "سُورَةٌ $suraName",
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Medium,
+                        fontFamily = FontFamily(Font(R.font.othmani))
+                    )
+                }
+
+                Text(
+                    text = reciter.description,
+                    fontSize = 16.sp,
+                    color = Color.Gray
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Mp3Playback(
+                    audioUrl = audioUrl,
+                    currentSuraIndex = currentSuraIndex,
+                    onNext = {
+                        if (currentSuraIndex < 113) currentSuraIndex++
+                    },
+                    onPrevious = {
+                        if (currentSuraIndex > 0) currentSuraIndex--
+                    }
+                )
+            }
         }
     }
+
 
 
 }

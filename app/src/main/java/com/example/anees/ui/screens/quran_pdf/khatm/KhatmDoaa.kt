@@ -8,12 +8,14 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
@@ -24,11 +26,13 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.anees.R
 
-
+@Preview(showBackground = true ,locale = "ar")
 @Composable
 fun KhatmQuranDuaScreen() {
     val scrollState = rememberScrollState()
@@ -39,53 +43,57 @@ fun KhatmQuranDuaScreen() {
 
     val keywords = listOf("اللَّهُمَّ", "رَبَّ", "رَبْنَا", "اللَّهُ")
 
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(scrollState)
-            .paint(
-                painter = painterResource(id = R.drawable.khatm_b),
-                contentScale = ContentScale.FillBounds
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(scrollState)
+                .paint(
+                    painter = painterResource(id = R.drawable.khatm_b),
+                    contentScale = ContentScale.FillBounds
+                )
+                .padding(40.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "دُعَاءُ خَتْمِ الْقُرْآنِ",
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = FontFamily(Font(R.font.othmani)),
+                color = Color(0xFF4CAF50),
+                modifier = Modifier.padding(top = 32.dp)
             )
-            .padding(40.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "دُعَاءُ خَتْمِ الْقُرْآنِ",
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Bold,
-            fontFamily = FontFamily(Font(R.font.othmani)),
-            color = Color(0xFF4CAF50),
-            modifier = Modifier.padding(top = 32.dp)
-        )
 
-        duaParts.forEachIndexed { index, part ->
-            val annotatedString = buildAnnotatedString {
-                val words = part.split(" ")
-                for (word in words) {
-                    if (keywords.any { word.contains(it) }) {
-                        withStyle(style = SpanStyle(color = Color.Red, fontWeight = FontWeight.Bold)) {
-                            append("$word ")
-                        }
-                    } else {
-                        withStyle(style = SpanStyle(color = Color.Black)) {
-                            append("$word ")
+            duaParts.forEachIndexed { index, part ->
+                val annotatedString = buildAnnotatedString {
+                    val words = part.split(" ")
+                    for (word in words) {
+                        if (keywords.any { word.contains(it) }) {
+                            withStyle(style = SpanStyle(color = Color.Red, fontWeight = FontWeight.Bold)) {
+                                append("$word ")
+                            }
+                        } else {
+                            withStyle(style = SpanStyle(color = Color.Black)) {
+                                append("$word ")
+                            }
                         }
                     }
                 }
+
+                Text(
+                    text = annotatedString,
+                    fontSize = 22.sp,
+                    fontFamily = FontFamily(Font(R.font.othmani)),
+                    lineHeight = 28.sp,
+                    textAlign = TextAlign.End,
+                    modifier = Modifier.padding(bottom = 24.dp)
+                )
+
             }
-
-            Text(
-                text = annotatedString,
-                fontSize = 22.sp,
-                fontFamily = FontFamily(Font(R.font.othmani)),
-                lineHeight = 28.sp,
-                textAlign = TextAlign.End,
-                modifier = Modifier.padding(bottom = 24.dp)
-            )
-
         }
+
     }
+
+
 }
 

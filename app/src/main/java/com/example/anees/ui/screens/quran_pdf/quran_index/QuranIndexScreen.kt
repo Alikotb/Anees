@@ -19,12 +19,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.example.anees.enums.SuraTypeEnum
 import com.example.anees.R
@@ -40,7 +43,7 @@ fun QuranIndexScreen(onIndexButtonClick: () -> Unit) {
         modifier = Modifier.fillMaxWidth().background(Color(0xFFF8F5E3))
     ) {
         item {
-            Spacer(modifier = Modifier.height(16.dp).fillMaxWidth()
+            Spacer(modifier = Modifier.height(48.dp).fillMaxWidth()
             )
         }
         items(SuraIndexes){
@@ -63,66 +66,70 @@ fun SurahRow(
     sura:SuraIndex,
     onClick:(Int)-> Unit
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .clickable(
-                indication = null,
-                interactionSource = MutableInteractionSource(),
-                onClick = {
-                    onClick(sura.pageNumber)
-                }
-            )
-        ,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Spacer(modifier = Modifier.width(16.dp))
 
-        Image(
-            painter = painterResource(
-                id = if (sura.type == SuraTypeEnum.MECCA)
-                    R.drawable.kaaba else R.drawable.mosque
-            ),
-            contentDescription = "Surah Icon",
-            modifier = Modifier.size(32.dp).weight(1f)
-        )
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
 
-        Spacer(modifier = Modifier.width(16.dp))
-
-        Column(
-            modifier = Modifier.weight(1f),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+                .clickable(
+                    indication = null,
+                    interactionSource = MutableInteractionSource(),
+                    onClick = {
+                        onClick(sura.pageNumber)
+                    }
+                ),
+            verticalAlignment = Alignment.CenterVertically
         ) {
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Image(
+                painter = painterResource(
+                    id = if (sura.type == SuraTypeEnum.MECCA)
+                        R.drawable.kaaba else R.drawable.mosque
+                ),
+                contentDescription = "Surah Icon",
+                modifier = Modifier.size(32.dp).weight(1f)
+            )
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Column(
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "آياتها",
+                    style = MaterialTheme.typography.bodySmall,
+                    textAlign = TextAlign.End
+                )
+                Text(
+                    text = "${sura.ayahNumber}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.End
+                )
+            }
+
             Text(
-                text = "آياتها",
-                style = MaterialTheme.typography.bodySmall,
+                text = "  سوره ${sura.suraName}",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(end = 16.dp).weight(3f),
                 textAlign = TextAlign.End
             )
+
             Text(
-                text = "${sura.ayahNumber}",
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.End
+                text = "${sura.index}",
+                fontWeight = FontWeight.Bold, textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .weight(1f),
+                color = Color.Black
             )
         }
 
-        Text(
-            text = "  سوره ${sura.suraName}",
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(end = 16.dp).weight(3f),
-            textAlign = TextAlign.End
-        )
-
-        Text(
-            text = "${sura.index}",
-            fontWeight = FontWeight.Bold, textAlign = TextAlign.Center,
-            modifier = Modifier
-                .padding(8.dp)
-                .weight(1f),
-            color = Color.Black
-        )
     }
 }
