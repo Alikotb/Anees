@@ -27,6 +27,7 @@ import com.example.anees.ui.screens.Reciters.RecitersScreen
 import com.example.anees.ui.screens.Reciters.SuraMp3Screen
 import com.example.anees.ui.screens.azkar.screens.AdhkarDetailsScreen
 import com.example.anees.ui.screens.azkar.screens.AdhkarScreen
+import com.example.anees.ui.screens.hisn_almuslim.HisnAlMuslimScreen
 import com.example.anees.ui.screens.names_of_allah.NamesOfAllahScreen
 import com.example.anees.ui.screens.tafsir.screens.TafsirDetailsScreen
 import com.example.anees.ui.screens.tafsir.screens.TafsirScreen
@@ -81,6 +82,9 @@ fun SetUpNavHost(
                 },
                 navToNamesOfAllah= {
                     navController.navigate(ScreenRoute.NamesOfAllahScreen)
+                },
+                navToHisnAlMuslim = {
+                    navController.navigate(ScreenRoute.HisnAlMuslimScreen)
                 }
             )
         }
@@ -134,9 +138,13 @@ fun SetUpNavHost(
             })
         }
         composable<ScreenRoute.HadithAuthorsScreen> {
-            HadithAuthorsScreen() { author ->
-                navController.navigate(ScreenRoute.HadithSectionsScreen(author))
-            }
+            HadithAuthorsScreen(
+                onBackClick = {
+                    navController.navigateUp()
+                }, navToHadithsSections = {
+                    navController.navigate(ScreenRoute.HadithSectionsScreen(it))
+                }
+            )
         }
         composable<ScreenRoute.HadithSectionsScreen> {
             val author = Gson().fromJson(
@@ -230,6 +238,12 @@ fun SetUpNavHost(
                 reciter = reciter,
                 initialSuraIndex = index
             ){
+                navController.navigateUp()
+            }
+        }
+
+        composable<ScreenRoute.HisnAlMuslimScreen> {
+            HisnAlMuslimScreen() {
                 navController.navigateUp()
             }
         }

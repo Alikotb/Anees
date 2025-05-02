@@ -32,7 +32,8 @@ fun HomeScreen(navToSebiha: () -> Unit = {},
                navToTafsir: () -> Unit,
                navToPrayer: () -> Unit = {} ,
                navToReciters: () -> Unit = {},
-               navToNamesOfAllah: () -> Unit = {}
+               navToNamesOfAllah: () -> Unit = {},
+               navToHisnAlMuslim: () -> Unit = {}
 ){
 
     Box(
@@ -79,6 +80,9 @@ fun HomeScreen(navToSebiha: () -> Unit = {},
 
             HomeButton("Names") {
                 navToNamesOfAllah()
+            }
+            HomeButton("Hisn Al Muslim") {
+                navToHisnAlMuslim()
             }
         }
     }

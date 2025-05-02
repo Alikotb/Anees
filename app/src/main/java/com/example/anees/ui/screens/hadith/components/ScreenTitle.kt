@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -35,7 +34,7 @@ fun ScreenTitle(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(bottom = 18.dp, start = 16.dp, end = 16.dp),
+            .padding(top= 24.dp, bottom = 18.dp, start = 16.dp, end = 16.dp),
         contentAlignment = Alignment.CenterEnd
     ) {
         Row(

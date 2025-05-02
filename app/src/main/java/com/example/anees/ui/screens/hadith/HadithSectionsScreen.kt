@@ -40,6 +40,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
@@ -93,6 +95,7 @@ fun HadithSectionsScreen(author: AuthorEdition, navToHadithScreen: (String, Stri
                     }
                 }
             }
+            OfflineNoticeBanner(visible = !isOnline)
         }
     }
 }
@@ -181,3 +184,31 @@ fun HadithSearchBar(
         )
     )
 }
+
+@Composable
+fun OfflineNoticeBanner(visible: Boolean) {
+    if (visible) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            Card(
+                colors = CardDefaults.cardColors(containerColor = Color(0xFFD32F2F)),
+                shape = RoundedCornerShape(12.dp),
+                elevation = CardDefaults.cardElevation(4.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "أنت الآن غير متصل بالإنترنت — يرجى العلم أن هذه ليست كل الأقسام",
+                    modifier = Modifier.padding(16.dp),
+                    color = Color.White,
+                    fontSize = 14.sp,
+                    textAlign = TextAlign.Center,
+                    fontFamily = FontFamily(Font(R.font.othmani))
+                )
+            }
+        }
+    }
+}
+

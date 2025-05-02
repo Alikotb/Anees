@@ -6,7 +6,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.SkipNext
@@ -29,7 +28,7 @@ import com.example.anees.enums.RecitersEnum
 import com.example.anees.enums.SuraTypeEnum
 import com.example.anees.utils.pdf_helper.SuraIndexes
 import com.example.anees.R
-import com.example.anees.ui.screens.radio.components.RadioBackground
+import com.example.anees.ui.screens.radio.components.ScreenBackground
 import com.example.anees.utils.media_helper.RadioPlayer
 import com.example.anees.utils.sura_mp3_helper.suraUrls
 import kotlinx.coroutines.delay
@@ -47,7 +46,7 @@ fun QuranPlayerScreen(
     val audioUrl = reciter.url + suraUrls[currentSuraIndex].second
 
     Box(modifier = Modifier.fillMaxSize()) {
-        RadioBackground()
+        ScreenBackground()
         IconButton(
                 onClick = {
                     onBackClick()

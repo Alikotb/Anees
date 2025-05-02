@@ -20,8 +20,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.anees.ui.screens.radio.components.CustomSnackbar
 import com.example.anees.ui.screens.radio.components.PlaybackControls
-import com.example.anees.ui.screens.radio.components.RadioBackground
 import com.example.anees.ui.screens.radio.components.RadioTitle
+import com.example.anees.ui.screens.radio.components.ScreenBackground
 import com.example.anees.ui.screens.radio.components.StationImageCard
 import com.example.anees.ui.screens.radio.components.StationInfoCard
 
@@ -32,7 +32,7 @@ fun RadioScreen(viewModel: RadioViewModel = hiltViewModel()) {
     val snackbarMessage = remember { mutableStateOf<String?>(null) }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        RadioBackground()
+        ScreenBackground()
 
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             Column(

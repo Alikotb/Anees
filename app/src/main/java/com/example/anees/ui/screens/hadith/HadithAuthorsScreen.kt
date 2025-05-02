@@ -48,11 +48,12 @@ import com.example.anees.R
 import com.example.anees.utils.hadith_helper.AuthorAssets
 import com.example.anees.enums.AuthorEdition
 import com.example.anees.enums.getAuthorsName
+import com.example.anees.ui.screens.hadith.components.ScreenTitle
 import com.example.anees.utils.extensions.isInternetAvailable
 import com.google.gson.Gson
 
 @Composable
-fun HadithAuthorsScreen(navToHadithsSections: (String) -> Unit) {
+fun HadithAuthorsScreen(navToHadithsSections: (String) -> Unit, onBackClick: () -> Unit) {
     val ctx = LocalContext.current
     val isOnline = ctx.isInternetAvailable()
 
@@ -70,28 +71,7 @@ fun HadithAuthorsScreen(navToHadithsSections: (String) -> Unit) {
             .padding(18.dp)
     ) {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 18.dp),
-                contentAlignment = Alignment.CenterEnd
-            ) {
-                Text(
-                    text = "رواة الحديث",
-                    color = Color(0xFF3B3B3B),
-                    fontSize = 28.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily(Font(R.font.othmani)),
-                    textAlign = TextAlign.Right,
-                    style = TextStyle(
-                        shadow = Shadow(
-                            color = Color.Black.copy(alpha = 0.3f),
-                            offset = Offset(2f, 2f),
-                            blurRadius = 4f
-                        )
-                    )
-                )
-            }
+            ScreenTitle(title = "رواة الحديث", onBackClick = onBackClick)
         }
 
         LazyVerticalGrid(

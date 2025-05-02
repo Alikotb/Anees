@@ -33,7 +33,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.text.style.TextAlign
 import com.example.anees.data.model.Response
 import com.example.anees.data.model.TafsierModel
-import com.example.anees.ui.screens.radio.components.RadioBackground
+import com.example.anees.ui.screens.radio.components.ScreenBackground
 import com.example.anees.ui.screens.tafsir.TafsirViewModel
 
 @Composable
@@ -85,7 +85,7 @@ fun TafsirDetailsScreen(surah: QuranSurah) {
 @Composable
 fun Screen(surah: QuranSurah, tafsir: TafsierModel) {
     Box(Modifier.fillMaxSize()){
-        RadioBackground()
+        ScreenBackground()
         Column(
             modifier = Modifier
                 .fillMaxSize()

@@ -1,7 +1,6 @@
 package com.example.anees.ui.screens.Reciters
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -22,7 +20,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -45,20 +42,15 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.anees.R
-import com.example.anees.enums.AuthorEdition
 import com.example.anees.enums.RecitersEnum
-import com.example.anees.enums.getAuthorsName
-import com.example.anees.ui.screens.radio.components.RadioBackground
-import com.example.anees.utils.extensions.isInternetAvailable
-import com.example.anees.utils.hadith_helper.AuthorAssets
-import com.google.gson.Gson
+import com.example.anees.ui.screens.radio.components.ScreenBackground
 
 @Preview(showBackground = true)
 @Composable
 fun RecitersScreen(onBackClick: () -> Unit = {}, navToSuraMp3: (RecitersEnum) -> Unit = {}) {
     val ctx = LocalContext.current
     Box {
-        RadioBackground()
+        ScreenBackground()
         Column(
             modifier = Modifier
                 .fillMaxSize()

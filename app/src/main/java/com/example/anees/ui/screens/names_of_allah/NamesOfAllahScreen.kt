@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.example.anees.R
 import com.example.anees.ui.screens.radio.components.PlaybackButton
-import com.example.anees.ui.screens.radio.components.RadioBackground
+import com.example.anees.ui.screens.radio.components.ScreenBackground
 import com.example.anees.utils.names_of_allah_helper.getAllNames
 
 @Composable
@@ -64,7 +64,7 @@ fun NamesOfAllahScreen(navToHome: () -> Unit) {
         }
     }
 
-    RadioBackground()
+    ScreenBackground()
     Column(
         modifier = Modifier
             .fillMaxSize()

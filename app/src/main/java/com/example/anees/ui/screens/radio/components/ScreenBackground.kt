@@ -10,7 +10,7 @@ import androidx.compose.ui.res.painterResource
 import com.example.anees.R
 
 @Composable
-fun RadioBackground() {
+fun ScreenBackground() {
     Image(
         painter = painterResource(id = R.drawable.zekrback),
         contentDescription = "Background",

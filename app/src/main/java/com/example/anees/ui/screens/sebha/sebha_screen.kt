@@ -56,7 +56,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.anees.R
 import com.example.anees.data.model.Sebiha
-import com.example.anees.ui.screens.radio.components.RadioBackground
+import com.example.anees.ui.screens.radio.components.ScreenBackground
 import com.example.anees.ui.screens.sebha.component.AzkarButtomSheet
 import kotlinx.coroutines.delay
 
@@ -120,7 +120,7 @@ fun Ssebha(
     var mainZekir =sebiha.value.name
 
     Box(Modifier.fillMaxSize()){
-        RadioBackground()
+        ScreenBackground()
         Column(
             modifier = Modifier
                 .fillMaxSize()
