@@ -20,6 +20,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.anees.utils.extensions.convertNumbersToArabic
+import com.example.anees.utils.extensions.toArabicTime
 import com.example.anees.utils.prayer_helper.PrayerTimesHelper
 
 @Composable
@@ -32,7 +34,7 @@ fun PrayerList() {
             val icon = prayerEnum.icon
             PrayerItem(
                 name = name,
-                time = time,
+                time = time.toString(),
                 icon = icon,
                 isHighlighted = isHighlighted
             )

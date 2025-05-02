@@ -1,6 +1,5 @@
 package com.example.anees.utils.extensions
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -12,7 +11,6 @@ import android.os.Build
 import android.provider.Settings
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.annotation.RequiresPermission
 import com.example.anees.enums.PrayEnum
 import com.example.anees.receivers.AzanAlarmReceiver
 import com.example.anees.utils.prayer_helper.PrayerTimesHelper
@@ -25,13 +23,27 @@ fun Context.isInternetAvailable(): Boolean {
 
 
 @RequiresApi(Build.VERSION_CODES.S)
+fun Context.setAllAlarms(
+){
+    var index = 0;
+    for (pray in PrayerTimesHelper.getUpcomingPrayers()) {
+        setAlarm(
+            requestCode = index++,
+            prayEnum = pray.first,
+            triggerTimeMillis = pray.second
+        )
+    }
+}
+
+
+@RequiresApi(Build.VERSION_CODES.S)
 @SuppressLint("ScheduleExactAlarm")
 fun Context.setAlarm(
-    requestCode: Int = 0
+    requestCode: Int = 0,
+    triggerTimeMillis: Long,
+    prayEnum: PrayEnum
 ) {
-    val (prayEnum, triggerTimeMillis) = PrayerTimesHelper.getNextPrayer() ?: return
-
-
+    Log.e("TAG", "setAlarm:$requestCode : ${prayEnum.value} -> ${triggerTimeMillis.toArabicTime().convertNumbersToArabic()}", )
     val intent = Intent(this, AzanAlarmReceiver::class.java)
     intent.putExtra("prayEnum", prayEnum)
     intent.putExtra("time", triggerTimeMillis)

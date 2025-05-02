@@ -7,7 +7,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.anees.enums.PrayEnum
 import com.example.anees.ui.screens.azan.AzanOverlayActivity
-import com.example.anees.utils.extensions.setAlarm
+import com.example.anees.utils.extensions.setAllAlarms
 
 class AzanAlarmReceiver : BroadcastReceiver() {
     @RequiresApi(Build.VERSION_CODES.S)
@@ -21,6 +21,6 @@ class AzanAlarmReceiver : BroadcastReceiver() {
             putExtra("time" , time)
         }
         context.startActivity(overlayIntent)
-        context.setAlarm()
+        context.setAllAlarms()
     }
 }

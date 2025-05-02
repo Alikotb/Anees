@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.anees.ui.navigation.SetUpNavHost
-import com.example.anees.utils.extensions.setAlarm
+import com.example.anees.utils.extensions.setAllAlarms
 import com.example.anees.utils.location.LocationProvider
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,6 +26,7 @@ class MainActivity : ComponentActivity() {
     private var askedForOverlayPermission = false
 
 
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -36,6 +37,9 @@ class MainActivity : ComponentActivity() {
                 Uri.parse("package:$packageName")
             )
             startActivity(intent)
+        }
+        else{
+            setAllAlarms()
         }
         enableEdgeToEdge()
         setContent {
@@ -66,7 +70,7 @@ class MainActivity : ComponentActivity() {
         super.onResume()
         if (askedForOverlayPermission && Settings.canDrawOverlays(this)) {
             askedForOverlayPermission = false
-            setAlarm()
+            setAllAlarms()
         }
     }
 

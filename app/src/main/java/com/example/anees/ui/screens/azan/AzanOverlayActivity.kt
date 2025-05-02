@@ -8,13 +8,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.core.FastOutLinearInEasing
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -27,13 +20,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -44,9 +34,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -61,10 +49,9 @@ import com.example.anees.R
 import com.example.anees.enums.PrayEnum
 import com.example.anees.ui.screens.azan.component.AzanPulseView
 import com.example.anees.utils.extensions.convertNumbersToArabic
-import com.example.anees.utils.extensions.setAlarm
+import com.example.anees.utils.extensions.setAllAlarms
 import com.example.anees.utils.extensions.toArabicTime
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import java.time.format.TextStyle
 
 class AzanOverlayActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.S)
@@ -92,7 +79,7 @@ class AzanOverlayActivity : ComponentActivity() {
                 prayEnum = prayEnum ?: PrayEnum.FAJR,
                 prayerTime = time.toArabicTime().convertNumbersToArabic(),
             ){
-                setAlarm()
+                setAllAlarms()
                 finish()
             }
         }
