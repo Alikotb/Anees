@@ -29,13 +29,12 @@ fun Context.isInternetAvailable(): Boolean {
 fun Context.setAlarm(
     requestCode: Int = 0
 ) {
-    val (prayEnum , triggerTimeMillis) = PrayerTimesHelper.getNextPrayer() ?: return
-
+    val (prayEnum, triggerTimeMillis) = PrayerTimesHelper.getNextPrayer() ?: return
 
 
     val intent = Intent(this, AzanAlarmReceiver::class.java)
-    intent.putExtra("prayEnum" , prayEnum)
-    intent.putExtra("time" , triggerTimeMillis)
+    intent.putExtra("prayEnum", prayEnum)
+    intent.putExtra("time", triggerTimeMillis)
 
     val pendingIntent = PendingIntent.getBroadcast(
         this,
@@ -55,6 +54,7 @@ fun Context.setAlarm(
         triggerTimeMillis,
         pendingIntent
     )
+}
 fun Context.isVolumeZero(): Boolean {
     val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
     val volume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)

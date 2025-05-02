@@ -3,6 +3,7 @@ package com.example.anees.ui.screens.home
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,7 +25,16 @@ import com.example.anees.ui.screens.prayer.component.PrayerCardWithTimer
 import com.example.anees.utils.prayer_helper.PrayerTimesHelper
 
 @Composable
-fun HomeScreen(navToSebiha: () -> Unit = {}, navToQibla: () -> Unit = {}, navToQuran: () -> Unit = {},navToAzkar: () -> Unit = {}, navToHadith: () -> Unit = {}, navToRadio: () -> Unit, navToTafsir: () -> Unit,navToPrayer: () -> Unit = {} {
+fun HomeScreen(navToSebiha: () -> Unit = {},
+               navToQibla: () -> Unit = {},
+               navToQuran: () -> Unit = {},
+               navToAzkar: () -> Unit = {},
+               navToHadith: () -> Unit = {},
+               navToRadio: () -> Unit,
+               navToTafsir: () -> Unit,
+               navToPrayer: () -> Unit = {} ,
+               navToReciters: () -> Unit = {}
+){
     val screenHeight =LocalConfiguration.current.screenHeightDp.dp
 
     Box(
@@ -39,17 +49,12 @@ fun HomeScreen(navToSebiha: () -> Unit = {}, navToQibla: () -> Unit = {}, navToQ
         ) {
             val city = "زفتي"
             val country = "مصر"
-
-
             PrayerCardWithTimer{
                 navToPrayer()
             }
             HomeButton("Azkar") {
-            Spacer(
-                Modifier.height(
-                    screenHeight / 4
-                )
-            )
+                navToAzkar()
+            }
             HomeButton("Tasbih") {
                 navToSebiha()
             }
@@ -73,9 +78,11 @@ fun HomeScreen(navToSebiha: () -> Unit = {}, navToQibla: () -> Unit = {}, navToQ
                 navToTafsir()
             }
 
+            HomeButton("Reciters") {
+                navToReciters()
+            }
         }
     }
-
 }
 
 @Composable

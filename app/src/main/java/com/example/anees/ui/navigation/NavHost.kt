@@ -21,6 +21,7 @@ import com.example.anees.enums.AuthorEdition
 import com.example.anees.ui.screens.prayer.PrayerScreen
 import com.example.anees.ui.screens.radio.RadioScreen
 import com.example.anees.enums.QuranSurah
+import com.example.anees.ui.screens.Reciters.RecitersScreen
 import com.example.anees.ui.screens.azkar.screens.AdhkarDetailsScreen
 import com.example.anees.ui.screens.azkar.screens.AdhkarScreen
 import com.example.anees.ui.screens.tafsir.screens.TafsirDetailsScreen
@@ -64,11 +65,15 @@ fun SetUpNavHost(
                 },
                 navToPrayer = {
                     navController.navigate(ScreenRoute.PrayerTimesScreen)
+                              },
                 navToRadio = {
                     navController.navigate(ScreenRoute.RadioScreen)
                 },
                 navToTafsir = {
                     navController.navigate(ScreenRoute.TafsirScreen)
+                },
+                navToReciters = {
+                    navController.navigate(ScreenRoute.RecitersScreen)
                 }
             )
         }
@@ -169,6 +174,9 @@ fun SetUpNavHost(
                 QuranSurah::class.java
             )
             TafsirDetailsScreen(surah)
+        }
+        composable<ScreenRoute.RecitersScreen> {
+            RecitersScreen()
         }
     }
 }

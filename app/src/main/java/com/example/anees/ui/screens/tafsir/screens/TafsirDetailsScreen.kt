@@ -33,6 +33,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.text.style.TextAlign
 import com.example.anees.data.model.Response
 import com.example.anees.data.model.TafsierModel
+import com.example.anees.ui.screens.radio.components.RadioBackground
 import com.example.anees.ui.screens.tafsir.TafsirViewModel
 
 @Composable
@@ -83,39 +84,42 @@ fun TafsirDetailsScreen(surah: QuranSurah) {
 
 @Composable
 fun Screen(surah: QuranSurah, tafsir: TafsierModel) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 24.dp, start = 16.dp),
-                contentAlignment = Alignment.CenterEnd
-            ) {
-                Text(
-                    text = "سُورَةٌ ${surah.arabicName}",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF3B3B3B),
+    Box(Modifier.fillMaxSize()){
+        RadioBackground()
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 12.dp)
-                )
+                        .padding(top = 24.dp, start = 16.dp),
+                    contentAlignment = Alignment.CenterEnd
+                ) {
+                    Text(
+                        text = "سُورَةٌ ${surah.arabicName}",
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF3B3B3B),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 12.dp)
+                    )
+                }
             }
-        }
 
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(bottom = 16.dp)
-        ) {
-            items(tafsir.result) {
-                TafsirDeatilsCard(it)
-            }
-            item {
-                Spacer(modifier = Modifier.height(24.dp))
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(bottom = 16.dp)
+            ) {
+                items(tafsir.result) {
+                    TafsirDeatilsCard(it)
+                }
+                item {
+                    Spacer(modifier = Modifier.height(24.dp))
+                }
             }
         }
     }
