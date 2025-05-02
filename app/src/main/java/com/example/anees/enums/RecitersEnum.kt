@@ -18,4 +18,5 @@ enum class RecitersEnum(val reciter : String, val url : String, val image : Int 
     Kurdi("رعد محمد الكردي","https://server6.mp3quran.net/kurdi/",R.drawable.kurdi,"حفص عن عاصم - مرتل"),
     Hazza("هزاع البلوشي","https://server11.mp3quran.net/hazza/",R.drawable.hazza,"حفص عن عاصم - مرتل"),
     Badr("بدر التركي","https://server10.mp3quran.net/bader/Rewayat-Hafs-A-n-Assem/",R.drawable.badr,"حفص عن عاصم - مرتل"),
+
 }
