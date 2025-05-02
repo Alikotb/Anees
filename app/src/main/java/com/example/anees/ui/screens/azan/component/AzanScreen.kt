@@ -20,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
@@ -30,12 +31,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.anees.R
@@ -83,81 +86,90 @@ fun AzanScreen(
         )
     }
 
-    Scaffold (topBar = {}
-    ){padding->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            Image(
-                painter = painterResource(id = prayEnum.azanBackground),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-            )
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
 
-            Icon(
-                imageVector = Icons.Default.Close,
-                contentDescription = null,
-                tint = Color.White,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp , vertical = 40.dp)
-                    .size(32.dp)
-                    .background(
-                        Color.DarkGray.copy(alpha = 0.4f) , shape = RoundedCornerShape(50.dp)
-                    ).padding(4.dp).clickable{
-                        if (mediaPlayer.isPlaying) {
-                            // mediaPlayer.stop()
-                            //mediaPlayer.release()
-                        }
-                        onStopClicked()
-                    }
 
-            )
-
-            Column(
+        Scaffold(topBar = {}
+        ) { padding ->
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(24.dp),
-                verticalArrangement = Arrangement.SpaceBetween,
-                horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Image(
+                    painter = painterResource(id = prayEnum.azanBackground),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp, vertical = 40.dp)
+                        .size(32.dp)
+                        .background(
+                            Color.DarkGray.copy(alpha = 0.4f), shape = RoundedCornerShape(50.dp)
+                        ).padding(4.dp).clickable {
+                            if (mediaPlayer.isPlaying) {
+                                // mediaPlayer.stop()
+                                //mediaPlayer.release()
+                            }
+                            onStopClicked()
+                        }
+
+                )
+
                 Column(
-                    modifier = Modifier.padding(top = 64.dp),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(24.dp),
+                    verticalArrangement = Arrangement.SpaceBetween,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    AzanPulseView(prayerName = prayEnum.value
-                        , prayerTime = prayerTime,
-                        isDay = if(prayEnum == PrayEnum.ZUHR || prayEnum == PrayEnum.ASR) true else false
-                    )
-
-                }
-                Column {
-                    Text(text = "${prayEnum.hadith}" ,
-                        color = Color.White , fontSize = 14.sp ,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily =FontFamily(Font(R.font.othmani)
+                    Column(
+                        modifier = Modifier.padding(top = 64.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        AzanPulseView(
+                            prayerName = prayEnum.value, prayerTime = prayerTime,
+                            isDay = if (prayEnum == PrayEnum.ZUHR || prayEnum == PrayEnum.ASR) true else false
                         )
-                        , modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center
-                    )
-                    Spacer(Modifier.height(8.dp))
-                    Text(text = "${prayEnum.author}" ,
-                        color = Color.LightGray , fontSize = 12.sp ,
-                        fontWeight = FontWeight.Normal,
-                        fontFamily =FontFamily(Font(R.font.othmani))
-                        , modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center
+
+                    }
+                    Column {
+                        Text(
+                            text = "${prayEnum.hadith}",
+                            color = Color.White, fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = FontFamily(
+                                Font(R.font.othmani)
+                            ), modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center
+                        )
+                        Spacer(Modifier.height(8.dp))
+                        Text(
+                            text = "${prayEnum.author}",
+                            color = Color.LightGray,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Normal,
+                            fontFamily = FontFamily(Font(R.font.othmani)),
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
+
+                    Text(
+                        text = "أنــيــس الـمــســلــم",
+                        color = Color.White, fontSize = 32.sp,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = FontFamily(Font(R.font.othmani))
                     )
                 }
-
-
-                Text(text = "أنــيــس الـمــســلــم" ,
-                    color = Color.White , fontSize = 32.sp ,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily =FontFamily(Font(R.font.othmani))
-                )
             }
         }
+
     }
 }
