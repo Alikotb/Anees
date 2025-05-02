@@ -187,7 +187,9 @@ fun SetUpNavHost(
             }
         }
         composable<ScreenRoute.NamesOfAllahScreen> {
-            NamesOfAllahScreen()
+            NamesOfAllahScreen{
+                navController.navigateUp()
+            }
         }
         composable<ScreenRoute.TafsirDetailsScreen> {
             val surah = Gson().fromJson(

@@ -43,6 +43,8 @@ fun NamesOfAllahCard(name:NamesOfAllahModelItem) {
     val screenHeight = configuration.screenHeightDp.dp
 
     var isFlipped by remember { mutableStateOf(false) }
+
+
     val animatedRotation by animateFloatAsState(
         targetValue = if (isFlipped) 180f else 0f,
         animationSpec = tween(durationMillis = 600),
@@ -84,14 +86,16 @@ fun NamesOfAllahCard(name:NamesOfAllahModelItem) {
                 if (!showBackContent) {
                     Text(
                         text = name.name,
+                        color = Color(0xFF311403),
                         fontSize = 30.sp,
-                        fontFamily = FontFamily(Font(R.font.amiri)),
+                        fontFamily = FontFamily(Font(R.font.thules)),
                         fontWeight = FontWeight.Bold
                     )
                 } else {
                     Text(
                         text = name.text,
                         fontSize = 14.sp,
+                        color = Color(0xFF311403),
                         fontFamily = FontFamily(Font(R.font.othmani)),
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Normal,
