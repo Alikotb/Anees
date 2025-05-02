@@ -21,7 +21,10 @@ import com.example.anees.enums.AuthorEdition
 import com.example.anees.ui.screens.prayer.PrayerScreen
 import com.example.anees.ui.screens.radio.RadioScreen
 import com.example.anees.enums.QuranSurah
+import com.example.anees.enums.RecitersEnum
+import com.example.anees.ui.screens.Reciters.QuranPlayerScreen
 import com.example.anees.ui.screens.Reciters.RecitersScreen
+import com.example.anees.ui.screens.Reciters.SuraMp3Screen
 import com.example.anees.ui.screens.azkar.screens.AdhkarDetailsScreen
 import com.example.anees.ui.screens.azkar.screens.AdhkarScreen
 import com.example.anees.ui.screens.names_of_allah.NamesOfAllahScreen
@@ -66,7 +69,7 @@ fun SetUpNavHost(
                 },
                 navToPrayer = {
                     navController.navigate(ScreenRoute.PrayerTimesScreen)
-                              },
+                },
                 navToRadio = {
                     navController.navigate(ScreenRoute.RadioScreen)
                 },
@@ -92,15 +95,18 @@ fun SetUpNavHost(
         }
 
         composable<ScreenRoute.CompleteQuranScreen> {
-           val sharedPref = SharedPreferencesImpl(navController.context)
+            val sharedPref = SharedPreferencesImpl(navController.context)
             val initPage = sharedPref.fetchData(Constants.CURRENT_PAGE_INDEX, 658)
             QuranPDFViewerScreen(
                 initPage = initPage,
                 onIndexButtonClick = {
-                navController.navigate(ScreenRoute.QuranIndexScreen) },
-                onKhatmButtonClick = {navController.navigate(ScreenRoute.KhatmQuranDuaScreen)
+                    navController.navigate(ScreenRoute.QuranIndexScreen)
                 },
-                onJuzButtonClick = {navController.navigate(ScreenRoute.JuzIndexScreen)
+                onKhatmButtonClick = {
+                    navController.navigate(ScreenRoute.KhatmQuranDuaScreen)
+                },
+                onJuzButtonClick = {
+                    navController.navigate(ScreenRoute.JuzIndexScreen)
                 }
             )
         }
@@ -146,7 +152,7 @@ fun SetUpNavHost(
             )
         }
         composable<ScreenRoute.QuranIndexScreen> {
-            QuranIndexScreen(){
+            QuranIndexScreen() {
                 navController.popBackStack()
                 navController.popBackStack()
                 navController.navigate(ScreenRoute.CompleteQuranScreen)
@@ -155,7 +161,7 @@ fun SetUpNavHost(
 
 
         composable<ScreenRoute.JuzIndexScreen> {
-            JuzIndexScreen{
+            JuzIndexScreen {
                 navController.popBackStack()
                 navController.popBackStack()
                 navController.navigate(ScreenRoute.CompleteQuranScreen)
@@ -166,7 +172,7 @@ fun SetUpNavHost(
             KhatmQuranDuaScreen()
         }
         composable<ScreenRoute.PrayerTimesScreen> {
-            PrayerScreen{
+            PrayerScreen {
                 navController.navigateUp()
             }
         }
@@ -176,9 +182,9 @@ fun SetUpNavHost(
         }
 
         composable<ScreenRoute.TafsirScreen> {
-           TafsirScreen{
-               navController.navigate(ScreenRoute.TafsirDetailsScreen(it))
-           }
+            TafsirScreen {
+                navController.navigate(ScreenRoute.TafsirDetailsScreen(it))
+            }
         }
         composable<ScreenRoute.NamesOfAllahScreen> {
             NamesOfAllahScreen()
@@ -193,7 +199,37 @@ fun SetUpNavHost(
         composable<ScreenRoute.RecitersScreen> {
             RecitersScreen(onBackClick = {
                 navController.navigateUp()
-            })
+            }) {
+                navController.navigate(ScreenRoute.SuraMp3Screen(Gson().toJson(it)))
+            }
+        }
+
+        composable<ScreenRoute.SuraMp3Screen> {
+            val reciter = Gson().fromJson(
+                it.arguments?.getString("reciter"),
+                RecitersEnum::class.java
+            )
+            SuraMp3Screen(reciter, onBackClick = {
+                navController.navigateUp()
+            }) {
+                reciter, index ->
+                navController.navigate(ScreenRoute.QuranPlayerScreen(reciter, index))
+            }
+        }
+
+        composable<ScreenRoute.QuranPlayerScreen> {
+            val reciter = Gson().fromJson(
+                it.arguments?.getString("reciter"),
+                RecitersEnum::class.java
+            )
+
+            val index = it.arguments?.getInt("index") ?: 0
+            QuranPlayerScreen(
+                reciter = reciter,
+                initialSuraIndex = index
+            ){
+                navController.navigateUp()
+            }
         }
     }
 }
