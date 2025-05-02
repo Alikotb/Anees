@@ -1,10 +1,11 @@
 package com.example.anees.ui.screens.hisn_almuslim
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -77,6 +78,10 @@ fun HisnAlMuslimScreen(onBackClick: () -> Unit) {
                     items(texts.size) { index ->
                         HisnAlMuslimTextCard(textContent = texts[index])
                     }
+
+                }
+                item {
+                    Spacer(modifier = Modifier.height(48.dp))
                 }
             }
         }

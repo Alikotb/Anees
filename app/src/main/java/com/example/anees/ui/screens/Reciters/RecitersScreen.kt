@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,7 +33,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -48,7 +48,6 @@ import com.example.anees.ui.screens.radio.components.ScreenBackground
 @Preview(showBackground = true)
 @Composable
 fun RecitersScreen(onBackClick: () -> Unit = {}, navToSuraMp3: (RecitersEnum) -> Unit = {}) {
-    val ctx = LocalContext.current
     Box {
         ScreenBackground()
         Column(
@@ -84,7 +83,8 @@ fun RecitersScreen(onBackClick: () -> Unit = {}, navToSuraMp3: (RecitersEnum) ->
                 columns = GridCells.Fixed(2),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(bottom = 48.dp)
             ) {
                 items(RecitersEnum.entries.toTypedArray()) { reciter ->
                     ReciterCard(reciter = reciter){

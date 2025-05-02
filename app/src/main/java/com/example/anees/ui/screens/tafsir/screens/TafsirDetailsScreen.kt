@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
@@ -21,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,11 +31,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.text.style.TextAlign
 import com.example.anees.data.model.Response
 import com.example.anees.data.model.TafsierModel
+import com.example.anees.ui.screens.hadith.components.ScreenTitle
 import com.example.anees.ui.screens.radio.components.ScreenBackground
 import com.example.anees.ui.screens.tafsir.TafsirViewModel
 
 @Composable
-fun TafsirDetailsScreen(surah: QuranSurah) {
+fun TafsirDetailsScreen(surah: QuranSurah,navToHome:()->Unit) {
 
     val viewModel: TafsirViewModel = hiltViewModel()
     val tafsir by viewModel.tafsirSurah.collectAsStateWithLifecycle()
@@ -58,7 +57,7 @@ fun TafsirDetailsScreen(surah: QuranSurah) {
         }
 
         is Response.Success -> {
-            Screen(surah, state.data)
+            Screen(surah, navToHome,state.data)
         }
 
         is Response.Error -> {
@@ -83,33 +82,19 @@ fun TafsirDetailsScreen(surah: QuranSurah) {
 }
 
 @Composable
-fun Screen(surah: QuranSurah, tafsir: TafsierModel) {
+fun Screen(surah: QuranSurah, navToHome:()->Unit, tafsir: TafsierModel) {
     Box(Modifier.fillMaxSize()){
         ScreenBackground()
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(horizontal = 16.dp)
+                .padding(top = 24.dp)
         ) {
-            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 24.dp, start = 16.dp),
-                    contentAlignment = Alignment.CenterEnd
-                ) {
-                    Text(
-                        text = "سُورَةٌ ${surah.arabicName}",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF3B3B3B),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 12.dp)
-                    )
-                }
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                ScreenTitle(pading = 4, title =  "سُورَةٌ ${surah.arabicName}",
+                     onBackClick = { navToHome() }, size = 24)
             }
-
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 contentPadding = PaddingValues(bottom = 16.dp)

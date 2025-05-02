@@ -29,12 +29,14 @@ import com.example.anees.R
 fun ScreenTitle(
     title: String,
     onBackClick: (() -> Unit)? = null,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    pading: Int=16,
+    size:Int=28
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(top= 24.dp, bottom = 18.dp, start = 16.dp, end = 16.dp),
+            .padding(top= 24.dp, bottom = 18.dp, start = pading.dp, end = pading.dp),
         contentAlignment = Alignment.CenterEnd
     ) {
         Row(
@@ -57,7 +59,7 @@ fun ScreenTitle(
             Text(
                 text = title,
                 color = Color(0xFF3B3B3B),
-                fontSize = 28.sp,
+                fontSize = size.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = FontFamily(Font(R.font.othmani)),
                 textAlign = TextAlign.Right,

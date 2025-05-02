@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.SwapVert
 import androidx.compose.material.ripple.rememberRipple
@@ -56,6 +55,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.anees.R
 import com.example.anees.data.model.Sebiha
+import com.example.anees.ui.screens.hadith.components.ScreenTitle
 import com.example.anees.ui.screens.radio.components.ScreenBackground
 import com.example.anees.ui.screens.sebha.component.AzkarButtomSheet
 import kotlinx.coroutines.delay
@@ -123,35 +123,15 @@ fun Ssebha(
         ScreenBackground()
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize().padding(top = 32.dp),
         ) {
 
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 24.dp)
-                ) {
-                    IconButton(
-                        onClick = {
-                            navToHome()
-                        },
-                        modifier = Modifier
-                            .size(48.dp)
-                            .align(Alignment.TopStart)
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
-                            tint = Color.Black,
-                            modifier = Modifier.size(28.dp)
-                        )
-                    }
-                }
+                ScreenTitle(pading = 4, title = "السبحة", onBackClick = navToHome)
             }
-
-            Column {
-
+            Column(
+                modifier = Modifier.fillMaxSize().padding(horizontal = 8.dp)
+            ) {
 
                 Text(
                     text = mainZekir,

@@ -1,8 +1,6 @@
 package com.example.anees.ui.screens.azkar.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,27 +26,25 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.anees.R
 import com.example.anees.ui.screens.azkar.component.ZekrCard
+import com.example.anees.ui.screens.hadith.components.ScreenTitle
+import com.example.anees.ui.screens.radio.components.ScreenBackground
 import com.example.anees.utils.Constants
 import com.example.anees.utils.azkar_helper.AzkarUtils
 import com.example.anees.workers.setNotification
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AdhkarScreen(navToDetails: (String) -> Unit = {}) {
+fun AdhkarScreen(navToHome: () -> Unit = {}, navToDetails: (String) -> Unit = {}) {
     val context = LocalContext.current
     val azkarList = remember { AzkarUtils.parseAdhkar(context) }
     val categories = remember { AzkarUtils.getAdhkarCategories(azkarList) }
@@ -57,35 +53,19 @@ fun AdhkarScreen(navToDetails: (String) -> Unit = {}) {
     LaunchedEffect(Unit) {
         setNotification(context, hmada)
     }
-    Box(modifier = Modifier.fillMaxSize()) {
-        Image(
-            painter = painterResource(id = R.drawable.zekrback),
-            contentDescription = "Background Image",
-            modifier = Modifier.fillMaxSize().alpha(.22f),
-            contentScale = ContentScale.Crop
-        )
+
+    ScreenBackground()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(horizontal = 16.dp)
+            .padding(vertical = 32.dp)
     ) {
-        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.CenterEnd
-            ) {
-                Text(
-                    text = "الأذكار اليومية",
-                    textAlign = TextAlign.Right,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF3B3B3B),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp, bottom = 4.dp, start = 12.dp)                )
-            }
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+            ScreenTitle(pading = 4, title = "الأذكار اليومية", onBackClick = { navToHome() }, size = 24)
         }
+
         OutlinedTextField(
             value = searchQuery,
             onValueChange = { searchQuery = it },
@@ -147,6 +127,6 @@ fun AdhkarScreen(navToDetails: (String) -> Unit = {}) {
                 }
             }
         }
-    }}
+    }
 
 }

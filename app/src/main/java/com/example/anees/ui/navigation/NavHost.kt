@@ -80,7 +80,7 @@ fun SetUpNavHost(
                 navToReciters = {
                     navController.navigate(ScreenRoute.RecitersScreen)
                 },
-                navToNamesOfAllah= {
+                navToNamesOfAllah = {
                     navController.navigate(ScreenRoute.NamesOfAllahScreen)
                 },
                 navToHisnAlMuslim = {
@@ -116,9 +116,14 @@ fun SetUpNavHost(
         }
 
         composable<ScreenRoute.AdhkarScreen> {
-            AdhkarScreen { cat ->
-                navController.navigate(AzkarDetailsScreen(cat))
-            }
+            AdhkarScreen(
+                navToHome = {
+                    navController.navigateUp()
+                },
+                navToDetails = { cat ->
+                    navController.navigateUp()
+                    navController.navigate(AzkarDetailsScreen(cat))
+                })
         }
         composable<AzkarDetailsScreen> {
             val asd = it.arguments?.getString("category") ?: ""
@@ -151,7 +156,8 @@ fun SetUpNavHost(
                 it.arguments?.getString("author"),
                 AuthorEdition::class.java
             )
-            HadithSectionsScreen(author, {auth, id ->
+            HadithSectionsScreen(
+                author, { auth, id ->
                     navController.navigate(ScreenRoute.HadithScreen(auth, id))
                 },
                 onBackClick = {
@@ -190,12 +196,16 @@ fun SetUpNavHost(
         }
 
         composable<ScreenRoute.TafsirScreen> {
-            TafsirScreen {
+            TafsirScreen (navToDetails = {
+                navController.navigateUp()
                 navController.navigate(ScreenRoute.TafsirDetailsScreen(it))
+            },navToHome = {
+                navController.navigateUp()
             }
+            )
         }
         composable<ScreenRoute.NamesOfAllahScreen> {
-            NamesOfAllahScreen{
+            NamesOfAllahScreen {
                 navController.navigateUp()
             }
         }
@@ -204,7 +214,9 @@ fun SetUpNavHost(
                 it.arguments?.getString("surah"),
                 QuranSurah::class.java
             )
-            TafsirDetailsScreen(surah)
+            TafsirDetailsScreen(surah){
+                navController.navigate(ScreenRoute.TafsirScreen)
+            }
         }
         composable<ScreenRoute.RecitersScreen> {
             RecitersScreen(onBackClick = {
@@ -221,8 +233,7 @@ fun SetUpNavHost(
             )
             SuraMp3Screen(reciter, onBackClick = {
                 navController.navigateUp()
-            }) {
-                reciter, index ->
+            }) { reciter, index ->
                 navController.navigate(ScreenRoute.QuranPlayerScreen(reciter, index))
             }
         }
@@ -237,7 +248,7 @@ fun SetUpNavHost(
             QuranPlayerScreen(
                 reciter = reciter,
                 initialSuraIndex = index
-            ){
+            ) {
                 navController.navigateUp()
             }
         }
