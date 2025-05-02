@@ -4,7 +4,6 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-
         <DropdownSelection timestamp="2025-05-01T16:34:27.634557100Z">
           <Target type="DEFAULT_BOOT">
             <handle>
@@ -13,9 +12,6 @@
           </Target>
         </DropdownSelection>
         <DialogSelection />
-      </SelectionState>
-      <SelectionState runConfigName="RecitersScreen">
-        <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
   </component>

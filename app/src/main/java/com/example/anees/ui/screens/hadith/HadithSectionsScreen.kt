@@ -27,6 +27,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,54 +37,60 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.example.anees.enums.AuthorEdition
 import com.example.anees.utils.hadith_helper.getSections
 import com.example.anees.utils.extensions.isInternetAvailable
 import androidx.compose.ui.unit.sp
 import com.example.anees.R
+import com.example.anees.ui.screens.hadith.components.ScreenTitle
 import com.google.gson.Gson
 
 @Composable
-fun HadithSectionsScreen(author: AuthorEdition, navToHadithScreen: (String, String) -> Unit) {
+fun HadithSectionsScreen(author: AuthorEdition, navToHadithScreen: (String, String) -> Unit, onBackClick: ()-> Unit) {
     val ctx = LocalContext.current
     val isOnline = ctx.isInternetAvailable()
     val sectionsMap = getSections(author.apiKey,isOnline)
     var searchQuery by remember { mutableStateOf("") }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        HadithSearchBar(
-            query = searchQuery,
-            onQueryChange = { searchQuery = it }
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            modifier = Modifier.weight(1f),
-            contentPadding = PaddingValues(8.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
         ) {
-            val filteredSections = sectionsMap.filterValues {
-                it.contains(searchQuery, ignoreCase = true)
-            }
+            ScreenTitle(title = author.displayNameAr, onBackClick = onBackClick)
+            HadithSearchBar(
+                query = searchQuery,
+                onQueryChange = { searchQuery = it }
+            )
 
-            items(filteredSections.entries.toList()) { (number, title) ->
-                SectionCard(
-                    sectionNumber = number,
-                    sectionTitle = title
-                ) { selectedNumber ->
-                    navToHadithScreen(Gson().toJson(author), selectedNumber)
+            Spacer(modifier = Modifier.height(16.dp))
+
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                modifier = Modifier.weight(1f),
+                contentPadding = PaddingValues(8.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                val filteredSections = sectionsMap.filterValues {
+                    it.contains(searchQuery, ignoreCase = true)
+                }
+
+                items(filteredSections.entries.toList()) { (number, title) ->
+                    SectionCard(
+                        sectionNumber = number,
+                        sectionTitle = title
+                    ) { selectedNumber ->
+                        navToHadithScreen(Gson().toJson(author), selectedNumber)
+                    }
                 }
             }
         }

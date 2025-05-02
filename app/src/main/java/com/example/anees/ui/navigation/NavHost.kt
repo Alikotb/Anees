@@ -119,7 +119,9 @@ fun SetUpNavHost(
                 AuthorEdition::class.java
             )
             val id = it.arguments?.getString("number") ?: ""
-            HadithScreen(author, id)
+            HadithScreen(author, id, {
+                navController.navigateUp()
+            })
         }
         composable<ScreenRoute.HadithAuthorsScreen> {
             HadithAuthorsScreen() { author ->
@@ -131,9 +133,13 @@ fun SetUpNavHost(
                 it.arguments?.getString("author"),
                 AuthorEdition::class.java
             )
-            HadithSectionsScreen(author) { auth, id ->
-                navController.navigate(ScreenRoute.HadithScreen(auth, id))
-            }
+            HadithSectionsScreen(author, {auth, id ->
+                    navController.navigate(ScreenRoute.HadithScreen(auth, id))
+                },
+                onBackClick = {
+                    navController.navigateUp()
+                }
+            )
         }
         composable<ScreenRoute.QuranIndexScreen> {
             QuranIndexScreen(){
