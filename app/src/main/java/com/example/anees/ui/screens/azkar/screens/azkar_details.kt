@@ -52,7 +52,7 @@ fun AdhkarDetailsScreen(selectedCategory: String,navToAzkar:  () -> Unit = {}) {
             .padding(top = 32.dp)
     ) {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-            ScreenTitle(pading = 4, title = selectedCategory, onBackClick = {navToAzkar() }, size = 24)
+            ScreenTitle(padding = 4, title = selectedCategory, onBackClick = {navToAzkar() }, size = 24)
         }
 
         LazyColumn(

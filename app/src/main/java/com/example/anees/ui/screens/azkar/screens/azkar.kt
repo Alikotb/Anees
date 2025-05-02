@@ -63,7 +63,7 @@ fun AdhkarScreen(navToHome: () -> Unit = {}, navToDetails: (String) -> Unit = {}
             .padding(vertical = 32.dp)
     ) {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-            ScreenTitle(pading = 4, title = "الأذكار اليومية", onBackClick = { navToHome() }, size = 24)
+            ScreenTitle(padding = 4, title = "الأذكار اليومية", onBackClick = { navToHome() }, size = 24)
         }
 
         OutlinedTextField(

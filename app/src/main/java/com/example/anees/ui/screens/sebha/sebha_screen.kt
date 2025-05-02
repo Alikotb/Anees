@@ -127,7 +127,7 @@ fun Ssebha(
         ) {
 
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                ScreenTitle(pading = 4, title = "السبحة", onBackClick = navToHome)
+                ScreenTitle(padding = 4, title = "السبحة", onBackClick = navToHome)
             }
             Column(
                 modifier = Modifier.fillMaxSize().padding(horizontal = 8.dp)

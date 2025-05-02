@@ -22,7 +22,6 @@ fun Context.isInternetAvailable(): Boolean {
 }
 
 
-@RequiresApi(Build.VERSION_CODES.S)
 fun Context.setAllAlarms(
 ){
     var index = 0;
@@ -36,7 +35,6 @@ fun Context.setAllAlarms(
 }
 
 
-@RequiresApi(Build.VERSION_CODES.S)
 @SuppressLint("ScheduleExactAlarm")
 fun Context.setAlarm(
     requestCode: Int = 0,
@@ -57,9 +55,11 @@ fun Context.setAlarm(
 
 
     val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    if (!alarmManager.canScheduleExactAlarms()) {
-        val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
-        startActivity(intent)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        if (!alarmManager.canScheduleExactAlarms()) {
+            val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
+            startActivity(intent)
+        }
     }
     alarmManager.setExactAndAllowWhileIdle(
         AlarmManager.RTC_WAKEUP,

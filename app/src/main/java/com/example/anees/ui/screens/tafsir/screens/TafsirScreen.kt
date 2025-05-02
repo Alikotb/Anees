@@ -33,7 +33,7 @@ fun TafsirScreen(navToHome:()->Unit,navToDetails: (String) -> Unit) {
                 .padding(24.dp)
         ) {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                ScreenTitle(pading = 4, title =  "التفسير الميسر للقران الكريم", size = 24,onBackClick = { navToHome() })
+                ScreenTitle(padding = 4, title =  "التفسير الميسر للقران الكريم", size = 24,onBackClick = { navToHome() })
             }
 
             LazyColumn(

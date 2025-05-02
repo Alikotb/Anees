@@ -26,7 +26,6 @@ class MainActivity : ComponentActivity() {
     private var askedForOverlayPermission = false
 
 
-    @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -65,7 +64,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
     override fun onResume() {
         super.onResume()
         if (askedForOverlayPermission && Settings.canDrawOverlays(this)) {

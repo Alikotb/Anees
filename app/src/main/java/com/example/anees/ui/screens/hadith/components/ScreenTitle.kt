@@ -30,13 +30,13 @@ fun ScreenTitle(
     title: String,
     onBackClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
-    pading: Int=16,
+    padding: Int=12,
     size:Int=28
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(top= 24.dp, bottom = 18.dp, start = pading.dp, end = pading.dp),
+            .padding(top= 24.dp, bottom = 18.dp, start = padding.dp, end = padding.dp),
         contentAlignment = Alignment.CenterEnd
     ) {
         Row(

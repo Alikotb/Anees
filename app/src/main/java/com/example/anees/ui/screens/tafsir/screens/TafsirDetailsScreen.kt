@@ -92,7 +92,7 @@ fun Screen(surah: QuranSurah, navToHome:()->Unit, tafsir: TafsierModel) {
                 .padding(top = 24.dp)
         ) {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                ScreenTitle(pading = 4, title =  "سُورَةٌ ${surah.arabicName}",
+                ScreenTitle(padding = 4, title =  "سُورَةٌ ${surah.arabicName}",
                      onBackClick = { navToHome() }, size = 24)
             }
             LazyColumn(

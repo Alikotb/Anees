@@ -10,7 +10,6 @@ import com.example.anees.ui.screens.azan.AzanOverlayActivity
 import com.example.anees.utils.extensions.setAllAlarms
 
 class AzanAlarmReceiver : BroadcastReceiver() {
-    @RequiresApi(Build.VERSION_CODES.S)
     override fun onReceive(context: Context, intent: Intent?) {
 
         val prayEnum = intent?.getSerializableExtra("prayEnum") as? PrayEnum
