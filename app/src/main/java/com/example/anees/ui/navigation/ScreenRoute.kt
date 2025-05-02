@@ -50,5 +50,8 @@ sealed class ScreenRoute {
     @Serializable
     object HisnAlMuslimScreen : ScreenRoute()
 
+    @Serializable
+    object  AzanPlayerScreen : ScreenRoute()
+
 
 }

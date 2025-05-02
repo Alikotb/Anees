@@ -29,7 +29,7 @@ fun PrayerTopBar(
     onBackClick: () -> Unit = {}
 ){
     Row(
-        Modifier.fillMaxWidth(),
+        Modifier.fillMaxWidth().padding(top = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ){

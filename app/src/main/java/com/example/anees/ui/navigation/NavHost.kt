@@ -18,13 +18,16 @@ import com.example.anees.ui.screens.quran_pdf.quran.QuranPDFViewerScreen
 import com.example.anees.ui.screens.sebha.SebihaScreen
 import com.example.anees.ui.screens.splash.SplashScreen
 import com.example.anees.enums.AuthorEdition
+import com.example.anees.enums.PrayEnum
 import com.example.anees.ui.screens.prayer.PrayerScreen
 import com.example.anees.ui.screens.radio.RadioScreen
 import com.example.anees.enums.QuranSurah
 import com.example.anees.enums.RecitersEnum
+import com.example.anees.ui.navigation.ScreenRoute.AzanPlayerScreen
 import com.example.anees.ui.screens.Reciters.QuranPlayerScreen
 import com.example.anees.ui.screens.Reciters.RecitersScreen
 import com.example.anees.ui.screens.Reciters.SuraMp3Screen
+import com.example.anees.ui.screens.azan.component.AzanScreen
 import com.example.anees.ui.screens.azkar.screens.AdhkarDetailsScreen
 import com.example.anees.ui.screens.azkar.screens.AdhkarScreen
 import com.example.anees.ui.screens.hisn_almuslim.HisnAlMuslimScreen
@@ -33,6 +36,9 @@ import com.example.anees.ui.screens.tafsir.screens.TafsirDetailsScreen
 import com.example.anees.ui.screens.tafsir.screens.TafsirScreen
 import com.google.gson.Gson
 import com.example.anees.utils.Constants
+import com.example.anees.utils.extensions.convertNumbersToArabic
+import com.example.anees.utils.extensions.toArabicTime
+import com.example.anees.utils.prayer_helper.PrayerTimesHelper
 
 
 @Composable
@@ -186,7 +192,11 @@ fun SetUpNavHost(
             KhatmQuranDuaScreen()
         }
         composable<ScreenRoute.PrayerTimesScreen> {
-            PrayerScreen {
+            PrayerScreen(
+                onPreviewClick = {
+                    navController.navigate(ScreenRoute.AzanPlayerScreen)
+                }
+            ) {
                 navController.navigateUp()
             }
         }
@@ -255,6 +265,15 @@ fun SetUpNavHost(
 
         composable<ScreenRoute.HisnAlMuslimScreen> {
             HisnAlMuslimScreen() {
+                navController.navigateUp()
+            }
+        }
+        composable<ScreenRoute.AzanPlayerScreen> {
+            val (prayEnum , time) = PrayerTimesHelper.getNextPrayer() ?: PrayEnum.FAJR to 0L
+            AzanScreen(
+                prayEnum = prayEnum,
+                prayerTime = time.toArabicTime().convertNumbersToArabic(),
+            ){
                 navController.navigateUp()
             }
         }

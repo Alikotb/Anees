@@ -34,7 +34,7 @@ fun PrayerList() {
             val icon = prayerEnum.icon
             PrayerItem(
                 name = name,
-                time = time.toString(),
+                time = time.toArabicTime().convertNumbersToArabic(),
                 icon = icon,
                 isHighlighted = isHighlighted
             )

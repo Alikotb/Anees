@@ -1,8 +1,19 @@
 package com.example.anees.ui.screens.prayer.component
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Preview
+import androidx.compose.material.icons.filled.SkipNext
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -16,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.anees.enums.PrayEnum
 import com.example.anees.utils.extensions.convertNumbersToArabic
@@ -28,24 +40,41 @@ import java.util.concurrent.TimeUnit
 private fun HeaderSection(
     prayEnum: PrayEnum,
     remainingTime: String,
-    targetTime : String
+    targetTime : String,
+    onPreviewClick: () -> Unit = {},
 ) {
     val textColor = Color(0xFF3B3B3B)
     Column(
         Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(
-           text =  "${prayEnum.value}", fontSize = 24.sp,
-            color = textColor, textAlign = TextAlign.Center,
-        )
-        Text("${targetTime}", fontSize = 36.sp, fontWeight = FontWeight.Bold, color = textColor)
+
+        Row(
+            Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ){
+            Text(
+                text =  "${prayEnum.value}", fontSize = 24.sp,
+                color = textColor, textAlign = TextAlign.Center,
+            )
+            Spacer(Modifier.width(4.dp))
+            IconButton(onClick = onPreviewClick) {
+                Icon(Icons.Default.Preview,
+                    contentDescription = "",
+                    modifier = Modifier.size(32.dp),
+                    tint = Color(0xFF4CAF50)
+                )
+            }
+        }
+        Text("${targetTime}", fontSize = 36.sp,
+            fontWeight = FontWeight.Bold, color = textColor)
         Text("الصلاة القادمة بعد $remainingTime".convertNumbersToArabic(), fontSize = 14.sp, color = textColor)
     }
 }
 
 @Composable
-fun HeaderWithTimer() {
+fun HeaderWithTimer(onPreviewClick: () -> Unit = {}) {
     var remainingTime by remember { mutableStateOf("") }
 
     val (prayEnum, targetTime) = PrayerTimesHelper.getNextPrayer()!!
@@ -68,6 +97,7 @@ fun HeaderWithTimer() {
     HeaderSection(
         prayEnum = prayEnum,
         remainingTime = remainingTime,
-        targetTime = targetTime.toArabicTime().convertNumbersToArabic()
+        targetTime = targetTime.toArabicTime().convertNumbersToArabic(),
+        onPreviewClick = onPreviewClick
     )
 }

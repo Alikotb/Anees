@@ -1,6 +1,7 @@
 package com.example.anees.ui.screens.prayer
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,8 +10,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
@@ -23,11 +27,22 @@ import com.example.anees.ui.screens.prayer.component.HeaderWithTimer
 import com.example.anees.ui.screens.prayer.component.PrayerList
 import com.example.anees.ui.screens.prayer.component.PrayerTopBar
 import com.example.anees.utils.date_helper.DateHelper
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 
 @Preview(showBackground = true)
 @Composable
-fun PrayerScreen(onBackClick: () -> Unit = {}){
+fun PrayerScreen(onPreviewClick: () -> Unit = {},onBackClick: () -> Unit = {}){
+
+    val systemUiController = rememberSystemUiController()
+
+    SideEffect {
+        systemUiController.setStatusBarColor(
+            color = Color.Transparent,
+            darkIcons = true
+        )
+    }
+
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Box(
             Modifier.fillMaxSize()
@@ -42,12 +57,16 @@ fun PrayerScreen(onBackClick: () -> Unit = {}){
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(16.dp)
+                ,horizontalAlignment = Alignment.CenterHorizontally,
             ) {
 
                 PrayerTopBar("زفتي , مصر"){
                     onBackClick()
                 }
-                HeaderWithTimer()
+                Spacer(modifier = Modifier.height(32.dp))
+                HeaderWithTimer(
+                    onPreviewClick = onPreviewClick
+                )
                 Spacer(modifier = Modifier.height(32.dp))
                 DateSection(DateHelper.getTodayHijriDate())
                 Spacer(modifier = Modifier.height(8.dp))
