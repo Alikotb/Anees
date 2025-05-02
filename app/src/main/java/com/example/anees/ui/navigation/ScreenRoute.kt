@@ -24,26 +24,23 @@ sealed class ScreenRoute {
     data object HadithAuthorsScreen : ScreenRoute()
     @Serializable
     data class HadithSectionsScreen(val author: String) : ScreenRoute()
-
     @Serializable
     object QuranIndexScreen : ScreenRoute()
     @Serializable
     object JuzIndexScreen : ScreenRoute()
-
     @Serializable
     object KhatmQuranDuaScreen : ScreenRoute()
-
     @Serializable
     object PrayerTimesScreen : ScreenRoute()
     @Serializable
     object RadioScreen : ScreenRoute()
-
     @Serializable
     object TafsirScreen : ScreenRoute()
     @Serializable
     data class TafsirDetailsScreen (val surah: String): ScreenRoute()
-
     @Serializable
     object RecitersScreen : ScreenRoute()
+    @Serializable
+    object NamesOfAllahScreen : ScreenRoute()
 
 }

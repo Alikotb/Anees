@@ -24,6 +24,7 @@ import com.example.anees.enums.QuranSurah
 import com.example.anees.ui.screens.Reciters.RecitersScreen
 import com.example.anees.ui.screens.azkar.screens.AdhkarDetailsScreen
 import com.example.anees.ui.screens.azkar.screens.AdhkarScreen
+import com.example.anees.ui.screens.names_of_allah.NamesOfAllahScreen
 import com.example.anees.ui.screens.tafsir.screens.TafsirDetailsScreen
 import com.example.anees.ui.screens.tafsir.screens.TafsirScreen
 import com.google.gson.Gson
@@ -74,6 +75,9 @@ fun SetUpNavHost(
                 },
                 navToReciters = {
                     navController.navigate(ScreenRoute.RecitersScreen)
+                },
+                navToNamesOfAllah= {
+                    navController.navigate(ScreenRoute.NamesOfAllahScreen)
                 }
             )
         }
@@ -169,6 +173,9 @@ fun SetUpNavHost(
            TafsirScreen{
                navController.navigate(ScreenRoute.TafsirDetailsScreen(it))
            }
+        }
+        composable<ScreenRoute.NamesOfAllahScreen> {
+            NamesOfAllahScreen()
         }
         composable<ScreenRoute.TafsirDetailsScreen> {
             val surah = Gson().fromJson(

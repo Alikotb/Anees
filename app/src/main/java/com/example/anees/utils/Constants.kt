@@ -5,6 +5,8 @@ object Constants {
     const val SHARED_PREFERENCE_NAME = "SHARED_PREFERENCE_NAME"
     const val ROOM_DATABASE="roomdb"
     const val AZKAR_FILE_NAME="adhkar.json"
+    const val NAMES_OF_ALLAH="names.json"
+
     const val API_HADITH_ = "https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/"
     const val API_Tafsir_ = "https://quranenc.com/"
 
