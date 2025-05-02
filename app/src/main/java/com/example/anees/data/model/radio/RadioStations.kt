@@ -146,13 +146,13 @@ object RadioStations {
             "الفتاوى",
             "https://backup.qurango.net/radio/fatwa",
             "إذاعة مختصة ببث الفتاوى الدينية المباشرة",
-            R.drawable.dosri
+            R.drawable.fatwa
         ),
         RadioStation(
             "الرُقية الشرعية",
             "https://backup.qurango.net/radio/roqiah",
             "إذاعة متخصصة في الرُقية الشرعية وآيات الشفاء",
-            R.drawable.dosri
+            R.drawable.roqia
         ),
         RadioStation(
             "تفسير القرآن",

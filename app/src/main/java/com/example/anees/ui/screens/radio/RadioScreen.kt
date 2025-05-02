@@ -42,12 +42,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -62,6 +65,7 @@ import com.example.anees.data.model.radio.RadioStation
 import com.example.anees.ui.screens.radio.components.CustomSnackbar
 import com.example.anees.ui.screens.radio.components.PlaybackControls
 import com.example.anees.ui.screens.radio.components.RadioBackground
+import com.example.anees.ui.screens.radio.components.RadioTitle
 import com.example.anees.ui.screens.radio.components.StationImageCard
 import com.example.anees.ui.screens.radio.components.StationInfoCard
 import com.example.anees.utils.extensions.isInternetAvailable
@@ -85,6 +89,7 @@ fun RadioScreen(viewModel: RadioViewModel = hiltViewModel()) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
+                RadioTitle()
                 StationImageCard(currentStation)
                 Box(
                     modifier = Modifier.padding(horizontal = 12.dp).fillMaxWidth()

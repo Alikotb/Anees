@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -49,14 +51,19 @@ import com.example.anees.data.model.EditionResponse
 import com.example.anees.data.model.Response
 import com.example.anees.data.model.toHadith
 import com.example.anees.enums.AuthorEdition
+import com.example.anees.ui.screens.hadith.components.ScreenTitle
 import com.example.anees.utils.hadith_helper.cardColors
 import com.example.anees.utils.hadith_helper.offline_hadith.OfflineHadithHelper
 import com.example.anees.utils.extensions.isInternetAvailable
 
 
 @Composable
-fun HadithScreen(author: AuthorEdition, id: String, viewModel: HadithViewModel = hiltViewModel()) {
-
+fun HadithScreen(
+    author: AuthorEdition,
+    id: String,
+    onBackClick: () -> Unit,
+    viewModel: HadithViewModel = hiltViewModel()
+) {
     val sectionsState by viewModel.sectionsState.collectAsStateWithLifecycle()
     val ctx = LocalContext.current
     val isOnline = ctx.isInternetAvailable()
@@ -72,59 +79,62 @@ fun HadithScreen(author: AuthorEdition, id: String, viewModel: HadithViewModel =
             modifier = Modifier.fillMaxSize().alpha(.22f),
             contentScale = ContentScale.Crop
         )
-    }
-    if (!isOnline) {
-        Column {
-            val hadithOffline =
-                OfflineHadithHelper.getAllHadith(ctx, author, id)
 
-            val list = hadithOffline?.hadiths?.map {
-                it.toHadith()
-            } ?: emptyList()
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp, vertical = 16.dp)
+        ) {
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                ScreenTitle(
+                    title = author.displayNameAr,
+                    onBackClick = onBackClick,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
 
-            DisplayOfflineHadiths(list)
-        }
+            if (!isOnline) {
+                val hadithOffline = OfflineHadithHelper.getAllHadith(ctx, author, id)
+                val list = hadithOffline?.hadiths?.map { it.toHadith() } ?: emptyList()
 
-    }else {
-        Column(modifier = Modifier.padding(8.dp)) {
-            when (val state = sectionsState) {
-                is Response.Loading -> {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .wrapContentSize()
-                    ) {
-                        CircularProgressIndicator()
-                    }
-                }
+                DisplayOfflineHadiths(list)
 
-                is Response.Success -> {
-                    val sectionDetail = getSectionDetail(state.data.metadata.sectionDetails, id)
-                    if (sectionDetail != null) {
-                        val hadithNumberRange =
-                            sectionDetail.hadithnumberFirst to sectionDetail.hadithnumberLast
-
-                        Column {
-
-                                DisplayHadiths(state.data.hadiths, hadithNumberRange)
-
+            } else {
+                when (val state = sectionsState) {
+                    is Response.Loading -> {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .wrapContentSize(Alignment.Center)
+                        ) {
+                            CircularProgressIndicator()
                         }
                     }
-                }
 
-                is Response.Error -> {
-                    Text(
-                        text = state.message,
-                        color = Color.Red,
-                        fontSize = 16.sp,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
+                    is Response.Success -> {
+                        val sectionDetail = getSectionDetail(state.data.metadata.sectionDetails, id)
+                        if (sectionDetail != null) {
+                            val hadithNumberRange =
+                                sectionDetail.hadithnumberFirst to sectionDetail.hadithnumberLast
+
+                            DisplayHadiths(state.data.hadiths, hadithNumberRange)
+                        }
+                    }
+
+                    is Response.Error -> {
+                        Text(
+                            text = state.message,
+                            color = Color.Red,
+                            fontSize = 16.sp,
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        )
+                    }
                 }
             }
         }
     }
-
 }
+
 
 @Composable
 fun DisplayHadiths(allHadiths: List<EditionResponse.Hadith>, hadithRange: Pair<Double, Double>) {

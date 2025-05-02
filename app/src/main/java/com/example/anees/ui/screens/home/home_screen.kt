@@ -3,7 +3,6 @@ package com.example.anees.ui.screens.home
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.anees.ui.screens.prayer.component.PrayerCardWithTimer
 
-import com.example.anees.utils.prayer_helper.PrayerTimesHelper
 
 @Composable
 fun HomeScreen(navToSebiha: () -> Unit = {},
@@ -33,9 +31,9 @@ fun HomeScreen(navToSebiha: () -> Unit = {},
                navToRadio: () -> Unit,
                navToTafsir: () -> Unit,
                navToPrayer: () -> Unit = {} ,
-               navToReciters: () -> Unit = {}
+               navToReciters: () -> Unit = {},
+               navToNamesOfAllah: () -> Unit = {}
 ){
-    val screenHeight =LocalConfiguration.current.screenHeightDp.dp
 
     Box(
         modifier = Modifier
@@ -77,6 +75,10 @@ fun HomeScreen(navToSebiha: () -> Unit = {},
 
             HomeButton("Reciters") {
                 navToReciters()
+            }
+
+            HomeButton("Names") {
+                navToNamesOfAllah()
             }
         }
     }

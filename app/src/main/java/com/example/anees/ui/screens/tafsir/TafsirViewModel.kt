@@ -13,11 +13,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TafsirViewModel @Inject constructor(private val repo: RepositoryImpl) : ViewModel() {
-    private val _tafsirSurah = MutableStateFlow  <Response<TafsierModel>>(Response.Loading)
+    private val _tafsirSurah = MutableStateFlow<Response<TafsierModel>>(Response.Loading)
     val tafsirSurah = _tafsirSurah.asStateFlow()
 
 
-    fun addTafsir(id: Int,tafsir: TafsierModel){
+    fun addTafsir(id: Int, tafsir: TafsierModel) {
         viewModelScope.launch {
             tafsir.id = id
             repo.addTafsir(tafsir)
@@ -36,7 +36,8 @@ class TafsirViewModel @Inject constructor(private val repo: RepositoryImpl) : Vi
                             _tafsirSurah.value = Response.Success(apiData)
                         }
                     } catch (e: Exception) {
-                        _tafsirSurah.value = Response.Error("يرجى الاتصال بالإنترنت للحصول على البيانات لأول مرة")
+                        _tafsirSurah.value =
+                            Response.Error("يرجى الاتصال بالإنترنت للحصول على البيانات لأول مرة")
                     }
                 }
             }
