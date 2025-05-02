@@ -27,7 +27,7 @@ import com.example.anees.utils.date_helper.DateHelper
 
 @Preview(showBackground = true)
 @Composable
-fun PrayerScreen(){
+fun PrayerScreen(onBackClick: () -> Unit = {}){
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Box(
             Modifier.fillMaxSize()
@@ -44,7 +44,9 @@ fun PrayerScreen(){
                     .padding(16.dp)
             ) {
 
-                PrayerTopBar("زفتي , مصر")
+                PrayerTopBar("زفتي , مصر"){
+                    onBackClick()
+                }
                 HeaderWithTimer()
                 Spacer(modifier = Modifier.height(32.dp))
                 DateSection(DateHelper.getTodayHijriDate())

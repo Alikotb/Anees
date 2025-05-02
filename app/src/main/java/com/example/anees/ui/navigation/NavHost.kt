@@ -156,7 +156,9 @@ fun SetUpNavHost(
             KhatmQuranDuaScreen()
         }
         composable<ScreenRoute.PrayerTimesScreen> {
-            PrayerScreen()
+            PrayerScreen{
+                navController.navigateUp()
+            }
         }
 
         composable<ScreenRoute.RadioScreen> {
@@ -176,7 +178,9 @@ fun SetUpNavHost(
             TafsirDetailsScreen(surah)
         }
         composable<ScreenRoute.RecitersScreen> {
-            RecitersScreen()
+            RecitersScreen(onBackClick = {
+                navController.navigateUp()
+            })
         }
     }
 }
