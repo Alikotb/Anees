@@ -25,7 +25,8 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun PrayerTopBar(
-    location: String
+    location: String,
+    onBackClick: () -> Unit = {}
 ){
     Row(
         Modifier.fillMaxWidth(),
@@ -34,7 +35,7 @@ fun PrayerTopBar(
     ){
         LocationChip(location = location, icon = Icons.Default.LocationOn)
         IconButton(
-            onClick = { /*TODO*/ },
+            onClick = onBackClick,
             modifier = Modifier.size(48.dp),
         ){
             Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = "Back")

@@ -64,9 +64,6 @@ fun HomeScreen(navToSebiha: () -> Unit = {},
             HomeButton("Quran") {
                 navToQuran()
             }
-            HomeButton("Azkar") {
-                navToAzkar()
-            }
             HomeButton("Hadith") {
                 navToHadith()
             }
