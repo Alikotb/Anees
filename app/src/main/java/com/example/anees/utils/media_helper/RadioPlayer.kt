@@ -23,6 +23,7 @@ object RadioPlayer {
             val mediaItem = MediaItem.fromUri(url)
             setMediaItem(mediaItem)
             prepare()
+            playWhenReady = false
         }
     }
 
