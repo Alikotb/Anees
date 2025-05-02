@@ -6,6 +6,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.media.AudioManager
 import android.net.ConnectivityManager
 import android.os.Build
 import android.provider.Settings
@@ -54,4 +55,8 @@ fun Context.setAlarm(
         triggerTimeMillis,
         pendingIntent
     )
+fun Context.isVolumeZero(): Boolean {
+    val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    val volume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
+    return volume == 0
 }

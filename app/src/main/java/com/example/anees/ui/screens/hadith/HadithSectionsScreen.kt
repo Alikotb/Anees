@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.anees.enums.AuthorEdition
@@ -114,7 +115,7 @@ fun SectionCard(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(0x66000000))
+                    .background(Color(0x99000000))
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
@@ -125,6 +126,7 @@ fun SectionCard(
                         color = Color.White,
                         fontSize = 18.sp
                     ),
+                    fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
                 )
             }

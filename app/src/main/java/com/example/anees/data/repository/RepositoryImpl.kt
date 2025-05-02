@@ -39,4 +39,12 @@ class RepositoryImpl @Inject constructor(
     override fun <T> fetchData(key: String, defaultValue: T): T {
         return localDataSource.fetchData(key,defaultValue)
     }
+
+    override suspend fun addTafsir(tafsir: TafsierModel) {
+        localDataSource.insertTafsir(tafsir)
+    }
+
+    override fun getTafsir(id: Int): Flow<TafsierModel?> {
+        return localDataSource.getTafsir(id)
+    }
 }

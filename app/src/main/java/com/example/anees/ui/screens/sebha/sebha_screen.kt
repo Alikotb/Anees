@@ -19,13 +19,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Replay
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.SwapVert
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
@@ -37,11 +38,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -66,7 +69,6 @@ fun SebihaScreen(
     var isLottieVisible by remember { mutableStateOf(false) }
     var rounds = sebiha.value.rounds
     val composition = rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.celebration))
-
     LaunchedEffect(rounds) {
         if (rounds % 2 == 0 && rounds != 0) {
             isLottieVisible = true
@@ -76,7 +78,8 @@ fun SebihaScreen(
     }
     Box(
         modifier = Modifier
-            .fillMaxSize().zIndex(2f)
+            .fillMaxSize()
+            .zIndex(2f)
             .background(
                 Brush.verticalGradient(
                     colors = listOf(Color(0xFFF5F0E1), Color(0xFFEAE3D2))
@@ -88,7 +91,9 @@ fun SebihaScreen(
             LottieAnimation(
                 composition = composition.value,
                 iterations = LottieConstants.IterateForever,
-                modifier = Modifier.fillMaxSize().zIndex(1f),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .zIndex(1f),
                 renderMode = RenderMode.AUTOMATIC
             )
         }
@@ -116,27 +121,30 @@ fun Ssebha(
         .fillMaxSize()
         .background(color = Color(0xFFF5F5DB))){
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp)
-        ) {
-            IconButton(
-                onClick = {
-                    navToHome()
-                },
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+            Box(
                 modifier = Modifier
-                    .size(48.dp)
-                    .align(Alignment.TopStart)
+                    .fillMaxWidth()
+                    .padding(top = 24.dp)
             ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = Color.Black,
-                    modifier = Modifier.size(28.dp)
-                )
+                IconButton(
+                    onClick = {
+                        navToHome()
+                    },
+                    modifier = Modifier
+                        .size(48.dp)
+                        .align(Alignment.TopStart)
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = Color.Black,
+                        modifier = Modifier.size(28.dp)
+                    )
+                }
             }
         }
+
         Column {
 
 
@@ -153,80 +161,82 @@ fun Ssebha(
             )
 
             Spacer(Modifier.height(24.dp))
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text("Counter: ", color = Color.Black, fontSize = 20.sp)
-                        Text(
-                            text = "$counter/33",
-                            color = Color(0xFF29CA6A),
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 22.sp
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text("Round: ", color = Color.Black, fontSize = 20.sp)
-                        Text(
-                            text = rounds.toString(),
-                            color = Color(0xFF29CA6A),
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 22.sp
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        if(!isLottieVisible) {
-                            IconButton(
-                                onClick = {
-                                    rounds = 0
-                                    counter = 0
-                                    viewModel.addSebiha(Sebiha(0, counter, rounds,mainZekir.toString()))
-                                },
-                                modifier = Modifier
-                                    .size(32.dp)
-                                    .background(Color.Transparent, shape = CircleShape)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Replay,
-                                    contentDescription = null,
-                                    tint = Color.Black
-                                )
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text("التسبيح: ", color = Color.Black, fontSize = 20.sp)
+                            Text(
+                                text = "33/$counter",
+                                color = Color(0xFF29CA6A),
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 22.sp
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text("الدورات: ", color = Color.Black, fontSize = 20.sp)
+                            Text(
+                                text = rounds.toString(),
+                                color = Color(0xFF29CA6A),
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 22.sp
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            if (!isLottieVisible) {
+                                IconButton(
+                                    onClick = {
+                                        rounds = 0
+                                        counter = 0
+                                        viewModel.addSebiha(Sebiha(0, counter, rounds, mainZekir.toString()))
+                                    },
+                                    modifier = Modifier
+                                        .size(32.dp)
+                                        .background(Color.Transparent, shape = CircleShape)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Refresh,
+                                        contentDescription = null,
+                                        tint = Color.Black
+                                    )
+                                }
                             }
                         }
                     }
-                }
 
-                Box(
-                    modifier = Modifier.size(52.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.star),
-                        contentDescription = null,
-                        modifier = Modifier.fillMaxSize()
-                    )
-                    IconButton(
-                        onClick = { showBottomSheet = true },
-                        modifier = Modifier
-                            .size(36.dp)
-                            .background(Color.Transparent, shape = CircleShape)
+                    Box(
+                        modifier = Modifier.size(52.dp),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.SwapVert,
+                        Image(
+                            painter = painterResource(R.drawable.star),
                             contentDescription = null,
-                            tint = Color.Black
+                            modifier = Modifier.fillMaxSize()
                         )
+                        IconButton(
+                            onClick = { showBottomSheet = true },
+                            modifier = Modifier
+                                .size(36.dp)
+                                .background(Color.Transparent, shape = CircleShape)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.SwapVert,
+                                contentDescription = null,
+                                tint = Color.Black
+                            )
+                        }
                     }
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+
+            Spacer(modifier = Modifier.height(4.dp))
 
             Box(
                 contentAlignment = Alignment.Center,
@@ -254,7 +264,14 @@ fun Ssebha(
                                     counter = 0
                                     rounds++
                                 }
-                                viewModel.addSebiha(Sebiha(0, counter, rounds,mainZekir.toString()))
+                                viewModel.addSebiha(
+                                    Sebiha(
+                                        0,
+                                        counter,
+                                        rounds,
+                                        mainZekir.toString()
+                                    )
+                                )
                             }
 
                         )
@@ -270,7 +287,14 @@ fun Ssebha(
                             indication = rememberRipple(bounded = true, radius = 15.dp),
                             onClick = {
                                 counter = 0
-                            viewModel.addSebiha(Sebiha(0, counter, rounds,mainZekir.toString()))
+                                viewModel.addSebiha(
+                                    Sebiha(
+                                        0,
+                                        counter,
+                                        rounds,
+                                        mainZekir.toString()
+                                    )
+                                )
                             }
                         )
                 )

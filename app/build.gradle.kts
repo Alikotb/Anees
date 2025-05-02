@@ -114,9 +114,8 @@ dependencies {
 
     implementation ("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
 
-
-
-
-
+    //ExoPlayer
+    implementation ("androidx.media3:media3-exoplayer:1.3.1")
+    implementation ("androidx.media3:media3-ui:1.3.1")
 
 }

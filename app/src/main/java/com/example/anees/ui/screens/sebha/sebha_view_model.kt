@@ -18,7 +18,6 @@ class SebihaViewModel @Inject constructor(private val repo: RepositoryImpl): Vie
     val sebiha=_sebiha.asStateFlow()
     private val _error= MutableStateFlow("")
     val error=_error.asStateFlow()
-
     init {
         getSebiha()
     }
@@ -37,6 +36,7 @@ class SebihaViewModel @Inject constructor(private val repo: RepositoryImpl): Vie
             repo.addSebiha(sebiha)
         }
     }
+
 
 
 }
