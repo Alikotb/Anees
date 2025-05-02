@@ -30,7 +30,7 @@ fun ScreenTitle(
     title: String,
     onBackClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
-    padding: Int=12,
+    padding: Int=8,
     size:Int=28
 ) {
     Box(
