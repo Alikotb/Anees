@@ -59,10 +59,10 @@ fun PlaybackControls(
 }
 
 @Composable
-fun PlaybackButton(iconResId: Int, onClick: () -> Unit) {
+fun PlaybackButton(iconResId: Int,size:Int=72, onClick: () -> Unit) {
     Box(
         modifier = Modifier
-            .size(72.dp)
+            .size(size.dp)
             .clip(CircleShape)
             .clickable(onClick = onClick)
             .background(Color.White),
