@@ -7,12 +7,16 @@ import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.anees.ui.navigation.SetUpNavHost
 import com.example.anees.utils.extensions.setAlarm
 import com.example.anees.utils.location.LocationProvider
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -24,6 +28,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         if (!Settings.canDrawOverlays(this)) {
             askedForOverlayPermission = true
             val intent = Intent(
@@ -32,8 +37,16 @@ class MainActivity : ComponentActivity() {
             )
             startActivity(intent)
         }
-        //enableEdgeToEdge()
+        enableEdgeToEdge()
         setContent {
+            val systemUiController = rememberSystemUiController()
+
+            SideEffect {
+                systemUiController.setStatusBarColor(
+                    color = Color.Transparent,
+                    darkIcons = true
+                )
+            }
             navController = rememberNavController()
             SetUpNavHost(navController = navController)
 

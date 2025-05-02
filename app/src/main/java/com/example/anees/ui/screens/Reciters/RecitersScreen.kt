@@ -55,7 +55,7 @@ import com.google.gson.Gson
 
 @Preview(showBackground = true)
 @Composable
-fun RecitersScreen(onBackClick: () -> Unit = {}) {
+fun RecitersScreen(onBackClick: () -> Unit = {}, navToSuraMp3: (RecitersEnum) -> Unit = {}) {
     val ctx = LocalContext.current
     Box {
         RadioBackground()
@@ -95,7 +95,9 @@ fun RecitersScreen(onBackClick: () -> Unit = {}) {
                 modifier = Modifier.fillMaxSize()
             ) {
                 items(RecitersEnum.entries.toTypedArray()) { reciter ->
-                    ReciterCard(reciter = reciter)
+                    ReciterCard(reciter = reciter){
+                        navToSuraMp3(it)
+                    }
                 }
             }
         }
@@ -107,12 +109,15 @@ fun RecitersScreen(onBackClick: () -> Unit = {}) {
 @Composable
 fun ReciterCard(
     reciter: RecitersEnum = RecitersEnum.Abdelbaset,
+    navToSuraMp3: (RecitersEnum) -> Unit = {}
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(200.dp)
-            .clickable {},
+            .clickable {
+                navToSuraMp3(reciter)
+            },
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
