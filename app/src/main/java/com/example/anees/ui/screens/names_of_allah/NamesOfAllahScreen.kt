@@ -109,18 +109,19 @@ fun NamesOfAllahScreen(navToHome: () -> Unit) {
 
             }
         }
-
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.fillMaxSize()
-        ) {
-            items(namesList) { name ->
-                NamesOfAllahCard(name)
-            }
-            item{
-                Spacer(modifier = Modifier.height(48.dp))
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.fillMaxSize()
+            ) {
+                items(namesList) { name ->
+                    NamesOfAllahCard(name)
+                }
+                item {
+                    Spacer(modifier = Modifier.height(48.dp))
+                }
             }
         }
     }

@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.anees.R
 import com.example.anees.data.model.ZekrModelItem
+import com.example.anees.utils.extensions.convertNumbersToArabic
 
 @Composable
 fun DetailsCard(
@@ -61,7 +62,7 @@ fun DetailsCard(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "عدد التكرار: ${zekr.count}",
+                    text = "عدد التكرار: ${zekr.count}".convertNumbersToArabic(),
                     fontSize = 14.sp,
                     color = Color(0xFF5D4037),
                     textAlign = TextAlign.Left,

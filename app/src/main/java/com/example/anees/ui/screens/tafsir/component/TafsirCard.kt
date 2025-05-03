@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.anees.R
 import com.example.anees.enums.QuranSurah
+import com.example.anees.utils.extensions.convertNumbersToArabic
 
 @Composable
 fun TafsirCard(
@@ -48,7 +49,7 @@ fun TafsirCard(
                 .padding(horizontal = 12.dp, vertical = 12.dp)
         ) {
             Text(
-                text = "سُورَةٌ ${surah.arabicName}",
+                text = "سُورَةٌ ${surah.arabicName}".convertNumbersToArabic(),
                 fontSize = 22.sp,
                 color = Color(0xFF311403),
                 fontFamily = FontFamily(Font(R.font.othmani)),

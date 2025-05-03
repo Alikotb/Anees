@@ -13,6 +13,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.anees.R
+import com.example.anees.utils.extensions.convertNumbersToArabic
 
 @Composable
 fun SurahNumber(number: String) {
@@ -25,7 +26,7 @@ fun SurahNumber(number: String) {
             colorFilter = ColorFilter.tint(Color(0xFF311403))
         )
         Text(
-            number,
+            number.convertNumbersToArabic(),
             color = Color(0xFF311403),
             modifier = Modifier.align(Alignment.Center)
         )

@@ -58,6 +58,7 @@ import com.example.anees.data.model.Sebiha
 import com.example.anees.ui.screens.hadith.components.ScreenTitle
 import com.example.anees.ui.screens.radio.components.ScreenBackground
 import com.example.anees.ui.screens.sebha.component.AzkarButtomSheet
+import com.example.anees.utils.extensions.convertNumbersToArabic
 import kotlinx.coroutines.delay
 
 
@@ -158,7 +159,7 @@ fun Ssebha(
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text("التسبيح: ", color = Color.Black, fontSize = 20.sp)
                                 Text(
-                                    text = "33/$counter",
+                                    text = "33/$counter".convertNumbersToArabic(),
                                     color = Color(0xFF29CA6A),
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 22.sp
@@ -168,7 +169,7 @@ fun Ssebha(
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text("الدورات: ", color = Color.Black, fontSize = 20.sp)
                                 Text(
-                                    text = rounds.toString(),
+                                    text = rounds.toString().convertNumbersToArabic(),
                                     color = Color(0xFF29CA6A),
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 22.sp
