@@ -1,5 +1,6 @@
 package com.example.anees.ui.screens.home.component
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -57,9 +58,11 @@ fun ComponentCard(
             .height(cardHeight)
             .clickable { onClick() }
             .padding(4.dp),
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(8.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent)
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+        border = BorderStroke(1.dp, Color(0xFFB8926A))
+
     ) {
         Box(
             modifier = Modifier
@@ -72,8 +75,11 @@ fun ComponentCard(
                             Color(0xFF311403),
                         )
                     ),
-                    shape = RoundedCornerShape(16.dp)
-                )
+
+                    shape = RoundedCornerShape(16.dp),
+                ),
+
+
         ) {
             Image(
                 painter = painterResource(id),
