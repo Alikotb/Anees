@@ -194,7 +194,7 @@ fun SetUpNavHost(
         composable<ScreenRoute.PrayerTimesScreen> {
             PrayerScreen(
                 onPreviewClick = {
-                    navController.navigate(ScreenRoute.AzanPlayerScreen)
+                    navController.navigate(AzanPlayerScreen)
                 }
             ) {
                 navController.navigateUp()
@@ -225,6 +225,7 @@ fun SetUpNavHost(
                 QuranSurah::class.java
             )
             TafsirDetailsScreen(surah){
+                navController.navigateUp()
                 navController.navigate(ScreenRoute.TafsirScreen)
             }
         }
@@ -268,7 +269,7 @@ fun SetUpNavHost(
                 navController.navigateUp()
             }
         }
-        composable<ScreenRoute.AzanPlayerScreen> {
+        composable<AzanPlayerScreen> {
             val (prayEnum , time) = PrayerTimesHelper.getNextPrayer() ?: PrayEnum.FAJR to 0L
             AzanScreen(
                 prayEnum = prayEnum,
