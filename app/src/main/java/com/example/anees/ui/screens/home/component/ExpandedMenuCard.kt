@@ -1,4 +1,4 @@
-package com.example.anees.ui.screens.home
+package com.example.anees.ui.screens.home.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
