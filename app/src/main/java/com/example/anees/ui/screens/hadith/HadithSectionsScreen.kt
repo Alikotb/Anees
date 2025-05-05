@@ -52,6 +52,7 @@ import com.example.anees.utils.extensions.isInternetAvailable
 import androidx.compose.ui.unit.sp
 import com.example.anees.R
 import com.example.anees.ui.screens.hadith.components.ScreenTitle
+import com.example.anees.ui.screens.radio.components.ScreenBackground
 import com.google.gson.Gson
 
 @Composable
@@ -60,12 +61,13 @@ fun HadithSectionsScreen(author: AuthorEdition, navToHadithScreen: (String, Stri
     val isOnline = ctx.isInternetAvailable()
     val sectionsMap = getSections(author.apiKey,isOnline)
     var searchQuery by remember { mutableStateOf("") }
-
+    ScreenBackground()
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(horizontal = 16.dp)
+                .padding(vertical = 24.dp)
         ) {
             ScreenTitle(title = author.displayNameAr, onBackClick = onBackClick)
             HadithSearchBar(
@@ -73,12 +75,17 @@ fun HadithSectionsScreen(author: AuthorEdition, navToHadithScreen: (String, Stri
                 onQueryChange = { searchQuery = it }
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 modifier = Modifier.weight(1f),
-                contentPadding = PaddingValues(8.dp),
+                contentPadding = PaddingValues(
+                    start = 4.dp,
+                    end = 4.dp,
+                    top = 4.dp,
+                    bottom = 64.dp
+                ),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
@@ -93,6 +100,9 @@ fun HadithSectionsScreen(author: AuthorEdition, navToHadithScreen: (String, Stri
                     ) { selectedNumber ->
                         navToHadithScreen(Gson().toJson(author), selectedNumber)
                     }
+                }
+                item(1) {
+                    Spacer(modifier = Modifier.height(100.dp)) // adjust height as needed
                 }
             }
             OfflineNoticeBanner(visible = !isOnline)
@@ -163,7 +173,9 @@ fun HadithSearchBar(
         },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(horizontal = 8.dp)
+            .padding(vertical = 4.dp)
+        ,
         singleLine = true,
         leadingIcon = {
             Icon(

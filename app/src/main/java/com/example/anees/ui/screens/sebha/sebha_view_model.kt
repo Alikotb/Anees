@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.anees.data.model.Sebiha
 import com.example.anees.data.repository.RepositoryImpl
+import com.example.anees.utils.sebha_helper.azkarList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SebihaViewModel @Inject constructor(private val repo: RepositoryImpl): ViewModel() {
-    private val _sebiha= MutableStateFlow(Sebiha(0,0,0,"سبحان الله"))
+    private val _sebiha= MutableStateFlow(Sebiha(0,0,0, azkarList.first().arabicName))
     val sebiha=_sebiha.asStateFlow()
     private val _error= MutableStateFlow("")
     val error=_error.asStateFlow()
@@ -27,7 +28,7 @@ class SebihaViewModel @Inject constructor(private val repo: RepositoryImpl): Vie
              repo.getSebiha().catch {
                  _error.value=it.message.toString()
              }.collect {
-                 _sebiha.value = it ?: Sebiha(0,0,0,"سبحان الله")
+                 _sebiha.value = it ?: Sebiha(0,0,0,azkarList.first().arabicName)
              }
          }
     }

@@ -22,7 +22,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,7 +34,6 @@ import com.example.anees.utils.media_helper.RadioPlayer
 import com.example.anees.utils.sura_mp3_helper.suraUrls
 import kotlinx.coroutines.delay
 
-@Preview(showBackground = true)
 @Composable
 fun QuranPlayerScreen(
     reciter: RecitersEnum = RecitersEnum.Abdelbaset,
@@ -48,13 +46,14 @@ fun QuranPlayerScreen(
     val audioUrl = reciter.url + suraUrls[currentSuraIndex].second
 
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = Modifier.fillMaxSize()  .padding(horizontal = 16.dp)
+            .padding(top = 24.dp)) {
             ScreenBackground()
             IconButton(
                 onClick = {
                     onBackClick()
                 },
-                modifier = Modifier.padding(horizontal = 24.dp , vertical = 32.dp).size(48.dp),
+                modifier = Modifier.padding( vertical = 24.dp).size(48.dp),
             ){
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
             }
