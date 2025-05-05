@@ -37,7 +37,6 @@ import androidx.compose.ui.unit.sp
 import com.example.anees.R
 
 
-@Preview
 @Composable
 fun QuranCard(
     modifier: Modifier = Modifier,

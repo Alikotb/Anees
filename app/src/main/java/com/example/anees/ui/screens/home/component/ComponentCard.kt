@@ -37,11 +37,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.anees.R
 
-@Preview(showBackground = true,locale = "ar")
-@Composable
-fun ComponentCardPreview() {
-    ComponentCard()
-}
 @Composable
 fun ComponentCard(
     onClick: () -> Unit = {},
