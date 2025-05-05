@@ -25,6 +25,7 @@ import com.example.anees.ui.screens.home.component.ComponentCard
 import com.example.anees.ui.screens.prayer.component.PrayerCardWithTimer
 
 
+
 @Composable
 fun HomeScreen(navToSebiha: () -> Unit = {},
                navToQibla: () -> Unit = {},
@@ -107,7 +108,7 @@ fun HomeButton(
             .padding(horizontal = 64.dp)
             .height(50.dp),
         shape = RoundedCornerShape(12.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)), // Nice green
+        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
         elevation = ButtonDefaults.buttonElevation(4.dp)
     ) {
         Text(
@@ -118,3 +119,9 @@ fun HomeButton(
         )
     }
 }
+
+
+
+
+
+

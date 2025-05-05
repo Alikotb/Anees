@@ -31,6 +31,7 @@ import com.example.anees.ui.screens.azan.component.AzanScreen
 import com.example.anees.ui.screens.azkar.screens.AdhkarDetailsScreen
 import com.example.anees.ui.screens.azkar.screens.AdhkarScreen
 import com.example.anees.ui.screens.hisn_almuslim.HisnAlMuslimScreen
+import com.example.anees.ui.screens.home.HomeScreenWithDrawer
 import com.example.anees.ui.screens.names_of_allah.NamesOfAllahScreen
 import com.example.anees.ui.screens.tafsir.screens.TafsirDetailsScreen
 import com.example.anees.ui.screens.tafsir.screens.TafsirScreen
@@ -58,7 +59,7 @@ fun SetUpNavHost(
         }
 
         composable<ScreenRoute.HomeScreen> {
-            HomeScreen(
+            HomeScreenWithDrawer(
                 navToSebiha = {
                     navController.navigate(ScreenRoute.Sebiha)
                 },
