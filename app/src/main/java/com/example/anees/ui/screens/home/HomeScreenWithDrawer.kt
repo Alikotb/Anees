@@ -1,0 +1,168 @@
+package com.example.anees.ui.screens.home
+
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateOffset
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.anees.ui.navigation.ScreenRoute
+import com.example.anees.ui.screens.radio.components.ScreenBackground
+import kotlinx.coroutines.launch
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HomeScreenWithDrawer(
+    navToSebiha: () -> Unit = {},
+    navToQibla: () -> Unit = {},
+    navToQuran: () -> Unit = {},
+    navToAzkar: () -> Unit = {},
+    navToHadith: () -> Unit = {},
+    navToRadio: () -> Unit,
+    navToTafsir: () -> Unit,
+    navToPrayer: () -> Unit = {},
+    navToReciters: () -> Unit = {},
+    navToNamesOfAllah: () -> Unit = {},
+    navToHisnAlMuslim: () -> Unit = {}
+) {
+    val drawerState = remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+
+    Box(modifier = Modifier.fillMaxSize().background(Color(0xFFC9C0B3))) {
+        ScreenBackground()
+        HomeDrawer(
+            isOpen = drawerState.value,
+            onNavigate = { destination ->
+                scope.launch {
+                    drawerState.value = false
+                    when (destination) {
+                        ScreenRoute.HomeScreen -> { }
+                        ScreenRoute.QiblaScreen -> navToQibla()
+                        ScreenRoute.AdhkarScreen -> navToAzkar()
+                        ScreenRoute.NamesOfAllahScreen -> navToNamesOfAllah()
+                        ScreenRoute.RadioScreen -> navToRadio()
+                        ScreenRoute.TafsirScreen -> navToTafsir()
+                        ScreenRoute.RecitersScreen -> navToReciters()
+                        ScreenRoute.Sebiha -> navToSebiha()
+                        ScreenRoute.CompleteQuranScreen -> navToQuran()
+                        ScreenRoute.HadithAuthorsScreen -> navToHadith()
+                        ScreenRoute.PrayerTimesScreen -> navToPrayer()
+                        ScreenRoute.HisnAlMuslimScreen -> navToHisnAlMuslim()
+                        else -> {  }
+                    }
+                }
+            }
+        )
+
+        val currentState = if (drawerState.value) MenuState.EXPANDED else MenuState.COLLAPSED
+        val transition = updateTransition(currentState, label = "menuTransition")
+
+        val scale by transition.animateFloat(
+            transitionSpec = { tween(300, easing = LinearOutSlowInEasing) },
+            label = "scale"
+        ) { state ->
+            when (state) {
+                MenuState.EXPANDED -> 0.7f
+                MenuState.COLLAPSED -> 1f
+            }
+        }
+
+        val offset by transition.animateOffset(
+            transitionSpec = { tween(300, easing = LinearOutSlowInEasing) },
+            label = "offset"
+        ) { state ->
+            when (state) {
+                MenuState.EXPANDED -> Offset(-450f, 0f)
+                MenuState.COLLAPSED -> Offset(0f, 0f)
+            }
+        }
+
+        val roundness by transition.animateDp(
+            transitionSpec = { tween(300) },
+            label = "roundness"
+        ) { state ->
+            when (state) {
+                MenuState.EXPANDED -> 20.dp
+                MenuState.COLLAPSED -> 0.dp
+            }
+        }
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .graphicsLayer {
+                    scaleX = scale
+                    scaleY = scale
+                    translationX = offset.x
+                }
+                .clip(RoundedCornerShape(roundness))
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = "أنيس المسلم",
+                        fontSize = 20.sp,
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.End
+                    )
+                },
+                actions = {
+                    IconButton(onClick = { drawerState.value = !drawerState.value }) {
+                        Icon(
+                            imageVector = Icons.Default.Menu,
+                            contentDescription = "القائمة"
+                        )
+                    }
+                },
+                navigationIcon = {}
+            )
+
+            HomeScreen(
+                navToSebiha = navToSebiha,
+                navToQibla = navToQibla,
+                navToQuran = navToQuran,
+                navToAzkar = navToAzkar,
+                navToHadith = navToHadith,
+                navToRadio = navToRadio,
+                navToTafsir = navToTafsir,
+                navToPrayer = navToPrayer,
+                navToReciters = navToReciters,
+                navToNamesOfAllah = navToNamesOfAllah,
+                navToHisnAlMuslim = navToHisnAlMuslim
+            )
+        }
+    }
+}
+
+
+enum class MenuState {
+    EXPANDED, COLLAPSED
+}
