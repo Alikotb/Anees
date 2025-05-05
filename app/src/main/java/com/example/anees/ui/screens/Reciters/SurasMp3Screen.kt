@@ -45,14 +45,14 @@ fun SuraMp3Screen(reciter: RecitersEnum ,
         ScreenBackground()
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(24.dp)
+                .fillMaxSize()  .padding(horizontal = 16.dp)
+                .padding(top = 24.dp)
         ) {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 16.dp),
+                        .padding(vertical = 24.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
@@ -65,7 +65,7 @@ fun SuraMp3Screen(reciter: RecitersEnum ,
                             .shadow(2.dp, CircleShape, clip = true)
                     )
                     Text(
-                        text = "${reciter.reciter}",
+                        text = reciter.reciter,
                         textAlign = TextAlign.Right,
                         style = MaterialTheme.typography.headlineSmall
                     )

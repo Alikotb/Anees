@@ -49,10 +49,10 @@ fun AdhkarDetailsScreen(selectedCategory: String,navToAzkar:  () -> Unit = {}) {
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp)
-            .padding(top = 32.dp)
+            .padding(top = 24.dp)
     ) {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-            ScreenTitle(padding = 4, title = selectedCategory, onBackClick = {navToAzkar() }, size = 24)
+            ScreenTitle( title = selectedCategory, onBackClick = {navToAzkar() }, size = 24)
         }
 
         LazyColumn(
