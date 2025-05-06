@@ -56,10 +56,10 @@ fun HomeScreen(navToSebiha: () -> Unit = {},
             val country = "مصر"
           
             Spacer(Modifier.height(16.dp))
-            ComponentCard()
             PrayerCardWithTimer{
                 navToPrayer()
             }
+            ComponentCard()
             HomeButton("Azkar") {
                 navToAzkar()
             }
