@@ -51,6 +51,7 @@ fun LocationChip(
     modifier: Modifier = Modifier
 ) {
     Row(
+
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .background(Color(0xFFE0E0E0), shape = RoundedCornerShape(50.dp))
@@ -59,7 +60,7 @@ fun LocationChip(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = Color.Black,
+            tint = Color(0xFFCD0202),
             modifier = Modifier.size(16.dp)
         )
         Spacer(modifier = Modifier.width(4.dp))
