@@ -18,11 +18,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.anees.ui.screens.prayer.component.PrayerCardWithTimer
+import com.example.anees.ui.screens.home.component.HomeHeader
+import com.example.anees.ui.screens.home.component.PrayerCardWithTimer
 
 
 @Composable
@@ -52,6 +52,8 @@ fun HomeScreen(navToSebiha: () -> Unit = {},
         ) {
             val city = "زفتي"
             val country = "مصر"
+
+            Spacer(Modifier.height(16.dp))
             PrayerCardWithTimer{
                 navToPrayer()
             }

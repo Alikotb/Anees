@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Preview
+import androidx.compose.material.icons.filled.RemoveRedEye
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -60,9 +61,9 @@ private fun HeaderSection(
             )
             Spacer(Modifier.width(4.dp))
             IconButton(onClick = onPreviewClick) {
-                Icon(Icons.Default.Preview,
+                Icon(Icons.Default.RemoveRedEye,
                     contentDescription = "",
-                    modifier = Modifier.size(32.dp),
+                    modifier = Modifier.size(24.dp),
                     tint = Color(0xFF4CAF50)
                 )
             }
