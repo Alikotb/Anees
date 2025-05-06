@@ -60,10 +60,10 @@ fun AdhkarScreen(navToHome: () -> Unit = {}, navToDetails: (String) -> Unit = {}
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp)
-            .padding(vertical = 32.dp)
+            .padding(vertical = 24.dp)
     ) {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-            ScreenTitle(padding = 4, title = "الأذكار اليومية", onBackClick = { navToHome() }, size = 24)
+            ScreenTitle( title = "الأذكار اليومية", onBackClick = { navToHome() }, size = 24)
         }
 
         OutlinedTextField(
@@ -78,7 +78,9 @@ fun AdhkarScreen(navToHome: () -> Unit = {}, navToDetails: (String) -> Unit = {}
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 12.dp),
+                .padding(bottom = 16.dp)
+                .padding(horizontal = 4.dp)
+            ,
             singleLine = true,
             leadingIcon = {
                 Icon(

@@ -35,7 +35,8 @@ fun HisnAlMuslimScreen(onBackClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 24.dp, start = 16.dp, end = 16.dp)
+            .padding(horizontal = 16.dp)
+            .padding(top = 24.dp)
     ) {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             ScreenTitle(

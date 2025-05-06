@@ -9,7 +9,6 @@ import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
 import com.example.anees.ui.screens.hadith.HadithAuthorsScreen
 import com.example.anees.ui.screens.hadith.HadithScreen
 import com.example.anees.ui.screens.hadith.HadithSectionsScreen
-import com.example.anees.ui.screens.home.HomeScreen
 import com.example.anees.ui.screens.quran_pdf.juz_index.JuzIndexScreen
 import com.example.anees.ui.screens.quran_pdf.khatm.KhatmQuranDuaScreen
 import com.example.anees.ui.screens.qibla.QiblaScreen
@@ -31,6 +30,7 @@ import com.example.anees.ui.screens.azan.component.AzanScreen
 import com.example.anees.ui.screens.azkar.screens.AdhkarDetailsScreen
 import com.example.anees.ui.screens.azkar.screens.AdhkarScreen
 import com.example.anees.ui.screens.hisn_almuslim.HisnAlMuslimScreen
+import com.example.anees.ui.screens.home.HomeScreenWithDrawer
 import com.example.anees.ui.screens.names_of_allah.NamesOfAllahScreen
 import com.example.anees.ui.screens.tafsir.screens.TafsirDetailsScreen
 import com.example.anees.ui.screens.tafsir.screens.TafsirScreen
@@ -58,7 +58,7 @@ fun SetUpNavHost(
         }
 
         composable<ScreenRoute.HomeScreen> {
-            HomeScreen(
+            HomeScreenWithDrawer(
                 navToSebiha = {
                     navController.navigate(ScreenRoute.Sebiha)
                 },
@@ -101,7 +101,9 @@ fun SetUpNavHost(
             }
         }
         composable<ScreenRoute.QiblaScreen> {
-            QiblaScreen()
+            QiblaScreen{
+                navController.popBackStack()
+            }
         }
 
         composable<ScreenRoute.CompleteQuranScreen> {
@@ -194,7 +196,7 @@ fun SetUpNavHost(
         composable<ScreenRoute.PrayerTimesScreen> {
             PrayerScreen(
                 onPreviewClick = {
-                    navController.navigate(ScreenRoute.AzanPlayerScreen)
+                    navController.navigate(AzanPlayerScreen)
                 }
             ) {
                 navController.navigateUp()
@@ -202,7 +204,9 @@ fun SetUpNavHost(
         }
 
         composable<ScreenRoute.RadioScreen> {
-            RadioScreen()
+            RadioScreen{
+                navController.navigateUp()
+            }
         }
 
         composable<ScreenRoute.TafsirScreen> {
@@ -225,6 +229,7 @@ fun SetUpNavHost(
                 QuranSurah::class.java
             )
             TafsirDetailsScreen(surah){
+                navController.navigateUp()
                 navController.navigate(ScreenRoute.TafsirScreen)
             }
         }
@@ -268,7 +273,7 @@ fun SetUpNavHost(
                 navController.navigateUp()
             }
         }
-        composable<ScreenRoute.AzanPlayerScreen> {
+        composable<AzanPlayerScreen> {
             val (prayEnum , time) = PrayerTimesHelper.getNextPrayer() ?: PrayEnum.FAJR to 0L
             AzanScreen(
                 prayEnum = prayEnum,

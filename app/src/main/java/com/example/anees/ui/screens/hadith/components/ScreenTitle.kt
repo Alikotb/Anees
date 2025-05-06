@@ -30,13 +30,12 @@ fun ScreenTitle(
     title: String,
     onBackClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
-    padding: Int=8,
     size:Int=28
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(top= 24.dp, bottom = 18.dp, start = padding.dp, end = padding.dp),
+            .padding(top= 24.dp, bottom = 8.dp, end = 4.dp),
         contentAlignment = Alignment.CenterEnd
     ) {
         Row(
@@ -47,7 +46,6 @@ fun ScreenTitle(
             if (onBackClick != null) {
                 IconButton(
                     onClick = onBackClick,
-                    modifier = Modifier.padding(end = 8.dp)
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -59,6 +57,55 @@ fun ScreenTitle(
             Text(
                 text = title,
                 color = Color(0xFF3B3B3B),
+                fontSize = size.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = FontFamily(Font(R.font.othmani)),
+                textAlign = TextAlign.Right,
+                style = TextStyle(
+                    shadow = Shadow(
+                        color = Color.Black.copy(alpha = 0.3f),
+                        offset = Offset(2f, 2f),
+                        blurRadius = 4f
+                    )
+                )
+            )
+        }
+    }
+}
+
+
+@Composable
+fun QiblaTitle(
+    title: String,
+    onBackClick: (() -> Unit)? = null,
+    modifier: Modifier = Modifier,
+    size:Int=28
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(top = 4.dp, bottom = 8.dp, end = 12.dp),
+        contentAlignment = Alignment.CenterEnd
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            if (onBackClick != null) {
+                IconButton(
+                    onClick = onBackClick,
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "رجوع",
+                        tint = Color(0xFFe8e0d5)
+                    )
+                }
+            }
+            Text(
+                text = title,
+                color = Color(0xFFe8e0d5),
                 fontSize = size.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = FontFamily(Font(R.font.othmani)),

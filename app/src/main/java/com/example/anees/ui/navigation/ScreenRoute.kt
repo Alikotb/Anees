@@ -49,9 +49,6 @@ sealed class ScreenRoute {
     data class  QuranPlayerScreen(val reciter: String , val index: Int) : ScreenRoute()
     @Serializable
     object HisnAlMuslimScreen : ScreenRoute()
-
     @Serializable
     object  AzanPlayerScreen : ScreenRoute()
-
-
 }

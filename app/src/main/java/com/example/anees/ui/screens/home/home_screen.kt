@@ -23,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.anees.ui.screens.home.component.HomeHeader
 import com.example.anees.ui.screens.home.component.PrayerCardWithTimer
+import com.example.anees.ui.screens.home.component.ComponentCard
+
 
 
 @Composable
@@ -52,8 +54,9 @@ fun HomeScreen(navToSebiha: () -> Unit = {},
         ) {
             val city = "زفتي"
             val country = "مصر"
-
+          
             Spacer(Modifier.height(16.dp))
+            ComponentCard()
             PrayerCardWithTimer{
                 navToPrayer()
             }
@@ -107,7 +110,7 @@ fun HomeButton(
             .padding(horizontal = 64.dp)
             .height(50.dp),
         shape = RoundedCornerShape(12.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)), // Nice green
+        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
         elevation = ButtonDefaults.buttonElevation(4.dp)
     ) {
         Text(
@@ -118,3 +121,9 @@ fun HomeButton(
         )
     }
 }
+
+
+
+
+
+
