@@ -2,6 +2,7 @@ package com.example.anees.utils.media_helper
 
 import android.content.Context
 import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 
 object RadioPlayer {
@@ -42,6 +43,10 @@ object RadioPlayer {
     fun release() {
         player?.release()
         player = null
+    }
+
+    fun setListener(listener: Player.Listener) {
+        player?.addListener(listener)
     }
 
     fun getCurrentPosition(): Long {
