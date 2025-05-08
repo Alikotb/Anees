@@ -31,13 +31,26 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.anees.R
 
+
+@Preview
 @Composable
 fun ComponentCard(
+    brush: Brush=Brush.verticalGradient(
+        colors = listOf(
+            Color(0xFF803F0B),
+            Color(0xFF5A2E0E),
+            Color(0xFF311403),
+        )
+    ),
+    fontSizeOption: Float? = null,
+    fontColor: Color = Color.White,
+    fontId:Int=R.font.thules,
     onClick: () -> Unit = {},
     id: Int = R.drawable.koran,
     title: String = "القرآن الكريم",
@@ -51,7 +64,7 @@ fun ComponentCard(
 
     val iconSize = cardWidth * 0.28f
     val bgIconSize = cardWidth * 0.8f
-    val fontSize = cardWidth.value * 0.11f
+    val fontSize = fontSizeOption ?: cardWidth.value * 0.11f
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
     Card(
         modifier = Modifier
@@ -69,13 +82,7 @@ fun ComponentCard(
             modifier = Modifier
                 .fillMaxSize()
                 .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            Color(0xFF803F0B),
-                            Color(0xFF5A2E0E),
-                            Color(0xFF311403),
-                        )
-                    ),
+                    brush = brush,
 
                     shape = RoundedCornerShape(16.dp),
                 ),
@@ -110,10 +117,10 @@ fun ComponentCard(
 
                 Text(
                     text = title,
-                    color = Color.White,
+                    color =fontColor,
                     fontSize = fontSize.sp,
                     fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily(Font(R.font.thules)),
+                    fontFamily = FontFamily(Font(fontId)),
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
             }

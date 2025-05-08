@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -33,7 +32,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
 import com.example.anees.R
 import com.example.anees.utils.extensions.convertNumbersToArabic
 import com.example.anees.utils.extensions.toArabicTime
@@ -56,25 +54,25 @@ fun HomeHeader(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(horizontal = 16.dp).padding(top = 4.dp)
     )
     {
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
                 text = location,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium,
-                color = Color.Gray
+                color = Color.Black
             )
             Text(
                 text = hijriDate,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium,
-                color = Color.Gray
+                color = Color.Black
             )
         }
 
