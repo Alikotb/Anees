@@ -1,13 +1,14 @@
 package com.example.anees.ui.screens.hadith
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -23,14 +24,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -47,7 +44,7 @@ import com.example.anees.data.model.Response
 import com.example.anees.data.model.toHadith
 import com.example.anees.enums.AuthorEdition
 import com.example.anees.ui.screens.hadith.components.ScreenTitle
-import com.example.anees.utils.hadith_helper.cardColors
+import com.example.anees.ui.screens.radio.components.ScreenBackground
 import com.example.anees.utils.hadith_helper.offline_hadith.OfflineHadithHelper
 import com.example.anees.utils.extensions.isInternetAvailable
 
@@ -66,25 +63,20 @@ fun HadithScreen(
     LaunchedEffect(Unit) {
         viewModel.getSections(author)
     }
-
+    ScreenBackground()
     Box(modifier = Modifier.fillMaxSize()) {
-        Image(
-            painter = painterResource(id = R.drawable.zekrback),
-            contentDescription = "Background Image",
-            modifier = Modifier.fillMaxSize().alpha(.22f),
-            contentScale = ContentScale.Crop
-        )
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 16.dp, vertical = 16.dp)
+                .padding(horizontal = 16.dp)
+                .padding(vertical = 24.dp)
         ) {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+
                 ScreenTitle(
                     title = author.displayNameAr,
                     onBackClick = onBackClick,
-                    modifier = Modifier.padding(top = 8.dp)
+                    size = 24
                 )
             }
 
@@ -136,11 +128,14 @@ fun DisplayHadiths(allHadiths: List<EditionResponse.Hadith>, hadithRange: Pair<D
     val hadiths = getHadithsForRange(allHadiths, hadithRange.first, hadithRange.second)
 
     LazyColumn(
-        contentPadding = PaddingValues(16.dp),
+        contentPadding = PaddingValues(vertical = 16.dp, horizontal = 4.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(hadiths) { hadith ->
             HadithCard(hadith)
+        }
+        item {
+            Spacer(modifier = Modifier.height(48.dp))
         }
     }
 }
@@ -150,7 +145,7 @@ fun DisplayOfflineHadiths(allHadiths: List<EditionResponse.Hadith>) {
     val hadiths = allHadiths.map { it.text }
 
     LazyColumn(
-        contentPadding = PaddingValues(16.dp),
+        contentPadding = PaddingValues(vertical = 16.dp, horizontal = 4.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(hadiths) { hadith ->
@@ -202,12 +197,19 @@ fun HadithCard(hadithText: String) {
     }
 }
 
-fun getHadithsForRange(allHadiths: List<EditionResponse.Hadith>, start: Double, end: Double): List<String> {
+fun getHadithsForRange(
+    allHadiths: List<EditionResponse.Hadith>,
+    start: Double,
+    end: Double
+): List<String> {
     return allHadiths.filter { it.hadithnumber in start..end && it.text.isNotBlank() }
         .map { it.text }
 }
 
-fun getSectionDetail(sectionDetails: EditionResponse.Metadata.SectionDetails, id: String): EditionResponse.Metadata.SectionDetails.SectionDetail? {
+fun getSectionDetail(
+    sectionDetails: EditionResponse.Metadata.SectionDetails,
+    id: String
+): EditionResponse.Metadata.SectionDetails.SectionDetail? {
     return when (id) {
         "0" -> sectionDetails.x0
         "1" -> sectionDetails.x1

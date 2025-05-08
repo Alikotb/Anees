@@ -10,11 +10,11 @@ import androidx.compose.ui.res.painterResource
 import com.example.anees.R
 
 @Composable
-fun ScreenBackground() {
+fun ScreenBackground(modifier: Modifier = Modifier) {
     Image(
         painter = painterResource(id = R.drawable.zekrback),
         contentDescription = "Background",
-        modifier = Modifier.fillMaxSize().alpha(0.22f),
+        modifier = modifier.fillMaxSize().alpha(0.22f),
         contentScale = ContentScale.Crop
     )
 }

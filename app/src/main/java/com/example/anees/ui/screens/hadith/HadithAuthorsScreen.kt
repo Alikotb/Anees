@@ -55,10 +55,11 @@ fun HadithAuthorsScreen(navToHadithsSections: (String) -> Unit, onBackClick: () 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(18.dp)
+            .padding(horizontal = 16.dp)
+            .padding(vertical = 24.dp)
     ) {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-            ScreenTitle(title = "رواة الحديث", onBackClick = onBackClick)
+            ScreenTitle(title = "رواة الحديث", onBackClick = onBackClick, size = 26)
         }
 
         LazyVerticalGrid(

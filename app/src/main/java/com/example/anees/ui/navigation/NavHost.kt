@@ -9,7 +9,6 @@ import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
 import com.example.anees.ui.screens.hadith.HadithAuthorsScreen
 import com.example.anees.ui.screens.hadith.HadithScreen
 import com.example.anees.ui.screens.hadith.HadithSectionsScreen
-import com.example.anees.ui.screens.home.HomeScreen
 import com.example.anees.ui.screens.quran_pdf.juz_index.JuzIndexScreen
 import com.example.anees.ui.screens.quran_pdf.khatm.KhatmQuranDuaScreen
 import com.example.anees.ui.screens.qibla.QiblaScreen
@@ -102,7 +101,9 @@ fun SetUpNavHost(
             }
         }
         composable<ScreenRoute.QiblaScreen> {
-            QiblaScreen()
+            QiblaScreen{
+                navController.popBackStack()
+            }
         }
 
         composable<ScreenRoute.CompleteQuranScreen> {
@@ -203,7 +204,9 @@ fun SetUpNavHost(
         }
 
         composable<ScreenRoute.RadioScreen> {
-            RadioScreen()
+            RadioScreen{
+                navController.navigateUp()
+            }
         }
 
         composable<ScreenRoute.TafsirScreen> {

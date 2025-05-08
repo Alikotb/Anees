@@ -124,11 +124,11 @@ fun Ssebha(
         ScreenBackground()
         Column(
             modifier = Modifier
-                .fillMaxSize().padding(top = 32.dp),
+                .fillMaxSize().padding(top = 24.dp),
         ) {
 
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                ScreenTitle(padding = 4, title = "السبحة", onBackClick = navToHome)
+                ScreenTitle( title = "السبحة", onBackClick = navToHome, size = 24)
             }
             Column(
                 modifier = Modifier.fillMaxSize().padding(horizontal = 8.dp)

@@ -1,11 +1,10 @@
 package com.example.anees.ui.screens.quran_pdf.khatm
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Divider
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -14,12 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -43,7 +39,7 @@ fun KhatmQuranDuaScreen() {
 
     val keywords = listOf("اللَّهُمَّ", "رَبَّ", "رَبْنَا", "اللَّهُ")
 
-    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -55,12 +51,13 @@ fun KhatmQuranDuaScreen() {
                 .padding(40.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
             Text(
                 text = "دُعَاءُ خَتْمِ الْقُرْآنِ",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
-                fontFamily = FontFamily(Font(R.font.othmani)),
-                color = Color(0xFF4CAF50),
+                fontFamily = FontFamily(Font(R.font.thules)),
+                color = Color(0xFF311403),
                 modifier = Modifier.padding(top = 32.dp)
             )
 
@@ -85,7 +82,7 @@ fun KhatmQuranDuaScreen() {
                     fontSize = 22.sp,
                     fontFamily = FontFamily(Font(R.font.othmani)),
                     lineHeight = 28.sp,
-                    textAlign = TextAlign.End,
+                    textAlign = TextAlign.Justify,
                     modifier = Modifier.padding(bottom = 24.dp)
                 )
 

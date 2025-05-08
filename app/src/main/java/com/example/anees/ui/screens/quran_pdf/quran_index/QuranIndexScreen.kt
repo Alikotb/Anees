@@ -2,7 +2,6 @@ package com.example.anees.ui.screens.quran_pdf.quran_index
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -35,12 +34,14 @@ import com.example.anees.utils.pdf_helper.SuraIndex
 import com.example.anees.utils.pdf_helper.SuraIndexes
 
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.anees.ui.screens.radio.components.ScreenBackground
 
 @Composable
 fun QuranIndexScreen(onIndexButtonClick: () -> Unit) {
     val quranIndexViewModel : QuranIndexViewModel = hiltViewModel()
+    ScreenBackground()
     LazyColumn(
-        modifier = Modifier.fillMaxWidth().background(Color(0xFFF8F5E3))
+        modifier = Modifier.fillMaxWidth()
     ) {
         item {
             Spacer(modifier = Modifier.height(48.dp).fillMaxWidth()
