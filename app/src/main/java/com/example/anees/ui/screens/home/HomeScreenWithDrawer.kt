@@ -166,7 +166,7 @@ fun HomeScreenWithDrawer(
                                         fontSize = 22.sp,
                                         fontWeight = FontWeight.Bold,
                                         modifier = Modifier.fillMaxWidth(),
-                                        fontFamily = FontFamily(Font(R.font.thules)),
+                                        fontFamily = FontFamily(Font(R.font.othmani)),
 
                                         textAlign = TextAlign.End
                                     )
