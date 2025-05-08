@@ -6,6 +6,7 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateOffset
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,22 +18,32 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.anees.R
 import com.example.anees.ui.navigation.ScreenRoute
 import com.example.anees.ui.screens.home.component.HomeDrawer
 import com.example.anees.ui.screens.radio.components.ScreenBackground
@@ -56,7 +67,10 @@ fun HomeScreenWithDrawer(
     val drawerState = remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
-    Box(modifier = Modifier.fillMaxSize().background(Color(0xFFC9C0B3))) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(Color(0xFFC9C0B3))
+    ) {
         ScreenBackground()
         HomeDrawer(
             isOpen = drawerState.value,
@@ -115,51 +129,79 @@ fun HomeScreenWithDrawer(
             }
         }
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .graphicsLayer {
-                    scaleX = scale
-                    scaleY = scale
-                    translationX = offset.x
-                }
-                .clip(RoundedCornerShape(roundness))
-                .background(MaterialTheme.colorScheme.background)
-        ) {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "أنيس المسلم",
-                        fontSize = 20.sp,
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.End
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .graphicsLayer {
+                        scaleX = scale
+                        scaleY = scale
+                        translationX = offset.x
+                    }
+                    .clip(RoundedCornerShape(roundness))
+            ) {
+
+                Box (
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color(0xFFC9C0B3))
+
+                ){
+                    Image(
+                        painter = painterResource(R.drawable.homeback),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .alpha(0.2f),
+                        contentScale =ContentScale.Crop
                     )
-                },
-                actions = {
-                    IconButton(onClick = { drawerState.value = !drawerState.value }) {
-                        Icon(
-                            imageVector = Icons.Default.Menu,
-                            contentDescription = "القائمة"
+                    Column {
+                        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+
+                            TopAppBar(
+                                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+                                title = {
+                                    Text(
+                                        text = "أنيس المسلم",
+                                        fontSize = 22.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        modifier = Modifier.fillMaxWidth(),
+                                        fontFamily = FontFamily(Font(R.font.thules)),
+
+                                        textAlign = TextAlign.End
+                                    )
+                                },
+                                actions = {
+                                    IconButton(onClick = {
+                                        drawerState.value = !drawerState.value
+                                    }) {
+                                        Icon(
+                                            imageVector = Icons.Default.Menu,
+                                            contentDescription = "القائمة"
+                                        )
+                                    }
+                                },
+                                navigationIcon = {}
+                            )
+                        }
+                        HomeScreen(
+                            navToSebiha = navToSebiha,
+                            navToQibla = navToQibla,
+                            navToQuran = navToQuran,
+                            navToAzkar = navToAzkar,
+                            navToHadith = navToHadith,
+                            navToRadio = navToRadio,
+                            navToTafsir = navToTafsir,
+                            navToPrayer = navToPrayer,
+                            navToReciters = navToReciters,
+                            navToNamesOfAllah = navToNamesOfAllah,
+                            navToHisnAlMuslim = navToHisnAlMuslim
                         )
                     }
-                },
-                navigationIcon = {}
-            )
+                }
 
-            HomeScreen(
-                navToSebiha = navToSebiha,
-                navToQibla = navToQibla,
-                navToQuran = navToQuran,
-                navToAzkar = navToAzkar,
-                navToHadith = navToHadith,
-                navToRadio = navToRadio,
-                navToTafsir = navToTafsir,
-                navToPrayer = navToPrayer,
-                navToReciters = navToReciters,
-                navToNamesOfAllah = navToNamesOfAllah,
-                navToHisnAlMuslim = navToHisnAlMuslim
-            )
-        }
+            }
+
     }
 }
 

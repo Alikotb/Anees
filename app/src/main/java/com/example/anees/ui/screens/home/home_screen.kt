@@ -1,13 +1,16 @@
 package com.example.anees.ui.screens.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -15,32 +18,141 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.anees.ui.screens.home.component.HomeHeader
-import com.example.anees.ui.screens.home.component.PrayerCardWithTimer
+import com.example.anees.R
 import com.example.anees.ui.screens.home.component.ComponentCard
+import com.example.anees.ui.screens.home.component.PrayerCardWithTimer
+import com.example.anees.ui.screens.home.component.QuranCard
+import com.example.anees.ui.screens.home.component.SubCards
 
 
-
+@Preview(showBackground = true,locale = "en")
 @Composable
 fun HomeScreen(navToSebiha: () -> Unit = {},
                navToQibla: () -> Unit = {},
                navToQuran: () -> Unit = {},
                navToAzkar: () -> Unit = {},
                navToHadith: () -> Unit = {},
-               navToRadio: () -> Unit,
-               navToTafsir: () -> Unit,
+               navToRadio: () -> Unit={},
+               navToTafsir: () -> Unit={},
                navToPrayer: () -> Unit = {} ,
                navToReciters: () -> Unit = {},
                navToNamesOfAllah: () -> Unit = {},
                navToHisnAlMuslim: () -> Unit = {}
 ){
+    Box {
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
 
+            Column(
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .background(Color.Transparent)
+
+            ) {
+                PrayerCardWithTimer {
+                    navToPrayer()
+                }
+                SubCards(
+                    navToSebiha = navToSebiha,
+                    navToQibla = navToQibla,
+                    navToRadio = navToRadio
+                )
+                Row(
+                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier.padding(horizontal = 24.dp)
+                ) {
+                    Text(
+                        text = "الأقسام الرئيسية",
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.End,
+                        color = Color.Black,
+                        fontFamily = FontFamily(Font(R.font.othmani)),
+
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+
+                QuranCard(onClick = navToQuran)
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+                ) {
+                    ComponentCard(size = .45f, title = "الحديث",onClick = navToHadith,id = R.drawable.had)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    ComponentCard(size = .45f, title = "التفسير",onClick = navToTafsir, id = R.drawable.taf)
+
+                }
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+                ) {
+                    ComponentCard(size = .45f, title = "القراء",onClick = navToReciters,id = R.drawable.sound)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    ComponentCard(size = .45f, title = "الأذكار",onClick = navToAzkar,id = R.drawable.do3aa)
+
+                }
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+                ) {
+                    ComponentCard(size = .45f, title = "اسماء الله الحسنى",onClick = navToNamesOfAllah,id = R.drawable.allah)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    ComponentCard(size = .45f, title = "حصن المسلم",onClick = navToHisnAlMuslim,id = R.drawable.hisen)
+
+                }
+                Spacer(modifier = Modifier.height(32.dp))
+
+            }
+        }
+    }
+
+}
+
+
+
+
+@Composable
+fun HomeButton(
+    text: String,
+    onClick: () -> Unit
+) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 64.dp)
+            .height(50.dp),
+        shape = RoundedCornerShape(12.dp),
+        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
+        elevation = ButtonDefaults.buttonElevation(4.dp)
+    ) {
+        Text(
+            text = text,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = Color.White
+        )
+    }
+}
+
+
+/*
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -54,7 +166,7 @@ fun HomeScreen(navToSebiha: () -> Unit = {},
         ) {
             val city = "زفتي"
             val country = "مصر"
-          
+
             Spacer(Modifier.height(16.dp))
             PrayerCardWithTimer{
                 navToPrayer()
@@ -95,35 +207,7 @@ fun HomeScreen(navToSebiha: () -> Unit = {},
             }
             Spacer(modifier = Modifier.height(32.dp))
         }
-    }
-}
-
-@Composable
-fun HomeButton(
-    text: String,
-    onClick: () -> Unit
-) {
-    Button(
-        onClick = onClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 64.dp)
-            .height(50.dp),
-        shape = RoundedCornerShape(12.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
-        elevation = ButtonDefaults.buttonElevation(4.dp)
-    ) {
-        Text(
-            text = text,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = Color.White
-        )
-    }
-}
-
-
-
+    }*/
 
 
 

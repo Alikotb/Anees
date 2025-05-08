@@ -54,6 +54,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.anees.ui.navigation.ScreenRoute
 import com.example.anees.ui.navigation.SetUpNavHost
+import com.example.anees.ui.screens.radio.components.ScreenBackground
 import com.example.anees.utils.extensions.setAllAlarms
 import com.example.anees.utils.location.LocationProvider
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -91,6 +92,7 @@ class MainActivity : ComponentActivity() {
                 )
             }
             navController = rememberNavController()
+//            ScreenBackground()
             SetUpNavHost(navController = navController)
 
 

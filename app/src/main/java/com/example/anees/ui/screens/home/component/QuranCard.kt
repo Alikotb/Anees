@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.anees.R
 
-
+@Preview
 @Composable
 fun QuranCard(
     modifier: Modifier = Modifier,
@@ -49,10 +49,10 @@ fun QuranCard(
             modifier = modifier
                 .fillMaxWidth()
                 .height(110.dp)
-                .padding(horizontal = 8.dp, vertical = 4.dp)
+                .padding(horizontal = 16.dp)
                 .clickable { onClick() },
             shape = RoundedCornerShape(20.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 16.dp),
             border = BorderStroke(1.dp, Color(0xFFB8926A))
 
         ) {
