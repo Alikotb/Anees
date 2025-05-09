@@ -34,9 +34,6 @@ class MainActivity : ComponentActivity() {
             )
             startActivity(intent)
         }
-        else{
-            setAllAlarms()
-        }
         enableEdgeToEdge()
         setContent {
             val systemUiController = rememberSystemUiController()
