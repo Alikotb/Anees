@@ -21,9 +21,24 @@ fun Context.isInternetAvailable(): Boolean {
     return networkInfo != null && networkInfo.isConnected
 }
 
+fun Context.cancelAllAlarms() {
+    var index = 0
+    for (pray in PrayerTimesHelper.getUpcomingPrayers()) {
+        val intent = Intent(this, AzanAlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            this,
+            index++,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager.cancel(pendingIntent)
+    }
+}
 
 fun Context.setAllAlarms(
 ){
+    cancelAllAlarms()
     var index = 0;
     for (pray in PrayerTimesHelper.getUpcomingPrayers()) {
         setAlarm(
