@@ -115,6 +115,12 @@ object PrayerTimesHelper {
         return  prayerEnum == prayer
     }
 
+    fun isTodayFriday(): Boolean {
+        val today = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
+        return today == Calendar.FRIDAY
+    }
+
+
 }
 
 

@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.anees.R
 import com.example.anees.enums.PrayEnum
+import com.example.anees.utils.prayer_helper.PrayerTimesHelper
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Preview
@@ -133,7 +134,8 @@ fun AzanScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         AzanPulseView(
-                            prayerName = prayEnum.value, prayerTime = prayerTime,
+                            prayerName = if (PrayerTimesHelper.isTodayFriday() && prayEnum == PrayEnum.ZUHR ) "صلاة الجمعة" else prayEnum.value
+                            , prayerTime = prayerTime,
                             isDay = if (prayEnum == PrayEnum.ZUHR || prayEnum == PrayEnum.ASR) true else false
                         )
 
