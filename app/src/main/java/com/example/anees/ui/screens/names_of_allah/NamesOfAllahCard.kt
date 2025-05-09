@@ -67,7 +67,11 @@ fun NamesOfAllahCard(name:NamesOfAllahModelItem) {
             modifier = Modifier
                 .fillMaxSize()
                 .border(1.dp, Color(0xEB803F0B), RoundedCornerShape(16.dp))
-                .clickable { isFlipped = !isFlipped },
+                .clickable (
+                    interactionSource = null,
+                    indication = null,
+                    onClick = { isFlipped = !isFlipped}
+                )  ,
             shape = RoundedCornerShape(8.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
         ) {

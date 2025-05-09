@@ -8,7 +8,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,6 +31,8 @@ import com.example.anees.ui.screens.radio.components.ScreenBackground
 import com.example.anees.utils.date_helper.DateHelper
 import com.example.anees.utils.extensions.getCityAndCountryInArabic
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 
 @Preview(showBackground = true)
@@ -34,6 +41,20 @@ fun PrayerScreen(onPreviewClick: () -> Unit = {},onBackClick: () -> Unit = {}){
 
     val systemUiController = rememberSystemUiController()
     val  context = LocalContext.current
+    var location by remember { mutableStateOf("") }
+
+
+    LaunchedEffect(Unit) {
+        withContext(Dispatchers.IO) {
+            val latitude = SharedPreferencesImpl(context).fetchData("latitude", 30.033333)
+            val longitude = SharedPreferencesImpl(context).fetchData("longitude", 31.233334)
+            val result = context.getCityAndCountryInArabic(latitude, longitude)
+
+            withContext(Dispatchers.Main) {
+                location = result
+            }
+        }
+    }
 
     SideEffect {
         systemUiController.setStatusBarColor(
@@ -56,10 +77,7 @@ fun PrayerScreen(onPreviewClick: () -> Unit = {},onBackClick: () -> Unit = {}){
             ) {
 
                 PrayerTopBar(location =
-                    context.getCityAndCountryInArabic(
-                        SharedPreferencesImpl(context).fetchData("latitude" ,30.033333 ),
-                        SharedPreferencesImpl(context).fetchData("longitude",31.233334)
-                    )
+                    location
                 ){
                     onBackClick()
                 }

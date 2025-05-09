@@ -1,10 +1,7 @@
 package com.example.anees
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -38,6 +35,16 @@ class MainActivity : ComponentActivity() {
             askedForOverlayPermission = true
             requestOverlayPermission()
         }
+        else {
+            val locationProvider = LocationProvider(this)
+            locationProvider.fetchLatLong(this) { location ->
+                SharedPreferencesImpl(this).saveData("latitude", location.latitude)
+                SharedPreferencesImpl(this).saveData("longitude", location.longitude)
+                PrayerTimesHelper.coordinates = Coordinates(location.latitude, location.longitude)
+                setAllAlarms()
+            }
+
+        }
 
         enableEdgeToEdge()
         setContent {
@@ -50,21 +57,9 @@ class MainActivity : ComponentActivity() {
                 )
             }
             navController = rememberNavController()
-//            ScreenBackground()
             SetUpNavHost(navController = navController)
 
 
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        val locationProvider = LocationProvider(this)
-        locationProvider.fetchLatLong(this) { location ->
-            Log.d("TAG", "onStart: ${location.latitude} ${location.longitude}")
-            SharedPreferencesImpl(this).saveData("latitude", location.latitude)
-            SharedPreferencesImpl(this).saveData("longitude", location.longitude)
-            PrayerTimesHelper.coordinates = Coordinates(location.latitude, location.longitude)
         }
     }
 
@@ -72,7 +67,13 @@ class MainActivity : ComponentActivity() {
         super.onResume()
         if (askedForOverlayPermission && Settings.canDrawOverlays(this)) {
             askedForOverlayPermission = false
-            setAllAlarms()
+            val locationProvider = LocationProvider(this)
+            locationProvider.fetchLatLong(this) { location ->
+                SharedPreferencesImpl(this).saveData("latitude", location.latitude)
+                SharedPreferencesImpl(this).saveData("longitude", location.longitude)
+                PrayerTimesHelper.coordinates = Coordinates(location.latitude, location.longitude)
+                setAllAlarms()
+            }
         }
 
     }
