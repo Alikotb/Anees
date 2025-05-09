@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,9 +34,11 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.anees.R
+import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
 import com.example.anees.enums.PrayEnum
 import com.example.anees.utils.date_helper.DateHelper
 import com.example.anees.utils.extensions.convertNumbersToArabic
+import com.example.anees.utils.extensions.getCityAndCountryInArabic
 import com.example.anees.utils.extensions.toArabicTime
 import com.example.anees.utils.prayer_helper.PrayerTimesHelper
 import kotlinx.coroutines.delay
@@ -56,12 +59,15 @@ fun HomeHeader(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp).padding(top = 4.dp)
+            .padding(horizontal = 16.dp)
+            .padding(top = 4.dp)
     )
     {
 
         Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
@@ -196,12 +202,20 @@ fun ExtrudedText(
 
 @Composable
 fun PrayerCardWithTimer(
-    location  : String = "القاهرة، مصر",
     onCardClick: () -> Unit
 ) {
+    val context = LocalContext.current
     var remainingTime by remember { mutableStateOf("") }
+    var location by remember { mutableStateOf("") }
 
     val (prayEnum, targetTime) = PrayerTimesHelper.getNextPrayer()!!
+
+    LaunchedEffect(Unit) {
+        location = context.getCityAndCountryInArabic(
+            SharedPreferencesImpl(context).fetchData("latitude", 30.033333),
+            SharedPreferencesImpl(context).fetchData("longitude", 31.233334)
+        )
+    }
 
     LaunchedEffect(targetTime) {
         while (true) {

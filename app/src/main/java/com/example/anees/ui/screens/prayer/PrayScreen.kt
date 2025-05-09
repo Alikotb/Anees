@@ -8,7 +8,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,6 +39,14 @@ fun PrayerScreen(onPreviewClick: () -> Unit = {},onBackClick: () -> Unit = {}){
 
     val systemUiController = rememberSystemUiController()
     val  context = LocalContext.current
+    var location by remember { mutableStateOf("") }
+
+    LaunchedEffect(Unit){
+        location = context.getCityAndCountryInArabic(
+            SharedPreferencesImpl(context).fetchData("latitude" ,30.033333 ),
+            SharedPreferencesImpl(context).fetchData("longitude",31.233334)
+        )
+    }
 
     SideEffect {
         systemUiController.setStatusBarColor(
@@ -56,10 +69,7 @@ fun PrayerScreen(onPreviewClick: () -> Unit = {},onBackClick: () -> Unit = {}){
             ) {
 
                 PrayerTopBar(location =
-                    context.getCityAndCountryInArabic(
-                        SharedPreferencesImpl(context).fetchData("latitude" ,30.033333 ),
-                        SharedPreferencesImpl(context).fetchData("longitude",31.233334)
-                    )
+                    location
                 ){
                     onBackClick()
                 }
