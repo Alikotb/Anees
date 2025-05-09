@@ -101,7 +101,7 @@ dependencies {
     implementation ("com.google.code.gson:gson:2.10.1")
 
     //workManager
-    implementation ("androidx.work:work-runtime-ktx:2.7.1")
+    implementation ("androidx.work:work-runtime-ktx:2.10.1")
     //notification
     implementation("androidx.core:core-ktx:1.16.0")
 
