@@ -16,8 +16,9 @@ import java.util.TimeZone
 
 object PrayerTimesHelper {
 
+    var coordinates : Coordinates = Coordinates(30.033333, 31.233334)
+
     fun getNextPrayer(): Pair<PrayEnum, Long>? {
-        val coordinates = Coordinates(30.666733, 31.169271)
         val dateComponents = DateComponents.from(Date())
 
         val params = CalculationMethod.EGYPTIAN.parameters
@@ -52,7 +53,6 @@ object PrayerTimesHelper {
     }
 
     fun getAllPrayers(): List<Triple<PrayEnum, Long, Boolean>> {
-        val coordinates = Coordinates(30.666733, 31.169271)
         val dateComponents = DateComponents.from(Date())
 
         val params = CalculationMethod.EGYPTIAN.parameters
@@ -71,7 +71,6 @@ object PrayerTimesHelper {
     }
 
     fun getUpcomingPrayers(): List<Pair<PrayEnum, Long>> {
-        val coordinates = Coordinates(30.666733, 31.169271)
         val now = System.currentTimeMillis()
 
         val result = mutableListOf<Pair<PrayEnum, Long>>()
@@ -89,7 +88,6 @@ object PrayerTimesHelper {
             )
         }
 
-        // نحاول نجيب صلوات انهارده اللي لسه جايه
         val todayPrayers = getPrayersForDate(Date())
         for ((prayer, time) in todayPrayers) {
             if (time > now) {
@@ -97,7 +95,6 @@ object PrayerTimesHelper {
             }
         }
 
-        // لو مفيش صلوات فاضلة انهارده نضيف صلوات بكرا كلها
         if (result.isEmpty()) {
             val tomorrow = Calendar.getInstance().apply { add(Calendar.DATE, 1) }.time
             val tomorrowPrayers = getPrayersForDate(tomorrow)
@@ -114,6 +111,12 @@ object PrayerTimesHelper {
         val(prayer,time)=getNextPrayer() ?: return false
         return  prayerEnum == prayer
     }
+
+    fun isTodayFriday(): Boolean {
+        val today = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
+        return today == Calendar.FRIDAY
+    }
+
 
 }
 

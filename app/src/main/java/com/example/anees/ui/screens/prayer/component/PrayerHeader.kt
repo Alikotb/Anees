@@ -25,11 +25,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.batoulapps.adhan.Coordinates
+import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
 import com.example.anees.enums.PrayEnum
 import com.example.anees.utils.extensions.convertNumbersToArabic
 import com.example.anees.utils.extensions.toArabicTime
@@ -56,7 +59,7 @@ private fun HeaderSection(
             horizontalArrangement = Arrangement.Center
         ){
             Text(
-                text =  "${prayEnum.value}", fontSize = 24.sp,
+                text =  "${if (PrayerTimesHelper.isTodayFriday() && prayEnum == PrayEnum.ZUHR ) "صلاة الجمعة" else prayEnum.value}", fontSize = 24.sp,
                 color = textColor, textAlign = TextAlign.Center,
             )
             Spacer(Modifier.width(4.dp))
@@ -77,6 +80,7 @@ private fun HeaderSection(
 @Composable
 fun HeaderWithTimer(onPreviewClick: () -> Unit = {}) {
     var remainingTime by remember { mutableStateOf("") }
+    val context = LocalContext.current
 
     val (prayEnum, targetTime) = PrayerTimesHelper.getNextPrayer()!!
 
