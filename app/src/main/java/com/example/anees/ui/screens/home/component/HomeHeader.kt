@@ -41,7 +41,9 @@ import com.example.anees.utils.extensions.convertNumbersToArabic
 import com.example.anees.utils.extensions.getCityAndCountryInArabic
 import com.example.anees.utils.extensions.toArabicTime
 import com.example.anees.utils.prayer_helper.PrayerTimesHelper
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 
 
@@ -101,6 +103,8 @@ fun HomeHeader(
                 )
                 .padding(16.dp)
                 .clickable(
+                    interactionSource = null,
+                    indication = null,
                     onClick = onCardClick
                 )
         ) {
@@ -211,10 +215,15 @@ fun PrayerCardWithTimer(
     val (prayEnum, targetTime) = PrayerTimesHelper.getNextPrayer()!!
 
     LaunchedEffect(Unit) {
-        location = context.getCityAndCountryInArabic(
-            SharedPreferencesImpl(context).fetchData("latitude", 30.033333),
-            SharedPreferencesImpl(context).fetchData("longitude", 31.233334)
-        )
+        withContext(Dispatchers.IO) {
+            val latitude = SharedPreferencesImpl(context).fetchData("latitude", 30.033333)
+            val longitude = SharedPreferencesImpl(context).fetchData("longitude", 31.233334)
+            val result = context.getCityAndCountryInArabic(latitude, longitude)
+
+            withContext(Dispatchers.Main) {
+                location = result
+            }
+        }
     }
 
     LaunchedEffect(targetTime) {

@@ -31,6 +31,8 @@ import com.example.anees.ui.screens.radio.components.ScreenBackground
 import com.example.anees.utils.date_helper.DateHelper
 import com.example.anees.utils.extensions.getCityAndCountryInArabic
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 
 @Preview(showBackground = true)
@@ -41,11 +43,17 @@ fun PrayerScreen(onPreviewClick: () -> Unit = {},onBackClick: () -> Unit = {}){
     val  context = LocalContext.current
     var location by remember { mutableStateOf("") }
 
-    LaunchedEffect(Unit){
-        location = context.getCityAndCountryInArabic(
-            SharedPreferencesImpl(context).fetchData("latitude" ,30.033333 ),
-            SharedPreferencesImpl(context).fetchData("longitude",31.233334)
-        )
+
+    LaunchedEffect(Unit) {
+        withContext(Dispatchers.IO) {
+            val latitude = SharedPreferencesImpl(context).fetchData("latitude", 30.033333)
+            val longitude = SharedPreferencesImpl(context).fetchData("longitude", 31.233334)
+            val result = context.getCityAndCountryInArabic(latitude, longitude)
+
+            withContext(Dispatchers.Main) {
+                location = result
+            }
+        }
     }
 
     SideEffect {

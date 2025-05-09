@@ -152,7 +152,7 @@ fun HomeScreenWithDrawer(
                         contentDescription = null,
                         modifier = Modifier
                             .fillMaxSize()
-                            .alpha(0.2f),
+                            .alpha(0.22f),
                         contentScale =ContentScale.Crop
                     )
                     Column {

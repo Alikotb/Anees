@@ -2,7 +2,6 @@ package com.example.anees
 
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -39,7 +38,6 @@ class MainActivity : ComponentActivity() {
         else {
             val locationProvider = LocationProvider(this)
             locationProvider.fetchLatLong(this) { location ->
-                Log.d("TAG", "onStart: ${location.latitude} ${location.longitude}")
                 SharedPreferencesImpl(this).saveData("latitude", location.latitude)
                 SharedPreferencesImpl(this).saveData("longitude", location.longitude)
                 PrayerTimesHelper.coordinates = Coordinates(location.latitude, location.longitude)
@@ -59,7 +57,6 @@ class MainActivity : ComponentActivity() {
                 )
             }
             navController = rememberNavController()
-//            ScreenBackground()
             SetUpNavHost(navController = navController)
 
 
@@ -72,7 +69,6 @@ class MainActivity : ComponentActivity() {
             askedForOverlayPermission = false
             val locationProvider = LocationProvider(this)
             locationProvider.fetchLatLong(this) { location ->
-                Log.d("TAG", "onStart: ${location.latitude} ${location.longitude}")
                 SharedPreferencesImpl(this).saveData("latitude", location.latitude)
                 SharedPreferencesImpl(this).saveData("longitude", location.longitude)
                 PrayerTimesHelper.coordinates = Coordinates(location.latitude, location.longitude)

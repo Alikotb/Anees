@@ -30,12 +30,10 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.anees.R
-import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
 import com.example.anees.ui.screens.home.component.ComponentCard
 import com.example.anees.ui.screens.home.component.PrayerCardWithTimer
 import com.example.anees.ui.screens.home.component.QuranCard
 import com.example.anees.ui.screens.home.component.SubCards
-import com.example.anees.utils.extensions.getCityAndCountryInArabic
 
 
 @Preview(showBackground = true,locale = "en")
@@ -52,7 +50,6 @@ fun HomeScreen(navToSebiha: () -> Unit = {},
                navToNamesOfAllah: () -> Unit = {},
                navToHisnAlMuslim: () -> Unit = {}
 ){
-    val context = LocalContext.current
     Box {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
 
@@ -66,8 +63,6 @@ fun HomeScreen(navToSebiha: () -> Unit = {},
 
             ) {
                 PrayerCardWithTimer(
-
-
                 ) {
                     navToPrayer()
                 }
