@@ -7,13 +7,19 @@ import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
 import android.net.ConnectivityManager
+import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
-import androidx.annotation.RequiresApi
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.example.anees.enums.PrayEnum
 import com.example.anees.receivers.AzanAlarmReceiver
 import com.example.anees.utils.prayer_helper.PrayerTimesHelper
+import com.example.anees.workers.AlarmResetWorker
+import java.util.Calendar
+import java.util.concurrent.TimeUnit
 
 fun Context.isInternetAvailable(): Boolean {
     val connectivityManager = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -87,3 +93,49 @@ fun Context.isVolumeZero(): Boolean {
     val volume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
     return volume == 0
 }
+
+fun Context.requestOverlayPermission() {
+    if (!Settings.canDrawOverlays(this)) {
+        try {
+            val intent = Intent(
+                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                Uri.parse("package:$packageName")
+            )
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+        } catch (e: Exception) {
+            val fallbackIntent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+            fallbackIntent.data = Uri.parse("package:$packageName")
+            fallbackIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(fallbackIntent)
+        }
+    }
+}
+
+fun Context.scheduleMidnightAlarmReset() {
+    val now = Calendar.getInstance()
+    val midnight = Calendar.getInstance().apply {
+        set(Calendar.HOUR_OF_DAY, 0)
+        set(Calendar.MINUTE, 0)
+        set(Calendar.SECOND, 0)
+        set(Calendar.MILLISECOND, 0)
+        if (before(now)) {
+            add(Calendar.DAY_OF_MONTH, 1)
+        }
+    }
+
+    val initialDelay = midnight.timeInMillis - now.timeInMillis
+
+    val workRequest = PeriodicWorkRequestBuilder<AlarmResetWorker>(1, TimeUnit.DAYS)
+        .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
+        .addTag("AlarmResetWorker")
+        .build()
+
+    WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+        "DailyAlarmReset",
+        ExistingPeriodicWorkPolicy.UPDATE,
+        workRequest
+    )
+}
+
+

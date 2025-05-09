@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.anees.ui.navigation.SetUpNavHost
+import com.example.anees.utils.extensions.requestOverlayPermission
 import com.example.anees.utils.extensions.setAllAlarms
 import com.example.anees.utils.location.LocationProvider
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -28,12 +29,9 @@ class MainActivity : ComponentActivity() {
 
         if (!Settings.canDrawOverlays(this)) {
             askedForOverlayPermission = true
-            val intent = Intent(
-                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                Uri.parse("package:$packageName")
-            )
-            startActivity(intent)
+            requestOverlayPermission()
         }
+
         enableEdgeToEdge()
         setContent {
             val systemUiController = rememberSystemUiController()

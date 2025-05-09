@@ -56,7 +56,7 @@ private fun HeaderSection(
             horizontalArrangement = Arrangement.Center
         ){
             Text(
-                text =  "${prayEnum.value}", fontSize = 24.sp,
+                text =  "${if (PrayerTimesHelper.isTodayFriday() && prayEnum == PrayEnum.ZUHR ) "صلاة الجمعة" else prayEnum.value}", fontSize = 24.sp,
                 color = textColor, textAlign = TextAlign.Center,
             )
             Spacer(Modifier.width(4.dp))

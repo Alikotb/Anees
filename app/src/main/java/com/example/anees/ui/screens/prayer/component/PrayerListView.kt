@@ -20,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.anees.enums.PrayEnum
 import com.example.anees.utils.extensions.convertNumbersToArabic
 import com.example.anees.utils.extensions.toArabicTime
 import com.example.anees.utils.prayer_helper.PrayerTimesHelper
@@ -30,7 +31,7 @@ fun PrayerList() {
 
     Column {
         prayers.forEach { (prayerEnum, time , isHighlighted) ->
-            val name = prayerEnum.value
+            val name = if (PrayerTimesHelper.isTodayFriday() && prayerEnum == PrayEnum.ZUHR ) "صلاة الجمعة" else prayerEnum.value
             val icon = prayerEnum.icon
             PrayerItem(
                 name = name,
