@@ -33,14 +33,11 @@ class RadioViewModel @Inject constructor(private val context: Application) : And
 
     init {
         setupBroadcastReceiver()
-        if (RadioServiceManager.isServiceRunning(context)) {
-            requestCurrentStateFromService()
-        } else {
-            _isPlaying.value = false
-            currentIndex = 0
-            _currentStation.value = radioStations[0]
-            RadioPlayer.setMediaItem(radioStations[0].url)
-        }
+        RadioServiceManager.startRadioService(context, _currentStation.value.url)
+        _isPlaying.value = true
+        currentIndex = 0
+        _currentStation.value = radioStations[0]
+        RadioPlayer.setMediaItem(radioStations[0].url)
     }
 
     fun playPauseRadio() {
@@ -70,21 +67,6 @@ class RadioViewModel @Inject constructor(private val context: Application) : And
         _isPlaying.value = true
     }
 
-    fun stopRadio() {
-        RadioServiceManager.stopRadioService(context)
-        _isPlaying.value = false
-    }
-
-    private fun requestCurrentStateFromService() {
-        val intent = Intent(context, RadioService::class.java).apply {
-            action = "ACTION_REQUEST_STATE"
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            context.startForegroundService(intent)
-        } else {
-            context.startService(intent)
-        }
-    }
 
     private fun setupBroadcastReceiver() {
         broadcastReceiver = RadioBroadcastReceiver(
@@ -112,6 +94,7 @@ class RadioViewModel @Inject constructor(private val context: Application) : And
 
     override fun onCleared() {
         super.onCleared()
+        RadioPlayer.release()
         broadcastReceiver?.let {
             context.unregisterReceiver(it)
         }

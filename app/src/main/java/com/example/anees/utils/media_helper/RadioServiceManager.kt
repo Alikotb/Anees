@@ -28,15 +28,4 @@ object RadioServiceManager {
             context.startService(intent)
         }
     }
-
-    fun stopRadioService(context: Context) {
-        val intent = Intent(context, RadioService::class.java)
-        context.stopService(intent)
-    }
-
-    fun isServiceRunning(context: Context): Boolean {
-        val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-        return manager.getRunningServices(Integer.MAX_VALUE)
-            .any { it.service.className == RadioService::class.java.name }
-    }
 }
