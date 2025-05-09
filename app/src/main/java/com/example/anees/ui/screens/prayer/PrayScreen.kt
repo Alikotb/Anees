@@ -12,16 +12,19 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
 import com.example.anees.ui.screens.prayer.component.DateSection
 import com.example.anees.ui.screens.prayer.component.HeaderWithTimer
 import com.example.anees.ui.screens.prayer.component.PrayerList
 import com.example.anees.ui.screens.prayer.component.PrayerTopBar
 import com.example.anees.ui.screens.radio.components.ScreenBackground
 import com.example.anees.utils.date_helper.DateHelper
+import com.example.anees.utils.extensions.getCityAndCountryInArabic
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 
@@ -30,6 +33,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 fun PrayerScreen(onPreviewClick: () -> Unit = {},onBackClick: () -> Unit = {}){
 
     val systemUiController = rememberSystemUiController()
+    val  context = LocalContext.current
 
     SideEffect {
         systemUiController.setStatusBarColor(
@@ -51,7 +55,12 @@ fun PrayerScreen(onPreviewClick: () -> Unit = {},onBackClick: () -> Unit = {}){
                 ,horizontalAlignment = Alignment.CenterHorizontally,
             ) {
 
-                PrayerTopBar("زفتي , مصر"){
+                PrayerTopBar(location =
+                    context.getCityAndCountryInArabic(
+                        SharedPreferencesImpl(context).fetchData("latitude" ,30.033333 ),
+                        SharedPreferencesImpl(context).fetchData("longitude",31.233334)
+                    )
+                ){
                     onBackClick()
                 }
                 Spacer(modifier = Modifier.height(32.dp))

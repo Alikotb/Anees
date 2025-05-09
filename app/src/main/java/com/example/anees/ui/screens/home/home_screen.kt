@@ -19,6 +19,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -29,10 +30,12 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.anees.R
+import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
 import com.example.anees.ui.screens.home.component.ComponentCard
 import com.example.anees.ui.screens.home.component.PrayerCardWithTimer
 import com.example.anees.ui.screens.home.component.QuranCard
 import com.example.anees.ui.screens.home.component.SubCards
+import com.example.anees.utils.extensions.getCityAndCountryInArabic
 
 
 @Preview(showBackground = true,locale = "en")
@@ -49,6 +52,7 @@ fun HomeScreen(navToSebiha: () -> Unit = {},
                navToNamesOfAllah: () -> Unit = {},
                navToHisnAlMuslim: () -> Unit = {}
 ){
+    val context = LocalContext.current
     Box {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
 
@@ -61,7 +65,12 @@ fun HomeScreen(navToSebiha: () -> Unit = {},
                     .background(Color.Transparent)
 
             ) {
-                PrayerCardWithTimer {
+                PrayerCardWithTimer(
+                    location = context.getCityAndCountryInArabic(
+                        SharedPreferencesImpl(context).fetchData("latitude" , 30.033333),
+                        SharedPreferencesImpl(context).fetchData("longitude" , 31.233334)
+                    )
+                ) {
                     navToPrayer()
                 }
                 SubCards(

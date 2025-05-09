@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.anees.R
 import com.example.anees.enums.PrayEnum
+import com.example.anees.utils.date_helper.DateHelper
 import com.example.anees.utils.extensions.convertNumbersToArabic
 import com.example.anees.utils.extensions.toArabicTime
 import com.example.anees.utils.prayer_helper.PrayerTimesHelper
@@ -219,7 +220,7 @@ fun PrayerCardWithTimer(
 
 
     HomeHeader(
-        hijriDate = "24 رمضان 1445 هـ".convertNumbersToArabic(),
+        hijriDate = DateHelper.getTodayHijriDate(),
         location = location,
         prayerName = if (PrayerTimesHelper.isTodayFriday() && prayEnum == PrayEnum.ZUHR ) "صلاة الجمعة" else prayEnum.value,
         prayerTime = targetTime.toArabicTime().convertNumbersToArabic(),
