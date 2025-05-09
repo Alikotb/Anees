@@ -1,8 +1,14 @@
 package com.example.anees.ui.screens.radio
 
 import android.app.Application
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.os.Build
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import com.example.anees.data.model.radio.RadioStations
+import com.example.anees.receivers.RadioBroadcastReceiver
 import com.example.anees.services.RadioService
 import com.example.anees.utils.media_helper.RadioPlayer
 import com.example.anees.utils.media_helper.RadioServiceManager
@@ -22,6 +28,20 @@ class RadioViewModel @Inject constructor(private val context: Application) : And
 
     private val _currentStation = MutableStateFlow(radioStations[currentIndex])
     val currentStation = _currentStation.asStateFlow()
+
+    private var broadcastReceiver: RadioBroadcastReceiver? = null
+
+    init {
+        setupBroadcastReceiver()
+        if (RadioServiceManager.isServiceRunning(context)) {
+            requestCurrentStateFromService()
+        } else {
+            _isPlaying.value = false
+            currentIndex = 0
+            _currentStation.value = radioStations[0]
+            RadioPlayer.setMediaItem(radioStations[0].url)
+        }
+    }
 
     fun playPauseRadio() {
         if (_isPlaying.value) {
@@ -53,6 +73,48 @@ class RadioViewModel @Inject constructor(private val context: Application) : And
     fun stopRadio() {
         RadioServiceManager.stopRadioService(context)
         _isPlaying.value = false
+    }
+
+    private fun requestCurrentStateFromService() {
+        val intent = Intent(context, RadioService::class.java).apply {
+            action = "ACTION_REQUEST_STATE"
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(intent)
+        } else {
+            context.startService(intent)
+        }
+    }
+
+    private fun setupBroadcastReceiver() {
+        broadcastReceiver = RadioBroadcastReceiver(
+            onPlayPause = { isPlaying ->
+                _isPlaying.value = isPlaying
+            },
+            onStationChanged = { index ->
+                currentIndex = index
+                _currentStation.value = radioStations[index]
+            }
+        )
+
+        val filter = IntentFilter().apply {
+            addAction(RadioBroadcastReceiver.ACTION_PLAYBACK_STATE)
+            addAction(RadioBroadcastReceiver.ACTION_STATION_CHANGED)
+            priority = IntentFilter.SYSTEM_HIGH_PRIORITY
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            context.registerReceiver(broadcastReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
+        } else {
+            ContextCompat.registerReceiver(context, broadcastReceiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED)
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        broadcastReceiver?.let {
+            context.unregisterReceiver(it)
+        }
     }
 }
 

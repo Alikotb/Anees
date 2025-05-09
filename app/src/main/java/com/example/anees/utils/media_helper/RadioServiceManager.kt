@@ -1,5 +1,6 @@
 package com.example.anees.utils.media_helper
 
+import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -31,5 +32,11 @@ object RadioServiceManager {
     fun stopRadioService(context: Context) {
         val intent = Intent(context, RadioService::class.java)
         context.stopService(intent)
+    }
+
+    fun isServiceRunning(context: Context): Boolean {
+        val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        return manager.getRunningServices(Integer.MAX_VALUE)
+            .any { it.service.className == RadioService::class.java.name }
     }
 }

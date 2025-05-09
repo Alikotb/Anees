@@ -1,5 +1,6 @@
 package com.example.anees.services
 
+import android.app.ActivityManager
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -27,6 +28,12 @@ class RadioService : Service() {
         const val ACTION_PREV = "action_prev"
         const val CHANNEL_ID = "radio_channel"
         const val NOTIFICATION_ID = 1
+
+        const val ACTION_PLAYBACK_STATE = "com.example.anees.ACTION_PLAYBACK_STATE"
+        const val ACTION_STATION_CHANGED = "com.example.anees.ACTION_STATION_CHANGED"
+        const val ACTION_REQUEST_STATE = "action_request_state"
+        const val EXTRA_IS_PLAYING = "extra_is_playing"
+        const val EXTRA_STATION_INDEX = "extra_station_index"
     }
 
     private lateinit var mediaSession: MediaSessionCompat
@@ -39,6 +46,29 @@ class RadioService : Service() {
         mediaSession = MediaSessionCompat(this, "AneesRadioSession").apply {
             isActive = true
         }
+
+        mediaSession.setCallback(object : MediaSessionCompat.Callback() {
+            override fun onPlay() {
+                RadioPlayer.play()
+                sendPlaybackStateBroadcast(true)
+            }
+
+            override fun onPause() {
+                RadioPlayer.pause()
+                sendPlaybackStateBroadcast(false)
+            }
+
+            override fun onSkipToNext() {
+                playNext()
+                sendStationChangedBroadcast(currentIndex)
+            }
+
+            override fun onSkipToPrevious() {
+                playPrev()
+                sendStationChangedBroadcast(currentIndex)
+            }
+        })
+
         createNotificationChannel()
 
         RadioPlayer.setListener(object : Player.Listener {
@@ -50,14 +80,34 @@ class RadioService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
-            ACTION_PLAY -> RadioPlayer.play()
-            ACTION_PAUSE -> RadioPlayer.pause()
-            ACTION_NEXT -> playNext()
-            ACTION_PREV -> playPrev()
+            ACTION_REQUEST_STATE -> {
+                sendPlaybackStateBroadcast(RadioPlayer.isPlaying())
+                sendStationChangedBroadcast(currentIndex)
+                return START_NOT_STICKY
+            }
+            ACTION_PLAY -> {
+                RadioPlayer.play()
+                sendPlaybackStateBroadcast(true)
+            }
+            ACTION_PAUSE -> {
+                RadioPlayer.pause()
+                sendPlaybackStateBroadcast(false);
+            }
+            ACTION_NEXT -> {
+                playNext()
+                sendStationChangedBroadcast(currentIndex)
+            }
+            ACTION_PREV -> {
+                playPrev()
+                sendStationChangedBroadcast(currentIndex)
+            }
             else -> {
                 val url = intent?.getStringExtra("url")
                 url?.let {
                     startPlayback(it)
+                    sendPlaybackStateBroadcast(true)
+                    currentIndex = stations.indexOfFirst { station -> station.url == url }
+                    sendStationChangedBroadcast(currentIndex)
                 }
             }
         }
@@ -82,15 +132,13 @@ class RadioService : Service() {
     }
 
     private fun buildNotification(): Notification {
-        val controller = mediaSession.controller
-
         val playPauseAction = if (RadioPlayer.isPlaying()) {
             NotificationCompat.Action(
                 R.drawable.pause, "Pause", notificationIntent(ACTION_PAUSE)
             )
         } else {
             NotificationCompat.Action(
-                R.drawable.play, "Play", notificationIntent(ACTION_PLAY)
+                R.drawable.playnot, "Play", notificationIntent(ACTION_PLAY)
             )
         }
 
@@ -116,7 +164,8 @@ class RadioService : Service() {
             .addAction(playPauseAction)
             .addAction(nextAction)
             .setOnlyAlertOnce(true)
-            .setOngoing(RadioPlayer.isPlaying())
+            .setOngoing(isAppInForeground())
+            .setDeleteIntent(deleteIntent())
             .build()
     }
 
@@ -133,6 +182,18 @@ class RadioService : Service() {
         return PendingIntent.getService(this, action.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
     }
 
+    private fun deleteIntent(): PendingIntent {
+        val intent = Intent(this, RadioService::class.java).apply {
+            action = "ACTION_DELETE_NOTIFICATION"
+        }
+        return PendingIntent.getService(
+            this,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+    }
+
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
@@ -143,11 +204,46 @@ class RadioService : Service() {
         }
     }
 
+    private fun sendPlaybackStateBroadcast(isPlaying: Boolean) {
+        val intent = Intent(ACTION_PLAYBACK_STATE).apply {
+            putExtra(EXTRA_IS_PLAYING, isPlaying)
+        }
+        sendBroadcast(intent)
+    }
+
+    private fun sendStationChangedBroadcast(index: Int) {
+        val intent = Intent(ACTION_STATION_CHANGED).apply {
+            putExtra(EXTRA_STATION_INDEX, index)
+        }
+        sendBroadcast(intent)
+    }
+
+    private fun isAppInForeground(): Boolean {
+        val activityManager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        val runningProcesses = activityManager.runningAppProcesses ?: return false
+        val packageName = packageName
+
+        for (processInfo in runningProcesses) {
+            if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND &&
+                processInfo.processName == packageName) {
+                return true
+            }
+        }
+        return false
+    }
+
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onDestroy() {
         super.onDestroy()
         RadioPlayer.release()
         mediaSession.release()
+    }
+
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        super.onTaskRemoved(rootIntent)
+        RadioPlayer.release()
+        mediaSession.release()
+        stopSelf()
     }
 }

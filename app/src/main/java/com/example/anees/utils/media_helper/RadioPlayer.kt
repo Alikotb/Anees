@@ -49,6 +49,10 @@ object RadioPlayer {
         player?.addListener(listener)
     }
 
+    fun removeListener(listener: Player.Listener) {
+        player?.removeListener(listener)
+    }
+
     fun getCurrentPosition(): Long {
         return player?.currentPosition ?: 0L
     }
