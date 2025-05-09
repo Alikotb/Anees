@@ -66,10 +66,11 @@ fun HomeScreen(navToSebiha: () -> Unit = {},
 
             ) {
                 PrayerCardWithTimer(
-                    location = context.getCityAndCountryInArabic(
-                        SharedPreferencesImpl(context).fetchData("latitude" , 30.033333),
-                        SharedPreferencesImpl(context).fetchData("longitude" , 31.233334)
-                    )
+
+//                    location = context.getCityAndCountryInArabic(
+//                        SharedPreferencesImpl(context).fetchData("latitude" , 30.033333),
+//                        SharedPreferencesImpl(context).fetchData("longitude" , 31.233334)
+//                    )
                 ) {
                     navToPrayer()
                 }
