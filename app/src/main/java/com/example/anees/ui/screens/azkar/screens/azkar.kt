@@ -35,6 +35,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.anees.enums.ZekirIntervalsEnum
 import com.example.anees.ui.screens.azkar.component.ZekrCard
 import com.example.anees.ui.screens.hadith.components.ScreenTitle
 import com.example.anees.ui.screens.radio.components.ScreenBackground
@@ -49,9 +50,10 @@ fun AdhkarScreen(navToHome: () -> Unit = {}, navToDetails: (String) -> Unit = {}
     val azkarList = remember { AzkarUtils.parseAdhkar(context) }
     val categories = remember { AzkarUtils.getAdhkarCategories(azkarList) }
     var searchQuery by remember { mutableStateOf("") }
-    val hmada = Constants.ONE_HOUR
+
+
     LaunchedEffect(Unit) {
-        setNotification(context, hmada)
+        setNotification(context)
     }
 
     ScreenBackground()

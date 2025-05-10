@@ -62,6 +62,7 @@ fun HomeScreenWithDrawer(
     navToPrayer: () -> Unit = {},
     navToReciters: () -> Unit = {},
     navToNamesOfAllah: () -> Unit = {},
+    navToSettings: () -> Unit = {},
     navToHisnAlMuslim: () -> Unit = {}
 ) {
     val drawerState = remember { mutableStateOf(false) }
@@ -90,6 +91,7 @@ fun HomeScreenWithDrawer(
                         ScreenRoute.HadithAuthorsScreen -> navToHadith()
                         ScreenRoute.PrayerTimesScreen -> navToPrayer()
                         ScreenRoute.HisnAlMuslimScreen -> navToHisnAlMuslim()
+                        ScreenRoute.SettingsScreen -> navToSettings()
                         else -> {  }
                     }
                 }

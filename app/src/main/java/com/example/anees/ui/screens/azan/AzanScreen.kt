@@ -1,6 +1,7 @@
-package com.example.anees.ui.screens.azan.component
+package com.example.anees.ui.screens.azan
 
 import android.media.MediaPlayer
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -41,25 +42,57 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.anees.R
+import com.example.anees.enums.AzanRecitersEnum
+import com.example.anees.enums.FajrRecitersEnum
 import com.example.anees.enums.PrayEnum
+import com.example.anees.ui.screens.azan.component.AzanPulseView
 import com.example.anees.utils.prayer_helper.PrayerTimesHelper
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Preview
 @Composable
 fun AzanScreen(
-    prayEnum : PrayEnum  = PrayEnum.MAGHRIB,
+    prayEnum: PrayEnum = PrayEnum.MAGHRIB,
     prayerTime: String = "5:37 ص",
     onStopClicked: () -> Unit = {},
 ) {
-
     val context = LocalContext.current
-
-    val mediaPlayer = remember { MediaPlayer.create(context, if(prayEnum== PrayEnum.FAJR) R.raw.azan_fajr else R.raw.azan2) }
-    val isPlaying = remember { mutableStateOf(false) }
+    val viewModel: AzanViewModel = hiltViewModel()
 
     LaunchedEffect(Unit) {
+        viewModel.getCurrentAzanReciter()
+    }
+
+    val currentAzanReciter = viewModel.currentAzanReciter.collectAsStateWithLifecycle()
+    val currentFajrReciter = viewModel.currentFajrReciter.collectAsStateWithLifecycle()
+
+    LaunchedEffect(currentAzanReciter.value) {
+        Log.d("TAG", "Reciter received in UI: ${currentAzanReciter.value}")
+    }
+
+    LaunchedEffect(currentFajrReciter.value) {
+        Log.d("TAG", "Reciter received in UI: ${currentFajrReciter.value}")
+    }
+
+    val azanFile = remember(currentAzanReciter.value) {
+        AzanRecitersEnum.getFileByLabel(currentAzanReciter.value)
+    }
+
+    val fajrFile = remember(currentFajrReciter.value) {
+        FajrRecitersEnum.getFileByLabel(currentFajrReciter.value)
+    }
+
+    val mediaPlayer = remember(currentAzanReciter.value) {
+        MediaPlayer.create(context, if (prayEnum == PrayEnum.FAJR) fajrFile else azanFile)
+    }
+
+    val isPlaying = remember { mutableStateOf(false) }
+
+    // Play Azan
+    LaunchedEffect(mediaPlayer) {
         mediaPlayer.setOnCompletionListener {
             isPlaying.value = false
             onStopClicked()
@@ -68,15 +101,21 @@ fun AzanScreen(
         isPlaying.value = true
     }
 
-    DisposableEffect(Unit) {
+    // Cleanup
+    DisposableEffect(mediaPlayer) {
         onDispose {
-            if (mediaPlayer.isPlaying) {
+            try {
                 mediaPlayer.stop()
+            } catch (_: IllegalStateException) {
+                // Player was not in a valid state to stop — ignore
             }
-            mediaPlayer.release()
+            try {
+                mediaPlayer.release()
+            } catch (_: Exception) {
+                // Already released or null
+            }
         }
     }
-
 
     val systemUiController = rememberSystemUiController()
 
@@ -88,14 +127,8 @@ fun AzanScreen(
     }
 
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-
-
-        Scaffold(topBar = {}
-        ) { padding ->
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
+        Scaffold(topBar = {}) { padding ->
+            Box(modifier = Modifier.fillMaxSize()) {
                 Image(
                     painter = painterResource(id = prayEnum.azanBackground),
                     contentDescription = null,
@@ -112,14 +145,15 @@ fun AzanScreen(
                         .size(32.dp)
                         .background(
                             Color.DarkGray.copy(alpha = 0.4f), shape = RoundedCornerShape(50.dp)
-                        ).padding(4.dp).clickable {
+                        )
+                        .padding(4.dp)
+                        .clickable {
                             if (mediaPlayer.isPlaying) {
-                                // mediaPlayer.stop()
-                                //mediaPlayer.release()
+                                mediaPlayer.stop()
+                                mediaPlayer.release()
                             }
                             onStopClicked()
                         }
-
                 )
 
                 Column(
@@ -134,25 +168,25 @@ fun AzanScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         AzanPulseView(
-                            prayerName = if (PrayerTimesHelper.isTodayFriday() && prayEnum == PrayEnum.ZUHR ) "صلاة الجمعة" else prayEnum.value
-                            , prayerTime = prayerTime,
-                            isDay = if (prayEnum == PrayEnum.ZUHR || prayEnum == PrayEnum.ASR) true else false
+                            prayerName = if (PrayerTimesHelper.isTodayFriday() && prayEnum == PrayEnum.ZUHR) "صلاة الجمعة" else prayEnum.value,
+                            prayerTime = prayerTime,
+                            isDay = (prayEnum == PrayEnum.ZUHR || prayEnum == PrayEnum.ASR)
                         )
-
                     }
+
                     Column {
                         Text(
-                            text = "${prayEnum.hadith}",
-                            color = Color.White, fontSize = 14.sp,
+                            text = prayEnum.hadith,
+                            color = Color.White,
+                            fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
-                            fontFamily = FontFamily(
-                                Font(R.font.othmani)
-                            ), modifier = Modifier.fillMaxWidth(),
+                            fontFamily = FontFamily(Font(R.font.othmani)),
+                            modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center
                         )
                         Spacer(Modifier.height(8.dp))
                         Text(
-                            text = "${prayEnum.author}",
+                            text = prayEnum.author,
                             color = Color.LightGray,
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Normal,
@@ -162,16 +196,15 @@ fun AzanScreen(
                         )
                     }
 
-
                     Text(
                         text = "أنــيــس الـمــســلــم",
-                        color = Color.White, fontSize = 32.sp,
+                        color = Color.White,
+                        fontSize = 32.sp,
                         fontWeight = FontWeight.Bold,
                         fontFamily = FontFamily(Font(R.font.othmani))
                     )
                 }
             }
         }
-
     }
 }
