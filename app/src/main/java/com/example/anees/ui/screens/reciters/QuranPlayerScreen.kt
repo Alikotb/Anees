@@ -1,5 +1,11 @@
 package com.example.anees.ui.screens.reciters
 
+import android.app.Activity
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -16,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
@@ -24,14 +31,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.anees.enums.RecitersEnum
 import com.example.anees.enums.SuraTypeEnum
-import com.example.anees.utils.pdf_helper.SuraIndexes
 import com.example.anees.R
+import com.example.anees.services.RadioService
 import com.example.anees.ui.screens.radio.components.ScreenBackground
-import com.example.anees.utils.sura_mp3_helper.suraUrls
 
 @Composable
 fun QuranPlayerScreen(
@@ -40,23 +48,47 @@ fun QuranPlayerScreen(
     onBackClick: () -> Unit = {}
 ) {
     val viewModel: RecitersViewModel = viewModel()
-    val currentSuraIndex by viewModel.currentSuraIndex.collectAsStateWithLifecycle()
-    LaunchedEffect(Unit) {
-        viewModel.setCurrentSura(initialSuraIndex, reciter.url)
+    val currentSura by viewModel.currentSura.collectAsStateWithLifecycle()
+    val currentSuraTypeIcon by viewModel.currentSuraTypeIcon.collectAsStateWithLifecycle()
+    val reciterUrl by viewModel.reciterUrl.collectAsStateWithLifecycle()
+    LaunchedEffect(reciterUrl) {
+        viewModel.setCurrentSura(initialSuraIndex, reciter)
     }
-    val suraName = SuraIndexes[currentSuraIndex].suraName
-    val suraTypeIcon = SuraIndexes[currentSuraIndex].type
-    val audioUrl = reciter.url + suraUrls[currentSuraIndex].second
+
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val receiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                (context as Activity).finishAffinity()
+            }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            context.registerReceiver(receiver, IntentFilter(RadioService.ACTION_CLOSE), Context.RECEIVER_NOT_EXPORTED)
+        }else {
+            ContextCompat.registerReceiver(context, receiver, IntentFilter(RadioService.ACTION_CLOSE), ContextCompat.RECEIVER_NOT_EXPORTED)
+        }
+
+        onDispose {
+            context.unregisterReceiver(receiver)
+            val stopIntent = Intent(context, RadioService::class.java)
+            context.stopService(stopIntent)
+        }
+    }
 
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-        Box(modifier = Modifier.fillMaxSize()  .padding(horizontal = 16.dp)
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp)
             .padding(top = 24.dp)) {
             ScreenBackground()
             IconButton(
                 onClick = {
                     onBackClick()
                 },
-                modifier = Modifier.padding( vertical = 24.dp).size(48.dp),
+                modifier = Modifier
+                    .padding(vertical = 24.dp)
+                    .size(48.dp),
             ){
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
             }
@@ -95,13 +127,13 @@ fun QuranPlayerScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Image(
-                        painter = painterResource(id = if (suraTypeIcon == SuraTypeEnum.MECCA) R.drawable.kaaba else R.drawable.mosque),
+                        painter = painterResource(id = if (currentSuraTypeIcon == SuraTypeEnum.MECCA) R.drawable.kaaba else R.drawable.mosque),
                         contentDescription = null,
                         modifier = Modifier.size(24.dp)
                     )
                     Spacer(modifier = Modifier.width(16.dp))
                     Text(
-                        text = "سُورَةٌ $suraName",
+                        text = "سُورَةٌ ${currentSura.suraName}",
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Medium,
                         fontFamily = FontFamily(Font(R.font.othmani))
@@ -109,7 +141,7 @@ fun QuranPlayerScreen(
                 }
 
                 Text(
-                    text = reciter.description,
+                    text = reciterUrl.description,
                     fontSize = 16.sp,
                     color = Color.Gray
                 )
@@ -117,27 +149,25 @@ fun QuranPlayerScreen(
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Mp3Playback(
-                    audioUrl = audioUrl,
-                    currentSuraIndex = currentSuraIndex,
                     viewModel = viewModel
                 )
             }
         }
     }
-
-
-
 }
 
 
 @Composable
 fun Mp3Playback(
-    audioUrl: String,
-    currentSuraIndex: Int,
     viewModel: RecitersViewModel
 ) {
     val isPlaying by viewModel.isPlaying.collectAsStateWithLifecycle()
     val progress by viewModel.progress.collectAsStateWithLifecycle()
+    val currentSuraIndex by viewModel.currentSuraIndex.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.getNextSura()
+    }
 
     LinearProgressIndicator(
         progress = progress.coerceIn(0f, 1f),

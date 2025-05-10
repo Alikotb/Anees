@@ -11,11 +11,13 @@ import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.IBinder
 import android.support.v4.media.session.MediaSessionCompat
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.media3.common.Player
 import com.example.anees.R
 import com.example.anees.data.model.radio.RadioStations
 import com.example.anees.utils.media_helper.RadioPlayer
+import com.example.anees.utils.sura_mp3_helper.suraUrls
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -38,6 +40,8 @@ class RadioService : Service() {
 
     private lateinit var mediaSession: MediaSessionCompat
     private val stations = RadioStations.stations
+    private var isSura = false;
+    private lateinit var reciterUrl: String
     private var currentIndex = 0
 
     override fun onCreate() {
@@ -102,11 +106,21 @@ class RadioService : Service() {
             }
             else -> {
                 val url = intent?.getStringExtra("url")
+                val index = intent?.getIntExtra("index", 0) ?: 0
+                val isRadio = intent?.getBooleanExtra("isRadio", true) ?: true
+                val reciter = intent?.getStringExtra("reciterUrl") ?: ""
                 url?.let {
                     startPlayback(it)
                     sendPlaybackStateBroadcast(true)
-                    currentIndex = stations.indexOfFirst { station -> station.url == url }
+                    currentIndex = if (isRadio) {
+                        stations.indexOfFirst { station -> station.url == url }
+                    }else {
+                        reciterUrl = reciter
+                        isSura = true
+                        index
+                    }
                     sendStationChangedBroadcast(currentIndex)
+                    Log.d("RecitersViewModel", "onStartCommand: $currentIndex")
                 }
             }
         }
@@ -121,13 +135,23 @@ class RadioService : Service() {
     }
 
     private fun playNext() {
-        currentIndex = (currentIndex + 1) % stations.size
-        startPlayback(stations[currentIndex].url)
+        if(isSura) {
+            if (currentIndex < 113) currentIndex++
+            startPlayback(reciterUrl + suraUrls[currentIndex].second)
+        }else {
+            currentIndex = (currentIndex + 1) % stations.size
+            startPlayback(stations[currentIndex].url)
+        }
     }
 
     private fun playPrev() {
-        currentIndex = if (currentIndex - 1 < 0) stations.lastIndex else currentIndex - 1
-        startPlayback(stations[currentIndex].url)
+        if(isSura) {
+            if (currentIndex > 0) currentIndex--
+            startPlayback(reciterUrl + suraUrls[currentIndex].second)
+        }else {
+            currentIndex = if (currentIndex - 1 < 0) stations.lastIndex else currentIndex - 1
+            startPlayback(stations[currentIndex].url)
+        }
     }
 
     private fun buildNotification(): Notification {

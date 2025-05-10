@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.content.IntentFilter
 import android.os.Build
+import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,6 +13,7 @@ import com.example.anees.receivers.RadioBroadcastReceiver
 import com.example.anees.services.RadioService
 import com.example.anees.utils.media_helper.RadioPlayer
 import com.example.anees.utils.media_helper.RadioServiceManager
+import com.example.anees.utils.pdf_helper.SuraIndexes
 import com.example.anees.utils.sura_mp3_helper.suraUrls
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -26,25 +28,36 @@ class RecitersViewModel @Inject constructor(private val context: Application) : 
     private val _currentSuraIndex = MutableStateFlow(0)
     val currentSuraIndex = _currentSuraIndex.asStateFlow()
 
+    private val _reciterUrl = MutableStateFlow(RecitersEnum.Abdelbaset)
+    val reciterUrl = _reciterUrl.asStateFlow()
+
+    private val _currentSura = MutableStateFlow(SuraIndexes[0])
+    val currentSura = _currentSura.asStateFlow()
+
+    private val _currentSuraTypeIcon = MutableStateFlow(SuraIndexes[0].type)
+    val currentSuraTypeIcon = _currentSuraTypeIcon.asStateFlow()
+
     private val _isPlaying = MutableStateFlow(false)
     val isPlaying = _isPlaying.asStateFlow()
 
     private val _progress = MutableStateFlow(0f)
     val progress = _progress.asStateFlow()
 
-    private val reciter = RecitersEnum.Abdelbaset
+    private var isProgressActive = true
 
     private var broadcastReceiver: RadioBroadcastReceiver? = null
 
     init {
         setupBroadcastReceiver()
-        //RadioServiceManager.startRadioService(context, reciter.url + suraUrls[_currentSuraIndex].second)
-        RadioPlayer.initializePlayer(context)
+        //getNextSura()
     }
 
-    fun setCurrentSura(index: Int, reciterUrl: String) {
+    fun setCurrentSura(index: Int, reciterUrl: RecitersEnum) {
         _currentSuraIndex.value = index
-        RadioServiceManager.startRadioService(context, reciterUrl + suraUrls[index].second)
+        _currentSura.value = SuraIndexes[index]
+        _currentSuraTypeIcon.value = SuraIndexes[index].type
+        _reciterUrl.value = reciterUrl
+        RadioServiceManager.startRadioService(context, reciterUrl.url + suraUrls[index].second, _reciterUrl.value.url, _currentSuraIndex.value, false)
     }
 
     fun playPauseSura() {
@@ -59,7 +72,9 @@ class RecitersViewModel @Inject constructor(private val context: Application) : 
 
     fun getNextSura() {
         viewModelScope.launch {
-            while (true) {
+            isProgressActive = true
+            while (isProgressActive) {
+                Log.d("RecitersViewModel", "getNextSura: ${_currentSuraIndex.value}")
                 val duration = RadioPlayer.getDuration()
                 val position = RadioPlayer.getCurrentPosition()
                 if (duration > 0) {
@@ -76,16 +91,28 @@ class RecitersViewModel @Inject constructor(private val context: Application) : 
     }
 
     private fun startRadioService() {
-        RadioServiceManager.startRadioService(context, reciter.url + suraUrls[_currentSuraIndex.value].second)
+        RadioServiceManager.startRadioService(context, reciterUrl.value.url + suraUrls[_currentSuraIndex.value].second, reciterUrl.value.url, _currentSuraIndex.value, false)
+        Log.d("RecitersViewModel", "startRadioService: ${_currentSuraIndex.value} ${_currentSura.value} ${_currentSuraTypeIcon.value}")
         _isPlaying.value = true
     }
 
     fun onNext() {
-        if (_currentSuraIndex.value < 113) _currentSuraIndex.value++
+        if (_currentSuraIndex.value < 113) {
+            _currentSuraIndex.value++
+            _currentSura.value = SuraIndexes[_currentSuraIndex.value]
+            _currentSuraTypeIcon.value = SuraIndexes[_currentSuraIndex.value].type
+            Log.d("RecitersViewModel", "onNext: ${_currentSuraIndex.value} ${_currentSura.value} ${_currentSuraTypeIcon.value}")
+        }
+        startRadioService()
     }
 
     fun onPrev() {
-        if (_currentSuraIndex.value > 0) _currentSuraIndex.value--
+        if (_currentSuraIndex.value > 0) {
+            _currentSuraIndex.value--
+            _currentSura.value = SuraIndexes[_currentSuraIndex.value]
+            _currentSuraTypeIcon.value = SuraIndexes[_currentSuraIndex.value].type
+        }
+        startRadioService()
     }
 
     private fun setupBroadcastReceiver() {
@@ -94,7 +121,12 @@ class RecitersViewModel @Inject constructor(private val context: Application) : 
                 _isPlaying.value = isPlaying
             },
             onStationChanged = { index ->
-                _currentSuraIndex.value = index
+                if (index != _currentSuraIndex.value) {
+                    _currentSuraIndex.value = index
+                    _currentSuraIndex.value = index
+                    _currentSura.value = SuraIndexes[index]
+                    _currentSuraTypeIcon.value = SuraIndexes[index].type
+                }
             }
         )
 
@@ -113,6 +145,7 @@ class RecitersViewModel @Inject constructor(private val context: Application) : 
 
     override fun onCleared() {
         super.onCleared()
+        isProgressActive = false
         RadioPlayer.release()
         broadcastReceiver?.let {
             context.unregisterReceiver(it)

@@ -7,9 +7,12 @@ import android.os.Build
 import com.example.anees.services.RadioService
 
 object RadioServiceManager {
-    fun startRadioService(context: Context, url: String) {
+    fun startRadioService(context: Context, url: String, reciterUrl: String = "", index: Int = 0, isRadio: Boolean = true) {
         val intent = Intent(context, RadioService::class.java).apply {
             putExtra("url", url)
+            putExtra("isRadio", isRadio)
+            putExtra("index", index)
+            putExtra("reciterUrl", reciterUrl)
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(intent)
