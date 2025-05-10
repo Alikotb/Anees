@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.batoulapps.adhan.Coordinates
 import com.example.anees.ui.navigation.ScreenRoute.AzkarDetailsScreen
 import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
 import com.example.anees.ui.screens.hadith.HadithAuthorsScreen
@@ -24,15 +23,18 @@ import com.example.anees.ui.screens.radio.RadioScreen
 import com.example.anees.enums.QuranSurah
 import com.example.anees.enums.RecitersEnum
 import com.example.anees.ui.navigation.ScreenRoute.AzanPlayerScreen
+import com.example.anees.ui.navigation.ScreenRoute.AzanSettingsPlayerScreen
+import com.example.anees.ui.navigation.ScreenRoute.FajrPlayerScreen
 import com.example.anees.ui.screens.Reciters.QuranPlayerScreen
 import com.example.anees.ui.screens.Reciters.RecitersScreen
 import com.example.anees.ui.screens.Reciters.SuraMp3Screen
-import com.example.anees.ui.screens.azan.component.AzanScreen
+import com.example.anees.ui.screens.azan.AzanScreen
 import com.example.anees.ui.screens.azkar.screens.AdhkarDetailsScreen
 import com.example.anees.ui.screens.azkar.screens.AdhkarScreen
 import com.example.anees.ui.screens.hisn_almuslim.HisnAlMuslimScreen
 import com.example.anees.ui.screens.home.HomeScreenWithDrawer
 import com.example.anees.ui.screens.names_of_allah.NamesOfAllahScreen
+import com.example.anees.ui.screens.settings.SettingsScreen
 import com.example.anees.ui.screens.tafsir.screens.TafsirDetailsScreen
 import com.example.anees.ui.screens.tafsir.screens.TafsirScreen
 import com.google.gson.Gson
@@ -92,6 +94,9 @@ fun SetUpNavHost(
                 },
                 navToHisnAlMuslim = {
                     navController.navigate(ScreenRoute.HisnAlMuslimScreen)
+                },
+                navToSettings = {
+                    navController.navigate(ScreenRoute.SettingsScreen)
                 }
             )
         }
@@ -282,6 +287,43 @@ fun SetUpNavHost(
             ){
                 navController.navigateUp()
             }
+        }
+
+        composable<AzanSettingsPlayerScreen> {
+            var (prayEnum , time) = PrayerTimesHelper.getNextPrayer() ?: PrayEnum.ZUHR to 0L
+            if (prayEnum == PrayEnum.FAJR){
+                prayEnum =  PrayerTimesHelper.getAllPrayers()[1].first
+                time = PrayerTimesHelper.getAllPrayers()[1].second
+            }
+            AzanScreen(
+                prayEnum = prayEnum,
+                prayerTime = time.toArabicTime().convertNumbersToArabic(),
+            ){
+                navController.navigateUp()
+            }
+        }
+
+        composable<FajrPlayerScreen> {
+            val (prayEnum , time) =  PrayerTimesHelper.getAllPrayers()[0]
+            AzanScreen(
+                prayEnum = prayEnum,
+                prayerTime = time.toArabicTime().convertNumbersToArabic(),
+            ){
+                navController.navigateUp()
+            }
+        }
+
+        composable<ScreenRoute.SettingsScreen> {
+            SettingsScreen(onBackClick = {
+                navController.navigateUp()
+            },
+                onAzanViewClick = {
+                    navController.navigate(AzanSettingsPlayerScreen)
+                },
+                onFajarClick = {
+                    navController.navigate(FajrPlayerScreen)
+                }
+            )
         }
     }
 }

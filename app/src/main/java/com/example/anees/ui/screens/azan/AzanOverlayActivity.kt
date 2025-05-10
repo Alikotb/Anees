@@ -8,9 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import com.example.anees.enums.PrayEnum
-import com.example.anees.ui.screens.azan.component.AzanScreen
 import com.example.anees.utils.extensions.convertNumbersToArabic
-import com.example.anees.utils.extensions.setAllAlarms
 import com.example.anees.utils.extensions.toArabicTime
 
 class AzanOverlayActivity : ComponentActivity() {

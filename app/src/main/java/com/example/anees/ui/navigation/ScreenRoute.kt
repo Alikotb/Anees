@@ -51,4 +51,13 @@ sealed class ScreenRoute {
     object HisnAlMuslimScreen : ScreenRoute()
     @Serializable
     object  AzanPlayerScreen : ScreenRoute()
+
+    @Serializable
+    object  AzanSettingsPlayerScreen : ScreenRoute()
+
+    @Serializable
+    object  FajrPlayerScreen : ScreenRoute()
+
+    @Serializable
+    object  SettingsScreen : ScreenRoute()
 }
