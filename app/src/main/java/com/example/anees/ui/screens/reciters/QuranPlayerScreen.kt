@@ -1,4 +1,4 @@
-package com.example.anees.ui.screens.Reciters
+package com.example.anees.ui.screens.reciters
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -16,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
@@ -25,14 +24,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.anees.enums.RecitersEnum
 import com.example.anees.enums.SuraTypeEnum
 import com.example.anees.utils.pdf_helper.SuraIndexes
 import com.example.anees.R
 import com.example.anees.ui.screens.radio.components.ScreenBackground
-import com.example.anees.utils.media_helper.RadioPlayer
 import com.example.anees.utils.sura_mp3_helper.suraUrls
-import kotlinx.coroutines.delay
 
 @Composable
 fun QuranPlayerScreen(
@@ -40,7 +39,11 @@ fun QuranPlayerScreen(
     initialSuraIndex: Int = 0,
     onBackClick: () -> Unit = {}
 ) {
-    var currentSuraIndex by remember { mutableStateOf(initialSuraIndex) }
+    val viewModel: RecitersViewModel = viewModel()
+    val currentSuraIndex by viewModel.currentSuraIndex.collectAsStateWithLifecycle()
+    LaunchedEffect(Unit) {
+        viewModel.setCurrentSura(initialSuraIndex, reciter.url)
+    }
     val suraName = SuraIndexes[currentSuraIndex].suraName
     val suraTypeIcon = SuraIndexes[currentSuraIndex].type
     val audioUrl = reciter.url + suraUrls[currentSuraIndex].second
@@ -116,12 +119,7 @@ fun QuranPlayerScreen(
                 Mp3Playback(
                     audioUrl = audioUrl,
                     currentSuraIndex = currentSuraIndex,
-                    onNext = {
-                        if (currentSuraIndex < 113) currentSuraIndex++
-                    },
-                    onPrevious = {
-                        if (currentSuraIndex > 0) currentSuraIndex--
-                    }
+                    viewModel = viewModel
                 )
             }
         }
@@ -136,42 +134,10 @@ fun QuranPlayerScreen(
 fun Mp3Playback(
     audioUrl: String,
     currentSuraIndex: Int,
-    onNext: () -> Unit,
-    onPrevious: () -> Unit
+    viewModel: RecitersViewModel
 ) {
-    val context = LocalContext.current
-    var isPlaying by remember { mutableStateOf(false) }
-    var progress by remember { mutableStateOf(0f) }
-
-    LaunchedEffect(audioUrl) {
-        RadioPlayer.initializePlayer(context)
-        RadioPlayer.setMediaItem(audioUrl)
-        RadioPlayer.play()
-        isPlaying = true
-    }
-
-    LaunchedEffect(Unit) {
-        while (true) {
-            val duration = RadioPlayer.getDuration()
-            val position = RadioPlayer.getCurrentPosition()
-            if (duration > 0) {
-                progress = position / duration.toFloat()
-                if (position >= duration - 500 && isPlaying) {
-                    if (currentSuraIndex < 113) {
-                        onNext()
-                    }
-                }
-            }
-            delay(500)
-        }
-    }
-
-
-    DisposableEffect(Unit) {
-        onDispose {
-            RadioPlayer.release()
-        }
-    }
+    val isPlaying by viewModel.isPlaying.collectAsStateWithLifecycle()
+    val progress by viewModel.progress.collectAsStateWithLifecycle()
 
     LinearProgressIndicator(
         progress = progress.coerceIn(0f, 1f),
@@ -191,7 +157,7 @@ fun Mp3Playback(
     ) {
         if (currentSuraIndex > 0) {
             IconButton(onClick = {
-                onPrevious()
+                viewModel.onPrev()
             }) {
                 Icon(Icons.Default.SkipPrevious, contentDescription = "السورة السابقة", modifier = Modifier.size(48.dp), tint = Color(0xFF4CAF50))
             }
@@ -200,13 +166,7 @@ fun Mp3Playback(
         }
 
         IconButton(onClick = {
-            if (RadioPlayer.isPlaying()) {
-                RadioPlayer.pause()
-                isPlaying = false
-            } else {
-                RadioPlayer.play()
-                isPlaying = true
-            }
+            viewModel.playPauseSura()
         }) {
             Icon(
                 imageVector = if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
@@ -218,7 +178,7 @@ fun Mp3Playback(
 
         if (currentSuraIndex < 113) {
             IconButton(onClick = {
-                onNext()
+                viewModel.onNext()
             }) {
                 Icon(Icons.Default.SkipNext, contentDescription = "السورة التالية", modifier = Modifier.size(48.dp), tint = Color(0xFF4CAF50))
             }

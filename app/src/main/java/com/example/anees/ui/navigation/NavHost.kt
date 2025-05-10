@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.batoulapps.adhan.Coordinates
 import com.example.anees.ui.navigation.ScreenRoute.AzkarDetailsScreen
 import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
 import com.example.anees.ui.screens.hadith.HadithAuthorsScreen
@@ -24,9 +23,9 @@ import com.example.anees.ui.screens.radio.RadioScreen
 import com.example.anees.enums.QuranSurah
 import com.example.anees.enums.RecitersEnum
 import com.example.anees.ui.navigation.ScreenRoute.AzanPlayerScreen
-import com.example.anees.ui.screens.Reciters.QuranPlayerScreen
-import com.example.anees.ui.screens.Reciters.RecitersScreen
-import com.example.anees.ui.screens.Reciters.SuraMp3Screen
+import com.example.anees.ui.screens.reciters.QuranPlayerScreen
+import com.example.anees.ui.screens.reciters.RecitersScreen
+import com.example.anees.ui.screens.reciters.SuraMp3Screen
 import com.example.anees.ui.screens.azan.component.AzanScreen
 import com.example.anees.ui.screens.azkar.screens.AdhkarDetailsScreen
 import com.example.anees.ui.screens.azkar.screens.AdhkarScreen
