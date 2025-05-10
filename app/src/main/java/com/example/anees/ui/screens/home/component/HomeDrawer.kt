@@ -160,7 +160,7 @@ fun HomeDrawer(
                     MenuCard(
                         width = cardWidth,
                         text = "الاعدادت",
-                        onClick = { onNavigate(ScreenRoute.HomeScreen) }
+                        onClick = { onNavigate(ScreenRoute.SettingsScreen) }
                     )
                 }
 
