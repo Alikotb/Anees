@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -27,6 +28,7 @@ import com.example.anees.ui.screens.radio.components.ScreenBackground
 import com.example.anees.ui.screens.settings.Component.SettingDropdownMenu
 import com.example.anees.ui.screens.settings.Component.SettingSection
 import com.example.anees.ui.screens.settings.Component.SettingSwitchRow
+import com.example.anees.workers.setNotification
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Preview(showBackground = true)
@@ -47,10 +49,12 @@ fun SettingsScreen(
     }
 
 
-        val viewModel : SettingsViewModel = hiltViewModel()
+    val viewModel : SettingsViewModel = hiltViewModel()
     val textColor = Color.Black
     val switchColor = Color(0xFF4CAF50)
     val sectionColor  = Color(0xFFFAF9F6)
+
+    val context = LocalContext.current
 
 
     var zekrNotificationState = viewModel.zekrNotificationState.collectAsStateWithLifecycle()
@@ -82,6 +86,9 @@ fun SettingsScreen(
                     color = switchColor,
                     onCheckedChange = {
                         viewModel.updateZekirNotificationState(it)
+                        if(it){
+                            setNotification(context)
+                        }
                     }
                 )
                 SettingDropdownMenu(

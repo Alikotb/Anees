@@ -10,6 +10,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.anees.R
+import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
 import com.example.anees.utils.Constants
 import com.example.anees.utils.sebha_helper.getRandomZekir
 import java.util.concurrent.TimeUnit
@@ -51,13 +52,8 @@ fun createNotificationChannel(context: Context) {
     }
 }
 
-fun setNotification(ctx: Context, choice:String){
-    var interval = when (choice) {
-        Constants.ONE_HOUR -> 1L
-        Constants.THREE_HOUR -> 3L
-        Constants.SIX_HOUR -> 6L
-        else -> 3L
-    }
+fun setNotification(ctx: Context){
+    val interval = SharedPreferencesImpl(ctx).fetchData(Constants.CURRENT_ZEKIR_INTERVAL , 1).toLong()
     val workRequest = PeriodicWorkRequestBuilder<MyPeriodicWorker>(
         interval , TimeUnit.HOURS
     ).build()
