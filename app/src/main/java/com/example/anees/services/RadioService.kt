@@ -6,12 +6,18 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.media.AudioFocusRequest
+import android.media.AudioManager
 import android.os.Build
 import android.os.IBinder
 import android.support.v4.media.session.MediaSessionCompat
 import android.util.Log
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.SkipNext
+import androidx.compose.material3.Icon
 import androidx.core.app.NotificationCompat
 import androidx.media3.common.Player
 import com.example.anees.R
@@ -38,7 +44,10 @@ class RadioService : Service() {
         const val EXTRA_STATION_INDEX = "extra_station_index"
     }
 
+    private lateinit var audioManager: AudioManager
+    private var audioFocusRequest: AudioFocusRequest? = null
     private lateinit var mediaSession: MediaSessionCompat
+
     private val stations = RadioStations.stations
     private var isSura = false;
     private lateinit var reciterUrl: String
@@ -47,31 +56,11 @@ class RadioService : Service() {
     override fun onCreate() {
         super.onCreate()
         RadioPlayer.initializePlayer(this)
+
+        audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
         mediaSession = MediaSessionCompat(this, "AneesRadioSession").apply {
             isActive = true
         }
-
-        mediaSession.setCallback(object : MediaSessionCompat.Callback() {
-            override fun onPlay() {
-                RadioPlayer.play()
-                sendPlaybackStateBroadcast(true)
-            }
-
-            override fun onPause() {
-                RadioPlayer.pause()
-                sendPlaybackStateBroadcast(false)
-            }
-
-            override fun onSkipToNext() {
-                playNext()
-                sendStationChangedBroadcast(currentIndex)
-            }
-
-            override fun onSkipToPrevious() {
-                playPrev()
-                sendStationChangedBroadcast(currentIndex)
-            }
-        })
 
         createNotificationChannel()
 
@@ -120,7 +109,6 @@ class RadioService : Service() {
                         index
                     }
                     sendStationChangedBroadcast(currentIndex)
-                    Log.d("RecitersViewModel", "onStartCommand: $currentIndex")
                 }
             }
         }
@@ -130,8 +118,10 @@ class RadioService : Service() {
     }
 
     private fun startPlayback(url: String) {
-        RadioPlayer.setMediaItem(url)
-        RadioPlayer.play()
+        if (requestAudioFocus()) {
+            RadioPlayer.setMediaItem(url)
+            RadioPlayer.play()
+        }
     }
 
     private fun playNext() {
@@ -157,19 +147,19 @@ class RadioService : Service() {
     private fun buildNotification(): Notification {
         val playPauseAction = if (RadioPlayer.isPlaying()) {
             NotificationCompat.Action(
-                R.drawable.playnot, "Pause", notificationIntent(ACTION_PAUSE)
+                R.drawable.play_notification, "Pause", notificationIntent(ACTION_PAUSE)
             )
         } else {
             NotificationCompat.Action(
-                R.drawable.pause, "Play", notificationIntent(ACTION_PLAY)
+                R.drawable.pause_notification, "Play", notificationIntent(ACTION_PLAY)
             )
         }
 
         val nextAction = NotificationCompat.Action(
-            R.drawable.right, "Next", notificationIntent(ACTION_NEXT)
+            R.drawable.next_notification, "Next", notificationIntent(ACTION_NEXT)
         )
         val prevAction = NotificationCompat.Action(
-            R.drawable.back, "Previous", notificationIntent(ACTION_PREV)
+            R.drawable.prev_notification, "Previous", notificationIntent(ACTION_PREV)
         )
 
         val closeAction = NotificationCompat.Action(
@@ -265,11 +255,62 @@ class RadioService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).cancel(NOTIFICATION_ID)
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            audioFocusRequest?.let {
+                audioManager.abandonAudioFocusRequest(it)
+            }
+        } else {
+            audioManager.abandonAudioFocus(audioFocusChangeListener)
+        }
         RadioPlayer.release()
         mediaSession.release()
         sendPlaybackStateBroadcast(false)
 
         sendBroadcast(Intent(ACTION_CLOSE))
+    }
+
+    private val audioFocusChangeListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
+        when (focusChange) {
+            AudioManager.AUDIOFOCUS_GAIN -> {
+                RadioPlayer.play()
+                sendPlaybackStateBroadcast(true)
+            }
+            AudioManager.AUDIOFOCUS_LOSS -> {
+                RadioPlayer.pause()
+                sendPlaybackStateBroadcast(false)
+            }
+            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
+                RadioPlayer.pause()
+                sendPlaybackStateBroadcast(false)
+            }
+            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
+                RadioPlayer.getPlayer()?.volume = 0.3f
+            }
+        }
+    }
+
+    private fun requestAudioFocus(): Boolean {
+        val focusRequest = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+                .setOnAudioFocusChangeListener(audioFocusChangeListener)
+                .setAudioAttributes(RadioPlayer.getAudioAttributes())
+                .build().also {
+                    audioFocusRequest = it
+                }
+        }else {
+            null
+        }
+
+        val result = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            audioManager.requestAudioFocus(focusRequest!!)
+        } else {
+            audioManager.requestAudioFocus(
+                audioFocusChangeListener,
+                AudioManager.STREAM_MUSIC,
+                AudioManager.AUDIOFOCUS_GAIN
+            )
+        }
+
+        return result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
     }
 }

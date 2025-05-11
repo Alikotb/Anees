@@ -1,6 +1,8 @@
 package com.example.anees.utils.media_helper
 
 import android.content.Context
+import androidx.media3.common.AudioAttributes
+import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
@@ -8,6 +10,7 @@ import androidx.media3.exoplayer.ExoPlayer
 object RadioPlayer {
 
     private var player: ExoPlayer? = null
+    private lateinit var audioAttributes: android.media.AudioAttributes
 
     fun initializePlayer(context: Context) {
         if (player == null) {
@@ -15,6 +18,20 @@ object RadioPlayer {
                 playWhenReady = false
             }
         }
+
+        audioAttributes = android.media.AudioAttributes.Builder()
+            .setUsage(android.media.AudioAttributes.USAGE_MEDIA)
+            .setContentType(android.media.AudioAttributes.CONTENT_TYPE_MUSIC)
+            .build()
+
+        player = ExoPlayer.Builder(context).build().apply {
+            setAudioAttributes(audioAttributes, true)
+            playWhenReady = false
+        }
+    }
+
+    fun getAudioAttributes(): android.media.AudioAttributes {
+        return audioAttributes
     }
 
     fun setMediaItem(url: String) {
@@ -51,6 +68,10 @@ object RadioPlayer {
 
     fun removeListener(listener: Player.Listener) {
         player?.removeListener(listener)
+    }
+
+    fun getPlayer(): ExoPlayer? {
+        return player
     }
 
     fun getCurrentPosition(): Long {

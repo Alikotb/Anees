@@ -49,7 +49,6 @@ class RecitersViewModel @Inject constructor(private val context: Application) : 
 
     init {
         setupBroadcastReceiver()
-        //getNextSura()
     }
 
     fun setCurrentSura(index: Int, reciterUrl: RecitersEnum) {
@@ -74,7 +73,6 @@ class RecitersViewModel @Inject constructor(private val context: Application) : 
         viewModelScope.launch {
             isProgressActive = true
             while (isProgressActive) {
-                Log.d("RecitersViewModel", "getNextSura: ${_currentSuraIndex.value}")
                 val duration = RadioPlayer.getDuration()
                 val position = RadioPlayer.getCurrentPosition()
                 if (duration > 0) {
@@ -92,7 +90,6 @@ class RecitersViewModel @Inject constructor(private val context: Application) : 
 
     private fun startRadioService() {
         RadioServiceManager.startRadioService(context, reciterUrl.value.url + suraUrls[_currentSuraIndex.value].second, reciterUrl.value.url, _currentSuraIndex.value, false)
-        Log.d("RecitersViewModel", "startRadioService: ${_currentSuraIndex.value} ${_currentSura.value} ${_currentSuraTypeIcon.value}")
         _isPlaying.value = true
     }
 
@@ -101,7 +98,6 @@ class RecitersViewModel @Inject constructor(private val context: Application) : 
             _currentSuraIndex.value++
             _currentSura.value = SuraIndexes[_currentSuraIndex.value]
             _currentSuraTypeIcon.value = SuraIndexes[_currentSuraIndex.value].type
-            Log.d("RecitersViewModel", "onNext: ${_currentSuraIndex.value} ${_currentSura.value} ${_currentSuraTypeIcon.value}")
         }
         startRadioService()
     }

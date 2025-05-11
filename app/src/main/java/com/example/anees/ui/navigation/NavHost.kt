@@ -26,7 +26,6 @@ import com.example.anees.ui.navigation.ScreenRoute.AzanPlayerScreen
 import com.example.anees.ui.screens.reciters.QuranPlayerScreen
 import com.example.anees.ui.screens.reciters.RecitersScreen
 import com.example.anees.ui.screens.reciters.SuraMp3Screen
-import com.example.anees.ui.screens.azan.component.AzanScreen
 import com.example.anees.ui.navigation.ScreenRoute.AzanSettingsPlayerScreen
 import com.example.anees.ui.navigation.ScreenRoute.FajrPlayerScreen
 import com.example.anees.ui.screens.azan.AzanScreen
