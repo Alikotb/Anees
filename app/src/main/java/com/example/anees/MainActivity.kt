@@ -25,9 +25,6 @@ class MainActivity : ComponentActivity() {
     lateinit var navController: NavHostController
     private var askedForOverlayPermission = false
 
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestNotificationPermission(this)

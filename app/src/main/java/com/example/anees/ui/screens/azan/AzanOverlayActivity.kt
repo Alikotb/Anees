@@ -11,7 +11,10 @@ import com.example.anees.enums.PrayEnum
 import com.example.anees.utils.extensions.convertNumbersToArabic
 import com.example.anees.utils.extensions.setAllAlarms
 import com.example.anees.utils.extensions.toArabicTime
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class AzanOverlayActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {

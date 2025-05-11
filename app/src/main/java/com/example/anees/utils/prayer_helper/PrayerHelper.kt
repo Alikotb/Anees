@@ -12,6 +12,9 @@ import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
 import com.example.anees.enums.PrayEnum
 import com.example.anees.utils.extensions.convertNumbersToArabic
 import com.example.anees.utils.extensions.toArabicTime
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
