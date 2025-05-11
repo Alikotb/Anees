@@ -23,11 +23,11 @@ import com.example.anees.ui.screens.radio.RadioScreen
 import com.example.anees.enums.QuranSurah
 import com.example.anees.enums.RecitersEnum
 import com.example.anees.ui.navigation.ScreenRoute.AzanPlayerScreen
+import com.example.anees.ui.screens.reciters.QuranPlayerScreen
+import com.example.anees.ui.screens.reciters.RecitersScreen
+import com.example.anees.ui.screens.reciters.SuraMp3Screen
 import com.example.anees.ui.navigation.ScreenRoute.AzanSettingsPlayerScreen
 import com.example.anees.ui.navigation.ScreenRoute.FajrPlayerScreen
-import com.example.anees.ui.screens.Reciters.QuranPlayerScreen
-import com.example.anees.ui.screens.Reciters.RecitersScreen
-import com.example.anees.ui.screens.Reciters.SuraMp3Screen
 import com.example.anees.ui.screens.azan.AzanScreen
 import com.example.anees.ui.screens.azkar.screens.AdhkarDetailsScreen
 import com.example.anees.ui.screens.azkar.screens.AdhkarScreen

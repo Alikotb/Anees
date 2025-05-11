@@ -1,5 +1,11 @@
-package com.example.anees.ui.screens.Reciters
+package com.example.anees.ui.screens.reciters
 
+import android.app.Activity
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -25,14 +31,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.anees.enums.RecitersEnum
 import com.example.anees.enums.SuraTypeEnum
-import com.example.anees.utils.pdf_helper.SuraIndexes
 import com.example.anees.R
+import com.example.anees.services.RadioService
 import com.example.anees.ui.screens.radio.components.ScreenBackground
-import com.example.anees.utils.media_helper.RadioPlayer
-import com.example.anees.utils.sura_mp3_helper.suraUrls
-import kotlinx.coroutines.delay
 
 @Composable
 fun QuranPlayerScreen(
@@ -40,20 +47,48 @@ fun QuranPlayerScreen(
     initialSuraIndex: Int = 0,
     onBackClick: () -> Unit = {}
 ) {
-    var currentSuraIndex by remember { mutableStateOf(initialSuraIndex) }
-    val suraName = SuraIndexes[currentSuraIndex].suraName
-    val suraTypeIcon = SuraIndexes[currentSuraIndex].type
-    val audioUrl = reciter.url + suraUrls[currentSuraIndex].second
+    val viewModel: RecitersViewModel = viewModel()
+    val currentSura by viewModel.currentSura.collectAsStateWithLifecycle()
+    val currentSuraTypeIcon by viewModel.currentSuraTypeIcon.collectAsStateWithLifecycle()
+    val reciterUrl by viewModel.reciterUrl.collectAsStateWithLifecycle()
+    LaunchedEffect(reciterUrl) {
+        viewModel.setCurrentSura(initialSuraIndex, reciter)
+    }
+
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val receiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                (context as Activity).finishAffinity()
+            }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            context.registerReceiver(receiver, IntentFilter(RadioService.ACTION_CLOSE), Context.RECEIVER_NOT_EXPORTED)
+        }else {
+            ContextCompat.registerReceiver(context, receiver, IntentFilter(RadioService.ACTION_CLOSE), ContextCompat.RECEIVER_NOT_EXPORTED)
+        }
+
+        onDispose {
+            context.unregisterReceiver(receiver)
+            val stopIntent = Intent(context, RadioService::class.java)
+            context.stopService(stopIntent)
+        }
+    }
 
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-        Box(modifier = Modifier.fillMaxSize()  .padding(horizontal = 16.dp)
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp)
             .padding(top = 24.dp)) {
             ScreenBackground()
             IconButton(
                 onClick = {
                     onBackClick()
                 },
-                modifier = Modifier.padding( vertical = 24.dp).size(48.dp),
+                modifier = Modifier
+                    .padding(vertical = 24.dp)
+                    .size(48.dp),
             ){
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
             }
@@ -92,13 +127,13 @@ fun QuranPlayerScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Image(
-                        painter = painterResource(id = if (suraTypeIcon == SuraTypeEnum.MECCA) R.drawable.kaaba else R.drawable.mosque),
+                        painter = painterResource(id = if (currentSuraTypeIcon == SuraTypeEnum.MECCA) R.drawable.kaaba else R.drawable.mosque),
                         contentDescription = null,
                         modifier = Modifier.size(24.dp)
                     )
                     Spacer(modifier = Modifier.width(16.dp))
                     Text(
-                        text = "سُورَةٌ $suraName",
+                        text = "سُورَةٌ ${currentSura.suraName}",
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Medium,
                         fontFamily = FontFamily(Font(R.font.othmani))
@@ -106,7 +141,7 @@ fun QuranPlayerScreen(
                 }
 
                 Text(
-                    text = reciter.description,
+                    text = reciterUrl.description,
                     fontSize = 16.sp,
                     color = Color.Gray
                 )
@@ -114,63 +149,24 @@ fun QuranPlayerScreen(
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Mp3Playback(
-                    audioUrl = audioUrl,
-                    currentSuraIndex = currentSuraIndex,
-                    onNext = {
-                        if (currentSuraIndex < 113) currentSuraIndex++
-                    },
-                    onPrevious = {
-                        if (currentSuraIndex > 0) currentSuraIndex--
-                    }
+                    viewModel = viewModel
                 )
             }
         }
     }
-
-
-
 }
 
 
 @Composable
 fun Mp3Playback(
-    audioUrl: String,
-    currentSuraIndex: Int,
-    onNext: () -> Unit,
-    onPrevious: () -> Unit
+    viewModel: RecitersViewModel
 ) {
-    val context = LocalContext.current
-    var isPlaying by remember { mutableStateOf(false) }
-    var progress by remember { mutableStateOf(0f) }
-
-    LaunchedEffect(audioUrl) {
-        RadioPlayer.initializePlayer(context)
-        RadioPlayer.setMediaItem(audioUrl)
-        RadioPlayer.play()
-        isPlaying = true
-    }
+    val isPlaying by viewModel.isPlaying.collectAsStateWithLifecycle()
+    val progress by viewModel.progress.collectAsStateWithLifecycle()
+    val currentSuraIndex by viewModel.currentSuraIndex.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        while (true) {
-            val duration = RadioPlayer.getDuration()
-            val position = RadioPlayer.getCurrentPosition()
-            if (duration > 0) {
-                progress = position / duration.toFloat()
-                if (position >= duration - 500 && isPlaying) {
-                    if (currentSuraIndex < 113) {
-                        onNext()
-                    }
-                }
-            }
-            delay(500)
-        }
-    }
-
-
-    DisposableEffect(Unit) {
-        onDispose {
-            RadioPlayer.release()
-        }
+        viewModel.getNextSura()
     }
 
     LinearProgressIndicator(
@@ -191,7 +187,7 @@ fun Mp3Playback(
     ) {
         if (currentSuraIndex > 0) {
             IconButton(onClick = {
-                onPrevious()
+                viewModel.onPrev()
             }) {
                 Icon(Icons.Default.SkipPrevious, contentDescription = "السورة السابقة", modifier = Modifier.size(48.dp), tint = Color(0xFF4CAF50))
             }
@@ -200,13 +196,7 @@ fun Mp3Playback(
         }
 
         IconButton(onClick = {
-            if (RadioPlayer.isPlaying()) {
-                RadioPlayer.pause()
-                isPlaying = false
-            } else {
-                RadioPlayer.play()
-                isPlaying = true
-            }
+            viewModel.playPauseSura()
         }) {
             Icon(
                 imageVector = if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
@@ -218,7 +208,7 @@ fun Mp3Playback(
 
         if (currentSuraIndex < 113) {
             IconButton(onClick = {
-                onNext()
+                viewModel.onNext()
             }) {
                 Icon(Icons.Default.SkipNext, contentDescription = "السورة التالية", modifier = Modifier.size(48.dp), tint = Color(0xFF4CAF50))
             }
