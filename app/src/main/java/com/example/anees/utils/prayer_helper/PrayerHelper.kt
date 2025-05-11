@@ -1,11 +1,14 @@
 package com.example.anees.utils.prayer_helper
 
 
+import android.annotation.SuppressLint
+import android.content.Context
 import com.batoulapps.adhan.CalculationMethod
 import com.batoulapps.adhan.Coordinates
 import com.batoulapps.adhan.Madhab
 import com.batoulapps.adhan.PrayerTimes
 import com.batoulapps.adhan.data.DateComponents
+import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
 import com.example.anees.enums.PrayEnum
 import com.example.anees.utils.extensions.convertNumbersToArabic
 import com.example.anees.utils.extensions.toArabicTime
@@ -14,9 +17,21 @@ import java.util.Calendar
 import java.util.Date
 import java.util.TimeZone
 
+
+@SuppressLint("StaticFieldLeak")
 object PrayerTimesHelper {
 
-    var coordinates : Coordinates = Coordinates(30.033333, 31.233334)
+    private lateinit var context: Context
+
+    fun init(context: Context) {
+        this.context = context
+    }
+
+    private fun getCoordinates(): Coordinates {
+        val latitude = SharedPreferencesImpl(context).fetchData("latitude", 30.033333)
+        val longitude = SharedPreferencesImpl(context).fetchData("longitude", 31.233334)
+        return Coordinates(latitude, longitude)
+    }
 
     fun getNextPrayer(): Pair<PrayEnum, Long>? {
         val dateComponents = DateComponents.from(Date())
@@ -24,7 +39,7 @@ object PrayerTimesHelper {
         val params = CalculationMethod.EGYPTIAN.parameters
         //params.madhab = Madhab.SHAFI
 
-        val prayerTimes = PrayerTimes(coordinates, dateComponents, params)
+        val prayerTimes = PrayerTimes(getCoordinates(), dateComponents, params)
 
         val now = System.currentTimeMillis()
 
@@ -45,7 +60,7 @@ object PrayerTimesHelper {
 
         val tomorrow = Calendar.getInstance().apply { add(Calendar.DATE, 1) }
         val tomorrowDate = DateComponents.from(tomorrow.time)
-        val tomorrowPrayerTimes = PrayerTimes(coordinates, tomorrowDate, params)
+        val tomorrowPrayerTimes = PrayerTimes(getCoordinates(), tomorrowDate, params)
 
         val fajrMillis = tomorrowPrayerTimes.fajr.time
 
@@ -58,7 +73,7 @@ object PrayerTimesHelper {
         val params = CalculationMethod.EGYPTIAN.parameters
         //params.madhab = Madhab.SHAFI
 
-        val prayerTimes = PrayerTimes(coordinates, dateComponents, params)
+        val prayerTimes = PrayerTimes(getCoordinates(), dateComponents, params)
 
         return listOf(
 
@@ -78,7 +93,7 @@ object PrayerTimesHelper {
         fun getPrayersForDate(date: Date): List<Pair<PrayEnum, Long>> {
             val dateComponents = DateComponents.from(date)
             val params = CalculationMethod.EGYPTIAN.parameters
-            val prayerTimes = PrayerTimes(coordinates, dateComponents, params)
+            val prayerTimes = PrayerTimes(getCoordinates(), dateComponents, params)
             return listOf(
                 PrayEnum.FAJR to prayerTimes.fajr.time,
                 PrayEnum.ZUHR to prayerTimes.dhuhr.time,

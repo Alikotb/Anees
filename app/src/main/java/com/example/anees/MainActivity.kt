@@ -40,7 +40,6 @@ class MainActivity : ComponentActivity() {
             locationProvider.fetchLatLong(this) { location ->
                 SharedPreferencesImpl(this).saveData("latitude", location.latitude)
                 SharedPreferencesImpl(this).saveData("longitude", location.longitude)
-                PrayerTimesHelper.coordinates = Coordinates(location.latitude, location.longitude)
                 setAllAlarms()
             }
 
@@ -71,7 +70,6 @@ class MainActivity : ComponentActivity() {
             locationProvider.fetchLatLong(this) { location ->
                 SharedPreferencesImpl(this).saveData("latitude", location.latitude)
                 SharedPreferencesImpl(this).saveData("longitude", location.longitude)
-                PrayerTimesHelper.coordinates = Coordinates(location.latitude, location.longitude)
                 setAllAlarms()
             }
         }

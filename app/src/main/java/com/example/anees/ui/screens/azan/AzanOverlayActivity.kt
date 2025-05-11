@@ -9,12 +9,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import com.example.anees.enums.PrayEnum
 import com.example.anees.utils.extensions.convertNumbersToArabic
+import com.example.anees.utils.extensions.setAllAlarms
 import com.example.anees.utils.extensions.toArabicTime
 
 class AzanOverlayActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setAllAlarms()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             setShowWhenLocked(true)
             setTurnScreenOn(true)
@@ -36,6 +38,7 @@ class AzanOverlayActivity : ComponentActivity() {
                 prayEnum = prayEnum ?: PrayEnum.FAJR,
                 prayerTime = time.toArabicTime().convertNumbersToArabic(),
             ){
+                setAllAlarms()
                 finish()
             }
         }

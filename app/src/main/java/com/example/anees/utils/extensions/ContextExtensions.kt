@@ -52,7 +52,7 @@ fun Context.cancelAllAlarms() {
 
 fun Context.setAllAlarms(
 ){
-    cancelAllAlarms()
+   // cancelAllAlarms()
     var index = 0;
     for (pray in PrayerTimesHelper.getUpcomingPrayers()) {
         setAlarm(
@@ -86,9 +86,7 @@ fun Context.setAlarm(
     val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         if (!alarmManager.canScheduleExactAlarms()) {
-            val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
+            val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
             startActivity(intent)
         }
     }
