@@ -290,14 +290,14 @@
         private val audioFocusChangeListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
             when (focusChange) {
                 AudioManager.AUDIOFOCUS_GAIN -> {
-                    if (RadioPlayer.isPlaying()) {
-                        RadioPlayer.play()
-                    }
+                    RadioPlayer.play()
+                    Log.d("AudioFocus", "Audio focus gained")
                     sendPlaybackStateBroadcast(true)
                 }
                 AudioManager.AUDIOFOCUS_LOSS -> {
                     RadioPlayer.pause()
-                    abandonAudioFocus()
+                    Log.d("AudioFocus", "Audio focus loss")
+                    //abandonAudioFocus()
                     sendPlaybackStateBroadcast(false)
                 }
                 AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
@@ -315,6 +315,7 @@
                 AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
                     .setOnAudioFocusChangeListener(audioFocusChangeListener)
                     .setWillPauseWhenDucked(true)
+                    .setAcceptsDelayedFocusGain(true)
                     .setAudioAttributes(RadioPlayer.getAudioAttributes())
                     .build().also {
                         audioFocusRequest = it
