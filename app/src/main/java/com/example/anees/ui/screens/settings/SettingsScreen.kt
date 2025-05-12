@@ -4,9 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
-import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,7 +17,6 @@ import androidx.compose.material.icons.filled.RemoveRedEye
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -35,7 +31,6 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.anees.enums.AzanRecitersEnum
@@ -86,7 +81,6 @@ fun SettingsScreen(
 
     val showPermissionDialog = remember { mutableStateOf(false) }
 
-    // Handling notification permission request
     val requestNotificationPermission = NotificationPermissionRequester(
         onResult = { isGranted ->
             if (isGranted) {
@@ -101,7 +95,6 @@ fun SettingsScreen(
         }
     )
 
-    // Handling overlay permission request
     val showOverlayPermissionDialog = remember { mutableStateOf(false) }
 
     val requestOverlayPermission = {
@@ -109,7 +102,6 @@ fun SettingsScreen(
             if (!Settings.canDrawOverlays(context)) {
                 showOverlayPermissionDialog.value = true
             } else {
-                // Overlay permission granted, continue
                 viewModel.updateAzanNotificationState(true)
             }
         }
@@ -213,7 +205,6 @@ fun SettingsScreen(
         }
     }
 
-    // Overlay Permission Dialog
     if (showOverlayPermissionDialog.value) {
         AlertDialog(
             onDismissRequest = { showOverlayPermissionDialog.value = false },
@@ -239,7 +230,6 @@ fun SettingsScreen(
         )
     }
 
-    // Permission Dialog for Notifications
     if (showPermissionDialog.value) {
         AlertDialog(
             onDismissRequest = { showPermissionDialog.value = false },
