@@ -53,7 +53,7 @@ fun RadioScreen(viewModel: RadioViewModel = hiltViewModel(),navToHome: () -> Uni
     DisposableEffect(lifecycleOwner) {
         val receiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
-                (context as Activity)?.finishAffinity()
+                navToHome()
             }
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
