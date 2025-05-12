@@ -1,17 +1,27 @@
 package com.example.anees
 
+import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.batoulapps.adhan.Coordinates
 import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
 import com.example.anees.ui.navigation.SetUpNavHost
+import com.example.anees.ui.screens.azan.AzanOverlayActivity
+import com.example.anees.utils.SharedModel
 import com.example.anees.utils.extensions.requestNotificationPermission
 import com.example.anees.utils.extensions.requestOverlayPermission
 import com.example.anees.utils.extensions.setAllAlarms
@@ -27,6 +37,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        SharedModel.isAppOpen = true
         requestNotificationPermission(this)
         if (!Settings.canDrawOverlays(this)) {
             askedForOverlayPermission = true
@@ -54,7 +65,6 @@ class MainActivity : ComponentActivity() {
             }
             navController = rememberNavController()
             SetUpNavHost(navController = navController)
-
 
         }
     }
@@ -85,7 +95,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
 
 
 

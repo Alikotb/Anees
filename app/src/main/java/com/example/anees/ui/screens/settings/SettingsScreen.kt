@@ -2,7 +2,9 @@ package com.example.anees.ui.screens.settings
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -12,11 +14,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -69,7 +74,8 @@ fun SettingsScreen(
     val fajrList =FajrRecitersEnum.values().map { it.label }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        ScreenBackground()
+            ScreenBackground()
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -77,8 +83,10 @@ fun SettingsScreen(
                 .padding(vertical = 24.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            ScreenTitle(title = "الاعدادات", onBackClick = onBackClick, size = 24)
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
 
+                ScreenTitle(title = "الاعدادات", onBackClick = onBackClick, size = 24)
+            }
             SettingSection(title = "إعدادات الأذكار" , color = sectionColor) {
                 SettingSwitchRow(
                     title = "تفعيل اشعارات الأذكار",
@@ -149,6 +157,9 @@ fun SettingsScreen(
                     }
                 )
             }
+
+            Spacer(Modifier.height(80.dp))
+
         }
     }
 }
