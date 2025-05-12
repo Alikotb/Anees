@@ -202,6 +202,9 @@ fun AzanScreen(
                         fontSize = 32.sp,
                         fontWeight = FontWeight.Bold,
                         fontFamily = FontFamily(Font(R.font.othmani))
+                        , modifier = Modifier.padding(
+                            bottom = 60.dp
+                        )
                     )
                 }
             }

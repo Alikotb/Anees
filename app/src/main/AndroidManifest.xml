@@ -37,7 +37,13 @@
             android:name=".ui.screens.azan.AzanOverlayActivity"
             android:exported="false"
             android:label="@string/title_activity_azan_overlay"
-            android:theme="@style/Theme.Anees" />
+            android:theme="@style/Theme.Anees"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""
+            android:launchMode="singleTask"
+            android:showOnLockScreen="true"
+            android:turnScreenOn="true"
+            />
         <receiver android:name=".receivers.AzanAlarmReceiver" android:exported="true" />
         <receiver android:name=".receivers.RadioBroadcastReceiver" android:exported="true"
             tools:ignore="Instantiatable" />
