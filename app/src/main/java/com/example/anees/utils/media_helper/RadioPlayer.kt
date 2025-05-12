@@ -14,19 +14,15 @@ object RadioPlayer {
 
     fun initializePlayer(context: Context) {
         if (player == null) {
+            audioAttributes = android.media.AudioAttributes.Builder()
+                .setUsage(android.media.AudioAttributes.USAGE_MEDIA)
+                .setContentType(android.media.AudioAttributes.CONTENT_TYPE_MUSIC)
+                .build()
+
             player = ExoPlayer.Builder(context).build().apply {
-                playWhenReady = false
+                setAudioAttributes(audioAttributes, false)
+                playWhenReady = true
             }
-        }
-
-        audioAttributes = android.media.AudioAttributes.Builder()
-            .setUsage(android.media.AudioAttributes.USAGE_MEDIA)
-            .setContentType(android.media.AudioAttributes.CONTENT_TYPE_MUSIC)
-            .build()
-
-        player = ExoPlayer.Builder(context).build().apply {
-            setAudioAttributes(audioAttributes, true)
-            playWhenReady = false
         }
     }
 
@@ -41,7 +37,7 @@ object RadioPlayer {
             val mediaItem = MediaItem.fromUri(url)
             setMediaItem(mediaItem)
             prepare()
-            playWhenReady = false
+            playWhenReady = true
         }
     }
 
