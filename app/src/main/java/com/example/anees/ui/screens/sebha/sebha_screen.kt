@@ -43,6 +43,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -60,7 +61,6 @@ import com.example.anees.ui.screens.radio.components.ScreenBackground
 import com.example.anees.ui.screens.sebha.component.AzkarButtomSheet
 import com.example.anees.utils.extensions.convertNumbersToArabic
 import kotlinx.coroutines.delay
-
 
 @Composable
 fun SebihaScreen(
@@ -105,7 +105,6 @@ fun SebihaScreen(
 
     }
 }
-
 
 
 @Composable
@@ -273,13 +272,14 @@ fun Ssebha(
                     Box(
                         modifier = Modifier
                             .size(30.dp)
-                            .offset(x = 60.dp, y = 18.dp)
+                            .offset(x = -60.dp, y = 18.dp)
                             .background(Color.Transparent, shape = CircleShape)
                             .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = rememberRipple(bounded = true, radius = 15.dp),
                                 onClick = {
                                     counter = 0
+
                                     viewModel.addSebiha(
                                         Sebiha(
                                             0,
