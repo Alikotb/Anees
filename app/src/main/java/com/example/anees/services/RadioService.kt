@@ -14,11 +14,6 @@
     import android.os.Build
     import android.os.IBinder
     import android.support.v4.media.session.MediaSessionCompat
-    import android.util.Log
-    import androidx.compose.material.icons.Icons
-    import androidx.compose.material.icons.filled.SkipNext
-    import androidx.compose.material3.Icon
-    import androidx.compose.ui.res.stringResource
     import androidx.core.app.NotificationCompat
     import androidx.media3.common.Player
     import com.example.anees.R
@@ -291,13 +286,10 @@
             when (focusChange) {
                 AudioManager.AUDIOFOCUS_GAIN -> {
                     RadioPlayer.play()
-                    Log.d("AudioFocus", "Audio focus gained")
                     sendPlaybackStateBroadcast(true)
                 }
                 AudioManager.AUDIOFOCUS_LOSS -> {
                     RadioPlayer.pause()
-                    Log.d("AudioFocus", "Audio focus loss")
-                    //abandonAudioFocus()
                     sendPlaybackStateBroadcast(false)
                 }
                 AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
