@@ -35,6 +35,7 @@ import com.example.anees.utils.pdf_helper.SuraIndexes
 
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.anees.ui.screens.radio.components.ScreenBackground
+import com.example.anees.utils.extensions.convertNumbersToArabic
 
 @Composable
 fun QuranIndexScreen(onIndexButtonClick: () -> Unit) {
@@ -54,7 +55,7 @@ fun QuranIndexScreen(onIndexButtonClick: () -> Unit) {
             }
         }
         item {
-            Spacer(modifier = Modifier.height(16.dp).fillMaxWidth()
+            Spacer(modifier = Modifier.height(48.dp).fillMaxWidth()
             )
         }
     }
@@ -107,7 +108,7 @@ fun SurahRow(
                     textAlign = TextAlign.End
                 )
                 Text(
-                    text = "${sura.ayahNumber}",
+                    text = "${sura.ayahNumber}".convertNumbersToArabic(),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.End
