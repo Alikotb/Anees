@@ -12,6 +12,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,6 +26,7 @@ import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
 import com.example.anees.ui.navigation.SetUpNavHost
 import com.example.anees.ui.screens.azan.AzanOverlayActivity
 import com.example.anees.utils.SharedModel
+import com.example.anees.utils.extensions.getCityAndCountryInArabic
 import com.example.anees.utils.extensions.requestNotificationPermission
 import com.example.anees.utils.extensions.requestOverlayPermission
 import com.example.anees.utils.extensions.setAllAlarms
@@ -56,18 +61,31 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            val systemUiController = rememberSystemUiController()
+            var location by remember { mutableStateOf<Coordinates?>(null) }
 
+            val systemUiController = rememberSystemUiController()
             SideEffect {
                 systemUiController.setStatusBarColor(
                     color = Color.Transparent,
                     darkIcons = true
                 )
             }
-            navController = rememberNavController()
-            SetUpNavHost(navController = navController)
 
+            if (location == null) {
+                val locationProvider = LocationProvider(this)
+                locationProvider.fetchLatLong(this) { loc ->
+                    location = Coordinates(loc.latitude, loc.longitude)
+                    SharedPreferencesImpl(this).saveData("latitude", loc.latitude)
+                    SharedPreferencesImpl(this).saveData("longitude", loc.longitude)
+                    setAllAlarms()
+                }
+            }
+
+            navController = rememberNavController()
+            SetUpNavHost(navController = navController,
+                location = location?.let { getCityAndCountryInArabic(it.latitude, it.longitude) })
         }
+
     }
 
     override fun onResume() {

@@ -37,14 +37,16 @@ import kotlinx.coroutines.withContext
 
 @Preview(showBackground = true)
 @Composable
-fun PrayerScreen(onPreviewClick: () -> Unit = {},onBackClick: () -> Unit = {}){
+fun PrayerScreen(
+    location:String? = "",
+    onPreviewClick: () -> Unit = {},onBackClick: () -> Unit = {}){
 
     val systemUiController = rememberSystemUiController()
     val  context = LocalContext.current
-    var location by remember { mutableStateOf("") }
+//    var location by remember { mutableStateOf("") }
 
 
-    LaunchedEffect(Unit) {
+ /*   LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
             val latitude = SharedPreferencesImpl(context).fetchData("latitude", 30.033333)
             val longitude = SharedPreferencesImpl(context).fetchData("longitude", 31.233334)
@@ -54,7 +56,7 @@ fun PrayerScreen(onPreviewClick: () -> Unit = {},onBackClick: () -> Unit = {}){
                 location = result
             }
         }
-    }
+    }*/
 
     SideEffect {
         systemUiController.setStatusBarColor(
@@ -77,7 +79,7 @@ fun PrayerScreen(onPreviewClick: () -> Unit = {},onBackClick: () -> Unit = {}){
             ) {
 
                 PrayerTopBar(location =
-                    location
+                    location?:""
                 ){
                     onBackClick()
                 }

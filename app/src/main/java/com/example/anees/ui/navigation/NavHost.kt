@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.batoulapps.adhan.Coordinates
 import com.example.anees.ui.navigation.ScreenRoute.AzkarDetailsScreen
 import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
 import com.example.anees.ui.screens.hadith.HadithAuthorsScreen
@@ -47,6 +48,7 @@ import com.example.anees.utils.prayer_helper.PrayerTimesHelper
 @Composable
 fun SetUpNavHost(
     navController: NavHostController,
+    location:String? = ""
 ) {
     NavHost(
         navController = navController,
@@ -62,6 +64,7 @@ fun SetUpNavHost(
 
         composable<ScreenRoute.HomeScreen> {
             HomeScreenWithDrawer(
+                location = location,
                 navToSebiha = {
                     navController.navigate(ScreenRoute.Sebiha)
                 },
@@ -201,6 +204,7 @@ fun SetUpNavHost(
         }
         composable<ScreenRoute.PrayerTimesScreen> {
             PrayerScreen(
+                location = location,
                 onPreviewClick = {
                     navController.navigate(AzanPlayerScreen)
                 }

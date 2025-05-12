@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.batoulapps.adhan.Coordinates
 import com.example.anees.R
 import com.example.anees.ui.screens.home.component.ComponentCard
 import com.example.anees.ui.screens.home.component.PrayerCardWithTimer
@@ -38,7 +39,9 @@ import com.example.anees.ui.screens.home.component.SubCards
 
 @Preview(showBackground = true,locale = "en")
 @Composable
-fun HomeScreen(navToSebiha: () -> Unit = {},
+fun HomeScreen(
+    location:String? = "",
+    navToSebiha: () -> Unit = {},
                navToQibla: () -> Unit = {},
                navToQuran: () -> Unit = {},
                navToAzkar: () -> Unit = {},
@@ -62,8 +65,7 @@ fun HomeScreen(navToSebiha: () -> Unit = {},
                     .background(Color.Transparent)
 
             ) {
-                PrayerCardWithTimer(
-                ) {
+                PrayerCardWithTimer(location) {
                     navToPrayer()
                 }
                 SubCards(

@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.batoulapps.adhan.Coordinates
 import com.example.anees.R
 import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
 import com.example.anees.enums.PrayEnum
@@ -51,7 +52,7 @@ import java.util.concurrent.TimeUnit
 @Composable
 fun HomeHeader(
     hijriDate: String = "24 رمضان 1445 هـ".convertNumbersToArabic(),
-    location: String = "القاهرة، مصر",
+    location: String? = "القاهرة، مصر",
     prayerName: String = "صلاة الظهر",
     prayerTime: String = "12:45 م".convertNumbersToArabic(),
     remainingTime: String = "5:02:02".convertNumbersToArabic(),
@@ -73,7 +74,7 @@ fun HomeHeader(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = location,
+                text = location?:"",
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium,
                 color = Color.Black
@@ -206,25 +207,32 @@ fun ExtrudedText(
 
 @Composable
 fun PrayerCardWithTimer(
+    mylocation: String? = "",
     onCardClick: () -> Unit
 ) {
     val context = LocalContext.current
     var remainingTime by remember { mutableStateOf("") }
-    var location by remember { mutableStateOf("") }
+//    var location by remember { mutableStateOf("") }
 
     val (prayEnum, targetTime) = PrayerTimesHelper.getNextPrayer()!!
 
-    LaunchedEffect(Unit) {
+/*    LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
-            val latitude = SharedPreferencesImpl(context).fetchData("latitude", 30.033333)
-            val longitude = SharedPreferencesImpl(context).fetchData("longitude", 31.233334)
-            val result = context.getCityAndCountryInArabic(latitude, longitude)
+            var result =""
+            if (mylocation == null){
+                val latitude = SharedPreferencesImpl(context).fetchData("latitude", 30.033333)
+                val longitude = SharedPreferencesImpl(context).fetchData("longitude", 31.233334)
+                result = context.getCityAndCountryInArabic(latitude, longitude)
+            }
+            else{
+                result = context.getCityAndCountryInArabic(mylocation.latitude, mylocation.longitude)
+            }
 
             withContext(Dispatchers.Main) {
                 location = result
             }
         }
-    }
+    }*/
 
     LaunchedEffect(targetTime) {
         while (true) {
@@ -244,7 +252,7 @@ fun PrayerCardWithTimer(
 
     HomeHeader(
         hijriDate = DateHelper.getTodayHijriDate(),
-        location = location,
+        location = mylocation?:"",
         prayerName = if (PrayerTimesHelper.isTodayFriday() && prayEnum == PrayEnum.ZUHR ) "صلاة الجمعة" else prayEnum.value,
         prayerTime = targetTime.toArabicTime().convertNumbersToArabic(),
         remainingTime = remainingTime.convertNumbersToArabic()
