@@ -77,7 +77,6 @@ class MainActivity : ComponentActivity() {
                     location = Coordinates(loc.latitude, loc.longitude)
                     SharedPreferencesImpl(this).saveData("latitude", loc.latitude)
                     SharedPreferencesImpl(this).saveData("longitude", loc.longitude)
-                    setAllAlarms()
                 }
             }
 
