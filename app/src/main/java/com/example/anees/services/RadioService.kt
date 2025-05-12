@@ -18,11 +18,13 @@ import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material3.Icon
+import androidx.compose.ui.res.stringResource
 import androidx.core.app.NotificationCompat
 import androidx.media3.common.Player
 import com.example.anees.R
 import com.example.anees.data.model.radio.RadioStations
 import com.example.anees.utils.media_helper.RadioPlayer
+import com.example.anees.utils.pdf_helper.SuraIndexes
 import com.example.anees.utils.sura_mp3_helper.suraUrls
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -50,6 +52,7 @@ class RadioService : Service() {
 
     private val stations = RadioStations.stations
     private var isSura = false;
+    private var reciterName = ""
     private lateinit var reciterUrl: String
     private var currentIndex = 0
 
@@ -98,6 +101,7 @@ class RadioService : Service() {
                 val index = intent?.getIntExtra("index", 0) ?: 0
                 val isRadio = intent?.getBooleanExtra("isRadio", true) ?: true
                 val reciter = intent?.getStringExtra("reciterUrl") ?: ""
+                reciterName = intent?.getStringExtra("reciterName") ?: ""
                 url?.let {
                     startPlayback(it)
                     sendPlaybackStateBroadcast(true)
@@ -167,8 +171,18 @@ class RadioService : Service() {
         )
 
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle(if(isSura) getString(R.string.anees_quran) else getString(R.string.anees_radio))
-            .setContentText("Streaming Live")
+            .setContentTitle(if(isSura) {
+                reciterName
+            }else {
+                getString(R.string.anees_radio)
+            }
+            )
+            .setContentText(if (isSura) {
+                SuraIndexes[currentIndex].suraName
+            }else {
+                stations[currentIndex].name
+            }
+            )
             .setSmallIcon(R.drawable.logo_foreground)
             .setLargeIcon(BitmapFactory.decodeResource(resources,R.drawable.zekrback))
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)

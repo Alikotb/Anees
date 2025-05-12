@@ -56,7 +56,7 @@ class RecitersViewModel @Inject constructor(private val context: Application) : 
         _currentSura.value = SuraIndexes[index]
         _currentSuraTypeIcon.value = SuraIndexes[index].type
         _reciterUrl.value = reciterUrl
-        RadioServiceManager.startRadioService(context, reciterUrl.url + suraUrls[index].second, _reciterUrl.value.url, _currentSuraIndex.value, false)
+        RadioServiceManager.startRadioService(context, reciterUrl.url + suraUrls[index].second, _reciterUrl.value.url, _currentSuraIndex.value, _reciterUrl.value.reciter, false)
     }
 
     fun playPauseSura() {
@@ -89,7 +89,7 @@ class RecitersViewModel @Inject constructor(private val context: Application) : 
     }
 
     private fun startRadioService() {
-        RadioServiceManager.startRadioService(context, reciterUrl.value.url + suraUrls[_currentSuraIndex.value].second, reciterUrl.value.url, _currentSuraIndex.value, false)
+        RadioServiceManager.startRadioService(context, reciterUrl.value.url + suraUrls[_currentSuraIndex.value].second, reciterUrl.value.url, _currentSuraIndex.value,reciterUrl.value.reciter, false)
         _isPlaying.value = true
     }
 

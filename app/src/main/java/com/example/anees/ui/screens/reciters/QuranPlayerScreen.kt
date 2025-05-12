@@ -40,6 +40,7 @@ import com.example.anees.enums.SuraTypeEnum
 import com.example.anees.R
 import com.example.anees.services.RadioService
 import com.example.anees.ui.screens.radio.components.ScreenBackground
+import com.example.anees.utils.SharedModel
 
 @Composable
 fun QuranPlayerScreen(
@@ -60,7 +61,11 @@ fun QuranPlayerScreen(
     DisposableEffect(lifecycleOwner) {
         val receiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
-                (context as Activity).finishAffinity()
+                if (SharedModel.isAppActive) {
+                    onBackClick()
+                }else {
+                    (context as Activity).finishAffinity()
+                }
             }
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

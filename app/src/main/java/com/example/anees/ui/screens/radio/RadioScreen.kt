@@ -39,6 +39,7 @@ import com.example.anees.ui.screens.radio.components.PlaybackControls
 import com.example.anees.ui.screens.radio.components.ScreenBackground
 import com.example.anees.ui.screens.radio.components.StationImageCard
 import com.example.anees.ui.screens.radio.components.StationInfoCard
+import com.example.anees.utils.SharedModel
 import com.example.anees.utils.media_helper.RadioServiceManager
 
 @Composable
@@ -53,7 +54,11 @@ fun RadioScreen(viewModel: RadioViewModel = hiltViewModel(),navToHome: () -> Uni
     DisposableEffect(lifecycleOwner) {
         val receiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
-                navToHome()
+                if (SharedModel.isAppActive) {
+                    navToHome()
+                }else {
+                    (context as Activity).finishAffinity()
+                }
             }
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

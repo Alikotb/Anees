@@ -29,6 +29,7 @@ import com.example.anees.utils.location.LocationProvider
 import com.example.anees.utils.prayer_helper.PrayerTimesHelper
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.system.exitProcess
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -71,6 +72,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
+        SharedModel.isAppActive = true
         if (askedForOverlayPermission && Settings.canDrawOverlays(this)) {
             askedForOverlayPermission = false
             val locationProvider = LocationProvider(this)
@@ -81,6 +83,25 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+    }
+
+    override fun onPause() {
+        super.onPause()
+        SharedModel.isAppActive = false
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (!SharedModel.isAppActive) {
+            finish()
+            val activityManager = getSystemService(ACTIVITY_SERVICE) as android.app.ActivityManager
+            val appTasks = activityManager.appTasks
+            for (task in appTasks) {
+                task.finishAndRemoveTask()
+            }
+            android.os.Process.killProcess(android.os.Process.myPid())
+            exitProcess(0)
+        }
     }
 
 
