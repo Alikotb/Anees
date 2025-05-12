@@ -8,10 +8,12 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import com.example.anees.enums.PrayEnum
+import com.example.anees.utils.SharedModel
 import com.example.anees.utils.extensions.convertNumbersToArabic
 import com.example.anees.utils.extensions.setAllAlarms
 import com.example.anees.utils.extensions.toArabicTime
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.system.exitProcess
 
 
 @AndroidEntryPoint
@@ -46,6 +48,22 @@ class AzanOverlayActivity : ComponentActivity() {
             }
         }
     }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (!SharedModel.isAppOpen) {
+            finish()
+            val activityManager = getSystemService(ACTIVITY_SERVICE) as android.app.ActivityManager
+            val appTasks = activityManager.appTasks
+            for (task in appTasks) {
+                task.finishAndRemoveTask()
+            }
+            android.os.Process.killProcess(android.os.Process.myPid())
+            exitProcess(0)
+        }
+    }
+
 
 
 
