@@ -1,6 +1,7 @@
 package com.example.anees
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.ComponentActivity
@@ -25,6 +26,7 @@ import com.batoulapps.adhan.Coordinates
 import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
 import com.example.anees.ui.navigation.SetUpNavHost
 import com.example.anees.ui.screens.azan.AzanOverlayActivity
+import com.example.anees.utils.Constants
 import com.example.anees.utils.SharedModel
 import com.example.anees.utils.extensions.getCityAndCountryInArabic
 import com.example.anees.utils.extensions.requestNotificationPermission
@@ -34,6 +36,7 @@ import com.example.anees.utils.location.LocationProvider
 import com.example.anees.utils.prayer_helper.PrayerTimesHelper
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlin.system.exitProcess
 
 @AndroidEntryPoint
@@ -92,6 +95,7 @@ class MainActivity : ComponentActivity() {
         SharedModel.isAppActive = true
         if (askedForOverlayPermission && Settings.canDrawOverlays(this)) {
             askedForOverlayPermission = false
+            SharedPreferencesImpl(this).saveData(Constants.AZAN_NOTIFICATION_STATE,true)
             val locationProvider = LocationProvider(this)
             locationProvider.fetchLatLong(this) { location ->
                 SharedPreferencesImpl(this).saveData("latitude", location.latitude)
@@ -130,6 +134,12 @@ class MainActivity : ComponentActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         val locationProvider = LocationProvider(this)
         locationProvider.handlePermissionResult(requestCode, grantResults, this) {
+        }
+
+        if (requestCode == 1001) {
+            if (grantResults.isNotEmpty() && grantResults[0] == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                SharedPreferencesImpl(this).saveData(Constants.NOTIFICATION_STATE,true)
+            }
         }
     }
 }
