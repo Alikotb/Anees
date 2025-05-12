@@ -3,6 +3,7 @@ package com.example.anees.receivers
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
 import com.example.anees.enums.PrayEnum
 import com.example.anees.ui.screens.azan.AzanOverlayActivity
@@ -20,7 +21,7 @@ class AzanAlarmReceiver : BroadcastReceiver() {
         }
 
         val state = SharedPreferencesImpl(context).fetchData(Constants.AZAN_NOTIFICATION_STATE, true)
-
+        Log.e("TAG", "onReceive000000000000: $state", )
         if (state) {
             context.startActivity(overlayIntent)
         }
