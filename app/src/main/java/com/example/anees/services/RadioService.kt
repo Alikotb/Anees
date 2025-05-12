@@ -167,7 +167,7 @@ class RadioService : Service() {
         )
 
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Anees Radio")
+            .setContentTitle(if(isSura) getString(R.string.anees_quran) else getString(R.string.anees_radio))
             .setContentText("Streaming Live")
             .setSmallIcon(R.drawable.logo_foreground)
             .setLargeIcon(BitmapFactory.decodeResource(resources,R.drawable.zekrback))

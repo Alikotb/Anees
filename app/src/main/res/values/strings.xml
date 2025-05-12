@@ -2,4 +2,6 @@
     <string name="app_name">أنـيـس</string>
     <string name="hadith_authors">Hadith Authors</string>
     <string name="title_activity_azan_overlay">AzanOverlayActivity</string>
+    <string name="anees_quran">Anees Quran</string>
+    <string name="anees_radio">Anees Radio</string>
 </resources>
