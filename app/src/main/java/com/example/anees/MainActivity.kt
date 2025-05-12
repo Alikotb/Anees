@@ -1,48 +1,45 @@
 package com.example.anees
 
-import android.content.Intent
-import android.content.SharedPreferences
+
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.provider.Settings
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.app.ActivityCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.batoulapps.adhan.Coordinates
 import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
 import com.example.anees.ui.navigation.SetUpNavHost
-import com.example.anees.ui.screens.azan.AzanOverlayActivity
 import com.example.anees.utils.Constants
+import com.example.anees.utils.Constants.REQUEST_LOCATION_CODE
 import com.example.anees.utils.SharedModel
 import com.example.anees.utils.extensions.getCityAndCountryInArabic
 import com.example.anees.utils.extensions.requestNotificationPermission
 import com.example.anees.utils.extensions.requestOverlayPermission
 import com.example.anees.utils.extensions.setAllAlarms
 import com.example.anees.utils.location.LocationProvider
-import com.example.anees.utils.prayer_helper.PrayerTimesHelper
+import com.example.anees.utils.location.checkPermission
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import kotlin.system.exitProcess
+import androidx.core.content.edit
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     lateinit var navController: NavHostController
     private var askedForOverlayPermission = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,19 +48,30 @@ class MainActivity : ComponentActivity() {
         if (!Settings.canDrawOverlays(this)) {
             askedForOverlayPermission = true
             requestOverlayPermission()
-        }
-        else {
-            val locationProvider = LocationProvider(this)
-            locationProvider.fetchLatLong(this) { location ->
-                SharedPreferencesImpl(this).saveData("latitude", location.latitude)
-                SharedPreferencesImpl(this).saveData("longitude", location.longitude)
-                setAllAlarms()
+        } else {
+            if (this.checkPermission()) {
+                val locationProvider = LocationProvider(this)
+                locationProvider.fetchLatLong(this) { location ->
+                    SharedPreferencesImpl(this).saveData("latitude", location.latitude)
+                    SharedPreferencesImpl(this).saveData("longitude", location.longitude)
+                    setAllAlarms()
+                }
+            } else {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    ),
+                    REQUEST_LOCATION_CODE
+                )
             }
 
         }
 
         enableEdgeToEdge()
         setContent {
+
             var location by remember { mutableStateOf<Coordinates?>(null) }
 
             val systemUiController = rememberSystemUiController()
@@ -73,18 +81,19 @@ class MainActivity : ComponentActivity() {
                     darkIcons = true
                 )
             }
-
-            if (location == null) {
-                val locationProvider = LocationProvider(this)
-                locationProvider.fetchLatLong(this) { loc ->
-                    location = Coordinates(loc.latitude, loc.longitude)
-                    SharedPreferencesImpl(this).saveData("latitude", loc.latitude)
-                    SharedPreferencesImpl(this).saveData("longitude", loc.longitude)
+            if (checkPermission() && location == null) {
+                if (location == null) {
+                    val locationProvider = LocationProvider(this)
+                    locationProvider.fetchLatLong(this) { loc ->
+                        location = Coordinates(loc.latitude, loc.longitude)
+                        SharedPreferencesImpl(this).saveData("latitude", loc.latitude)
+                        SharedPreferencesImpl(this).saveData("longitude", loc.longitude)
+                    }
                 }
             }
-
             navController = rememberNavController()
-            SetUpNavHost(navController = navController,
+            SetUpNavHost(
+                navController = navController,
                 location = location?.let { getCityAndCountryInArabic(it.latitude, it.longitude) })
         }
 
@@ -95,7 +104,7 @@ class MainActivity : ComponentActivity() {
         SharedModel.isAppActive = true
         if (askedForOverlayPermission && Settings.canDrawOverlays(this)) {
             askedForOverlayPermission = false
-            SharedPreferencesImpl(this).saveData(Constants.AZAN_NOTIFICATION_STATE,true)
+            SharedPreferencesImpl(this).saveData(Constants.AZAN_NOTIFICATION_STATE, true)
             val locationProvider = LocationProvider(this)
             locationProvider.fetchLatLong(this) { location ->
                 SharedPreferencesImpl(this).saveData("latitude", location.latitude)
@@ -125,23 +134,28 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        val locationProvider = LocationProvider(this)
-        locationProvider.handlePermissionResult(requestCode, grantResults, this) {
-        }
 
-        if (requestCode == 1001) {
-            if (grantResults.isNotEmpty() && grantResults[0] == android.content.pm.PackageManager.PERMISSION_GRANTED) {
-                SharedPreferencesImpl(this).saveData(Constants.NOTIFICATION_STATE,true)
+        if (requestCode == REQUEST_LOCATION_CODE) {
+            val prefs = getSharedPreferences("permission_prefs", MODE_PRIVATE)
+
+            if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
+                prefs.edit() { putInt("location_denial_count", 0) }
+            } else {
+                val currentCount = prefs.getInt("location_denial_count", 0)
+                prefs.edit() { putInt("location_denial_count", currentCount + 1) }
+                Toast.makeText(this, "Permission Denied (${currentCount + 1})", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }
+
 }
 
 
