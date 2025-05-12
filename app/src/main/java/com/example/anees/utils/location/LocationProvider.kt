@@ -4,15 +4,12 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationManager
 import android.os.Looper
-import android.provider.Settings
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.anees.utils.Constants.REQUEST_LOCATION_CODE
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
@@ -28,8 +25,8 @@ class LocationProvider(private val context: Context) {
             requestPermissions(activity)
             return
         }
-        if (!isLocationEnabled()) {
-            enableLocationServices()
+        if (!context.isLocationEnabled()) {
+            context.enableLocationService()
             return
         }
 
@@ -77,36 +74,4 @@ class LocationProvider(private val context: Context) {
         )
     }
 
-    private fun isLocationEnabled(): Boolean {
-        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
-                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-    }
-
-    private fun enableLocationServices() {
-        Toast.makeText(context, "Please enable location services", Toast.LENGTH_SHORT).show()
-        context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-    }
-
-    fun handlePermissionResult(
-        requestCode: Int,
-        grantResults: IntArray,
-        activity: Activity,
-        onResult: (Location) -> Unit
-    ) {
-        if (requestCode == REQUEST_LOCATION_CODE) {
-            if (grantResults.isNotEmpty() &&
-                (grantResults[0] == PackageManager.PERMISSION_GRANTED ||
-                        grantResults.getOrNull(1) == PackageManager.PERMISSION_GRANTED)
-            ) {
-                fetchLatLong(activity, onResult)
-            } else {
-                Toast.makeText(context, "Location permission denied", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    companion object {
-        const val REQUEST_LOCATION_CODE = 111
-    }
 }

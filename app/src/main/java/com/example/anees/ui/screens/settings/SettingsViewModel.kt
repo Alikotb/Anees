@@ -39,8 +39,8 @@ class SettingsViewModel @Inject constructor(val repository: Repository) : ViewMo
         viewModelScope.launch(Dispatchers.IO){
             _currentAzanReciter.value = repository.fetchData(Constants.CURRENT_AZAN_RECITER , AzanRecitersEnum.Abdelbaset.label)
             _currentZekirInterval.value = repository.fetchData(Constants.CURRENT_ZEKIR_INTERVAL , 1)
-            _azanNotificationState.value = repository.fetchData(Constants.AZAN_NOTIFICATION_STATE , true)
-            _zekrNotificationState.value = repository.fetchData(Constants.NOTIFICATION_STATE , true)
+            _azanNotificationState.value = repository.fetchData(Constants.AZAN_NOTIFICATION_STATE , false)
+            _zekrNotificationState.value = repository.fetchData(Constants.NOTIFICATION_STATE , false)
             _currentFajrReciter.value = repository.fetchData(Constants.CURRENT_FAJR_RECITER , FajrRecitersEnum.Abdelbaset.label)
         }
     }

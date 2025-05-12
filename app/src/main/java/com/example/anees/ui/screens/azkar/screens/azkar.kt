@@ -19,7 +19,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,13 +34,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.anees.enums.ZekirIntervalsEnum
 import com.example.anees.ui.screens.azkar.component.ZekrCard
 import com.example.anees.ui.screens.hadith.components.ScreenTitle
 import com.example.anees.ui.screens.radio.components.ScreenBackground
-import com.example.anees.utils.Constants
 import com.example.anees.utils.azkar_helper.AzkarUtils
-import com.example.anees.workers.setNotification
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,11 +46,6 @@ fun AdhkarScreen(navToHome: () -> Unit = {}, navToDetails: (String) -> Unit = {}
     val azkarList = remember { AzkarUtils.parseAdhkar(context) }
     val categories = remember { AzkarUtils.getAdhkarCategories(azkarList) }
     var searchQuery by remember { mutableStateOf("") }
-
-
-    LaunchedEffect(Unit) {
-        setNotification(context)
-    }
 
     ScreenBackground()
 

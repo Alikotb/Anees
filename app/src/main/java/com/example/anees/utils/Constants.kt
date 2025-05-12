@@ -9,10 +9,8 @@ object Constants {
 
     const val API_HADITH_ = "https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/"
     const val API_Tafsir_ = "https://quranenc.com/"
+    const val REQUEST_LOCATION_CODE = 111
 
-    const val ONE_HOUR="1"
-    const val THREE_HOUR="3"
-    const val SIX_HOUR="6"
 
 
     //PDF Quran

@@ -1,5 +1,6 @@
 package com.example.anees.ui.screens.home
 
+import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,12 +30,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.batoulapps.adhan.Coordinates
 import com.example.anees.R
 import com.example.anees.ui.screens.home.component.ComponentCard
 import com.example.anees.ui.screens.home.component.PrayerCardWithTimer
 import com.example.anees.ui.screens.home.component.QuranCard
 import com.example.anees.ui.screens.home.component.SubCards
+import com.example.anees.utils.location.checkPermission
+import com.example.anees.utils.location.handleLocationPermission
+import com.example.anees.utils.location.isLocationEnabled
 
 
 @Preview(showBackground = true,locale = "en")
@@ -53,6 +56,9 @@ fun HomeScreen(
                navToNamesOfAllah: () -> Unit = {},
                navToHisnAlMuslim: () -> Unit = {}
 ){
+
+    val ctx=LocalContext.current
+    val activity = ctx as Activity
     Box {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
 
@@ -66,7 +72,12 @@ fun HomeScreen(
 
             ) {
                 PrayerCardWithTimer(location) {
-                    navToPrayer()
+                    if (ctx.checkPermission()&& ctx.isLocationEnabled()) {
+                        navToPrayer()
+                    } else {
+                        ctx.handleLocationPermission(activity)
+
+                    }
                 }
                 SubCards(
                     navToSebiha = navToSebiha,
