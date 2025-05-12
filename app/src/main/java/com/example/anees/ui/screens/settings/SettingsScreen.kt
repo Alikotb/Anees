@@ -86,6 +86,7 @@ fun SettingsScreen(
 
     val showPermissionDialog = remember { mutableStateOf(false) }
 
+    // Handling notification permission request
     val requestNotificationPermission = NotificationPermissionRequester(
         onResult = { isGranted ->
             if (isGranted) {
@@ -99,6 +100,20 @@ fun SettingsScreen(
             showPermissionDialog.value = true
         }
     )
+
+    // Handling overlay permission request
+    val showOverlayPermissionDialog = remember { mutableStateOf(false) }
+
+    val requestOverlayPermission = {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(context)) {
+                showOverlayPermissionDialog.value = true
+            } else {
+                // Overlay permission granted, continue
+                viewModel.updateAzanNotificationState(true)
+            }
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         ScreenBackground()
@@ -144,8 +159,13 @@ fun SettingsScreen(
                     title = "تفعيل تنبيهات الأذان",
                     isChecked = AzanNotificationState.value,
                     color = switchColor,
-                    onCheckedChange = {
-                        viewModel.updateAzanNotificationState(it)
+                    onCheckedChange = { isChecked ->
+                        if (isChecked) {
+                            // When Azan notifications are enabled, request overlay permission
+                            requestOverlayPermission()
+                        } else {
+                            viewModel.updateAzanNotificationState(false)
+                        }
                     }
                 )
 
@@ -193,6 +213,33 @@ fun SettingsScreen(
         }
     }
 
+    // Overlay Permission Dialog
+    if (showOverlayPermissionDialog.value) {
+        AlertDialog(
+            onDismissRequest = { showOverlayPermissionDialog.value = false },
+            title = { Text("السماح بعرض التنبيهات فوق التطبيقات") },
+            text = {
+                Text("يرجى السماح للتطبيق بعرض التنبيهات فوق التطبيقات الأخرى من خلال الإعدادات.")
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    showOverlayPermissionDialog.value = false
+                    val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION).apply {
+                    }
+                    context.startActivity(intent)
+                }) {
+                    Text("فتح الإعدادات")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showOverlayPermissionDialog.value = false }) {
+                    Text("إلغاء")
+                }
+            }
+        )
+    }
+
+    // Permission Dialog for Notifications
     if (showPermissionDialog.value) {
         AlertDialog(
             onDismissRequest = { showPermissionDialog.value = false },
@@ -226,4 +273,3 @@ fun SettingsScreen(
         )
     }
 }
-
