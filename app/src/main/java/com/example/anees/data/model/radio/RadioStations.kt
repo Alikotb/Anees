@@ -5,6 +5,12 @@ import com.example.anees.R
 object RadioStations {
     val stations = listOf(
         RadioStation(
+            "محمود خليل الحصري",
+            "https://backup.qurango.net/radio/mahmoud_khalil_alhussary",
+            " قارئ قرآن مصري ويعد أحد أعلام هذا المجال البارزين",
+            R.drawable.hosary
+        ),
+        RadioStation(
             "إدريس أبكر",
             "https://backup.qurango.net/radio/idrees_abkr",
             "قارئ سعودي من مدينة جدة، اشتهر بصوته المؤثر في تلاوة القرآن الكريم",
@@ -52,12 +58,12 @@ object RadioStations {
             "إمام سعودي معروف بصوته الجميل وأسلوبه الهادئ",
             R.drawable.qtamy
         ),
-        RadioStation(
+/*        RadioStation(
             "عبد الرحمن السديس",
             "https://backup.qurango.net/radio/abdulrahman_alsudaes",
             "إمام وخطيب المسجد الحرام، من أشهر قراء العالم الإسلامي",
             R.drawable.sudis
-        ),
+        ),*/
         RadioStation(
             "أحمد العجمي",
             "https://backup.qurango.net/radio/ahmad_alajmy",
