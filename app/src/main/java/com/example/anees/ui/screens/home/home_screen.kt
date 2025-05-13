@@ -128,7 +128,7 @@ fun HomeScreen(
                     ComponentCard(size = .45f, title = "حصن المسلم",onClick = navToHisnAlMuslim,id = R.drawable.hisen)
 
                 }
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(48.dp))
 
             }
         }
