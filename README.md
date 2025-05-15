@@ -54,16 +54,13 @@
 - **alikotb38@gmail.com**
 - **abdokamel8886@gmail.com**
 ### 📸 **Screenshots**
-
-Add screenshots of the app here to give users a preview of the UI:
-
 ![Screenshot 1](img/1.png)  
 ![Screenshot 2](img/2.png)  
 ![Screenshot 3](img/3.png)  
 
 ### 🎥 **Video**
 
-[Watch the demo video](path_to_video_url)
+[Watch the demo video](https://youtu.be/SD9qAmjIBZA)
 
 ## 🛠 **Setup and Installation**
 
