@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.core.app.ActivityCompat
+import androidx.core.content.edit
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.batoulapps.adhan.Coordinates
@@ -33,18 +34,18 @@ import com.example.anees.utils.location.checkPermission
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.system.exitProcess
-import androidx.core.content.edit
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     lateinit var navController: NavHostController
     private var askedForOverlayPermission = false
-
+    lateinit var locationProvider: LocationProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         SharedModel.isAppOpen = true
         requestNotificationPermission(this)
+        locationProvider = LocationProvider(this)
         if (!Settings.canDrawOverlays(this)) {
             askedForOverlayPermission = true
             requestOverlayPermission()
@@ -83,7 +84,7 @@ class MainActivity : ComponentActivity() {
             }
             if (checkPermission() && location == null) {
                 if (location == null) {
-                    val locationProvider = LocationProvider(this)
+                     locationProvider = LocationProvider(this)
                     locationProvider.fetchLatLong(this) { loc ->
                         location = Coordinates(loc.latitude, loc.longitude)
                         SharedPreferencesImpl(this).saveData("latitude", loc.latitude)
@@ -105,7 +106,7 @@ class MainActivity : ComponentActivity() {
         if (askedForOverlayPermission && Settings.canDrawOverlays(this)) {
             askedForOverlayPermission = false
             SharedPreferencesImpl(this).saveData(Constants.AZAN_NOTIFICATION_STATE, true)
-            val locationProvider = LocationProvider(this)
+             locationProvider = LocationProvider(this)
             locationProvider.fetchLatLong(this) { location ->
                 SharedPreferencesImpl(this).saveData("latitude", location.latitude)
                 SharedPreferencesImpl(this).saveData("longitude", location.longitude)
@@ -146,7 +147,12 @@ class MainActivity : ComponentActivity() {
 
             if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
                 Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
-                prefs.edit() { putInt("location_denial_count", 0) }
+                prefs.edit() { putInt("location_denial_count", 0)}
+                locationProvider.fetchLatLong(this@MainActivity) { location ->
+                    SharedPreferencesImpl(this@MainActivity).saveData("latitude", location.latitude)
+                    SharedPreferencesImpl(this@MainActivity).saveData("longitude", location.longitude)
+                    setAllAlarms()
+                }
             } else {
                 val currentCount = prefs.getInt("location_denial_count", 0)
                 prefs.edit() { putInt("location_denial_count", currentCount + 1) }
