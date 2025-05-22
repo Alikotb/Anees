@@ -30,7 +30,7 @@ object RadioStations {
         ),
         RadioStation(
             "محمد صديق المنشاوي",
-            "https://backup.qurango.net/radio/mohammed_siddiq_alminshawi",
+            "https://backup.qurango.net/radio/mohammed_siddiq_alminshawi_mojawwad",
             "أحد أشهر قراء مصر والعالم الإسلامي، تميز بأسلوب شجي وخاشع",
             R.drawable.menshawy
         ),
@@ -147,6 +147,12 @@ object RadioStations {
             "https://backup.qurango.net/radio/ahmed_altrabulsi",
             "قارئ كويتي، يتميز بصوت مؤثر وأداء مميز",
             R.drawable.trablsy
+        ),
+        RadioStation(
+            "إذاعة أنيس",
+            "https://backup.qurango.net/radio/mix",
+            "باقة مختارة من أجمل وأعذب تلاوات القراء",
+            R.drawable.logo_foreground
         ),
         RadioStation(
             "تلاوات خاشعة",
