@@ -60,4 +60,8 @@ sealed class ScreenRoute {
 
     @Serializable
     object  SettingsScreen : ScreenRoute()
+
+    //pray screens
+    @Serializable
+    object PrayScreen : ScreenRoute()
 }

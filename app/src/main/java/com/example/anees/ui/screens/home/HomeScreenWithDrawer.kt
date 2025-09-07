@@ -43,7 +43,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.batoulapps.adhan.Coordinates
 import com.example.anees.R
 import com.example.anees.ui.navigation.ScreenRoute
 import com.example.anees.ui.screens.home.component.HomeDrawer
@@ -53,7 +52,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreenWithDrawer(
-    location:String? = "",
+    location: String? = "",
     navToSebiha: () -> Unit = {},
     navToQibla: () -> Unit = {},
     navToQuran: () -> Unit = {},
@@ -65,7 +64,8 @@ fun HomeScreenWithDrawer(
     navToReciters: () -> Unit = {},
     navToNamesOfAllah: () -> Unit = {},
     navToSettings: () -> Unit = {},
-    navToHisnAlMuslim: () -> Unit = {}
+    navToHisnAlMuslim: () -> Unit = {},
+    navToPrayScreen: () -> Unit
 ) {
     val drawerState = remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
@@ -200,7 +200,8 @@ fun HomeScreenWithDrawer(
                             navToPrayer = navToPrayer,
                             navToReciters = navToReciters,
                             navToNamesOfAllah = navToNamesOfAllah,
-                            navToHisnAlMuslim = navToHisnAlMuslim
+                            navToHisnAlMuslim = navToHisnAlMuslim,
+                            navToPrayScreen = navToPrayScreen
                         )
                     }
                 }
