@@ -27,6 +27,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.example.anees.enums.RecitersEnum
@@ -96,4 +97,15 @@ fun SuraMp3Screen(reciter: RecitersEnum ,
             }
         }}
 
+}
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun PreviewSuraMp3Screen() {
+    SuraMp3Screen(
+        reciter = RecitersEnum.Abdelbaset,
+        onBackClick = {},
+        onSuraClicked = { reciter, index ->
+            println("Clicked sura $index by reciter $reciter")
+        }
+    )
 }
