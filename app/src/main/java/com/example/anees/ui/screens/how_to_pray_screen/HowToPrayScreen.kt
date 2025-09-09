@@ -22,10 +22,8 @@ import com.example.anees.ui.screens.radio.components.ScreenBackground
 @Preview(showBackground = true)
 @Composable
 fun HowToPrayScreen(modifier: Modifier = Modifier) {
-    val ctx = LocalContext.current
     val screenWidth = LocalConfiguration.current.screenWidthDp
     val screenHeight = LocalConfiguration.current.screenHeightDp
-    val aspectRatio = screenWidth.toFloat() / screenHeight.toFloat()
     ScreenBackground()
 
     Column(

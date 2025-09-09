@@ -301,7 +301,7 @@ fun SetUpNavHost(
         }
 
         composable<AzanSettingsPlayerScreen> {
-            var (prayEnum , time) = PrayerTimesHelper.getNextPrayer() ?: PrayEnum.ZUHR to 0L
+            var (prayEnum , time) = PrayerTimesHelper.getNextPrayer() ?: (PrayEnum.ZUHR to 0L)
             if (prayEnum == PrayEnum.FAJR){
                 prayEnum =  PrayerTimesHelper.getAllPrayers()[1].first
                 time = PrayerTimesHelper.getAllPrayers()[1].second
