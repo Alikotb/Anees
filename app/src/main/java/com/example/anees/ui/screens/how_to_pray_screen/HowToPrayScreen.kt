@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
@@ -22,8 +20,6 @@ import com.example.anees.ui.screens.radio.components.ScreenBackground
 @Preview(showBackground = true)
 @Composable
 fun HowToPrayScreen(modifier: Modifier = Modifier) {
-    val screenWidth = LocalConfiguration.current.screenWidthDp
-    val screenHeight = LocalConfiguration.current.screenHeightDp
     ScreenBackground()
 
     Column(

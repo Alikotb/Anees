@@ -44,7 +44,7 @@ fun HowToPrayChips(onStateChange:(String)-> Unit={}) {
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         list.forEach {
-            var isSelected = it == selectedOption
+            val isSelected = it == selectedOption
             val chipColor = if (isSelected) Color(0xEB803F0B) else Color.White
             FilterChip(
                 selected = isSelected,

@@ -291,7 +291,7 @@ fun SetUpNavHost(
             }
         }
         composable<AzanPlayerScreen> {
-            val (prayEnum , time) = PrayerTimesHelper.getNextPrayer() ?: PrayEnum.FAJR to 0L
+            val (prayEnum , time) = PrayerTimesHelper.getNextPrayer() ?: (PrayEnum.FAJR to 0L)
             AzanScreen(
                 prayEnum = prayEnum,
                 prayerTime = time.toArabicTime().convertNumbersToArabic(),
