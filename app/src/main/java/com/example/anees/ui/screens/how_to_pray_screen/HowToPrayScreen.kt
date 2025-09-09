@@ -1,7 +1,9 @@
-package com.example.anees.ui.screens.pray
+package com.example.anees.ui.screens.how_to_pray_screen
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -13,7 +15,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.example.anees.ui.screens.hadith.components.ScreenTitle
-import com.example.anees.ui.screens.pray.component.HowToPrayChips
+import com.example.anees.ui.screens.how_to_pray_screen.component.HowToPrayCard
+import com.example.anees.ui.screens.how_to_pray_screen.component.HowToPrayChips
 import com.example.anees.ui.screens.radio.components.ScreenBackground
 
 @Preview(showBackground = true)
@@ -36,6 +39,8 @@ fun HowToPrayScreen(modifier: Modifier = Modifier) {
         }
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
             HowToPrayChips()
+            Spacer(Modifier.height(8.dp))
+            HowToPrayCard(modifier = modifier.padding(horizontal = 8.dp))
         }
 
     }

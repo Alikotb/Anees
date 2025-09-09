@@ -1,4 +1,4 @@
-package com.example.anees.ui.screens.pray.component
+package com.example.anees.ui.screens.how_to_pray_screen.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.horizontalScroll

@@ -34,7 +34,7 @@ import com.example.anees.ui.screens.azkar.screens.AdhkarScreen
 import com.example.anees.ui.screens.hisn_almuslim.HisnAlMuslimScreen
 import com.example.anees.ui.screens.home.HomeScreenWithDrawer
 import com.example.anees.ui.screens.names_of_allah.NamesOfAllahScreen
-import com.example.anees.ui.screens.pray.HowToPrayScreen
+import com.example.anees.ui.screens.how_to_pray_screen.HowToPrayScreen
 import com.example.anees.ui.screens.settings.SettingsScreen
 import com.example.anees.ui.screens.tafsir.screens.TafsirDetailsScreen
 import com.example.anees.ui.screens.tafsir.screens.TafsirScreen
