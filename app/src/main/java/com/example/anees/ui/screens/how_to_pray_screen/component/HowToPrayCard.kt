@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.anees.R
 import com.example.anees.ui.screens.how_to_pray_screen.model.HowToPrayPojo
+import com.example.anees.utils.extensions.convertNumbersToArabic
 
 @Composable
 fun HowToPrayCard(modifier: Modifier = Modifier, data: HowToPrayPojo,onBackClick:()->Unit,onNextClick:()->Unit) {
@@ -89,7 +90,7 @@ fun HowToPrayCard(modifier: Modifier = Modifier, data: HowToPrayPojo,onBackClick
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        data.indexOfObj.toString(),
+                        data.indexOfObj.toString().convertNumbersToArabic(),
                         color = Color.White,
                         style = TextStyle(fontSize = 22.sp, fontWeight = FontWeight.Bold)
                     )

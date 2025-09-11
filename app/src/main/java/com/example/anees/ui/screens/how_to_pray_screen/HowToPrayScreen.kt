@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 
 @Preview(showBackground = true)
 @Composable
-fun HowToPrayScreen(modifier: Modifier = Modifier) {
+fun HowToPrayScreen(modifier: Modifier = Modifier,navToHome : () -> Unit = {}) {
     val list = remember { mutableStateOf(wodoaList) }
     val pagerState = rememberPagerState(pageCount = { list.value.size })
     val coroutineScope = rememberCoroutineScope()
@@ -44,7 +44,7 @@ fun HowToPrayScreen(modifier: Modifier = Modifier) {
     ) {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             ScreenTitle(title = "صفة الصلاة الصحيحة", onBackClick = {
-
+                navToHome()
             }, size = 24)
         }
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {

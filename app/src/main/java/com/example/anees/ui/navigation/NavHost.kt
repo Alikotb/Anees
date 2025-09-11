@@ -207,7 +207,9 @@ fun SetUpNavHost(
         }
 
         composable<ScreenRoute.PrayScreen> {
-            HowToPrayScreen()
+            HowToPrayScreen {
+                navController.navigateUp()
+            }
         }
         composable<ScreenRoute.PrayerTimesScreen> {
             PrayerScreen(

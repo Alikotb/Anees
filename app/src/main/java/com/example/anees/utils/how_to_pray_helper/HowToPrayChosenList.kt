@@ -11,8 +11,8 @@ fun getHowToPrayChosenList(chosenIndex: String): List<HowToPrayDto> {
         "صلاة الاستخارة"-> istikharaPrayerList
         "صلاة الاستسقاء" -> rainPrayerList
         "صلاة العيد" -> eidPrayerList
-        "صلاة الخوف" -> emptyList()
-        "صلاة الكسوف / الخسوف" -> emptyList()
+        "صلاة الخوف" ->fearPrayerList
+        "صلاة الكسوف / الخسوف" -> eclipsePrayerList
         else -> emptyList()
     }
 }
