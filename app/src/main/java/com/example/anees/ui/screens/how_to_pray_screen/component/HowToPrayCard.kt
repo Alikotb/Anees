@@ -161,7 +161,7 @@ fun HowToPrayCard(modifier: Modifier = Modifier, data: HowToPrayPojo,onBackClick
             }
 
             Text(
-                data.description,
+                data.description.convertNumbersToArabic(),
                 color = Color.Black,
                 modifier = Modifier
                     .height((screenHeight * 0.3f))
