@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -38,21 +39,20 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.anees.R
+import com.example.anees.ui.screens.how_to_pray_screen.model.HowToPrayPojo
 
-@Preview(showBackground = true)
 @Composable
-fun HowToPrayCard(modifier: Modifier = Modifier) {
+fun HowToPrayCard(modifier: Modifier = Modifier, data: HowToPrayPojo,onBackClick:()->Unit,onNextClick:()->Unit) {
 
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
 
     Card(
         modifier = modifier
-            .fillMaxSize()
+            .width(LocalConfiguration.current.screenWidthDp.dp * 0.95f)
             .padding(horizontal = 8.dp, vertical = 4.dp)
             .border(2.dp, Color(0xEB803F0B), RoundedCornerShape(32.dp)),
         shape = RoundedCornerShape(32.dp),
@@ -63,14 +63,16 @@ fun HowToPrayCard(modifier: Modifier = Modifier) {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .height((screenHeight * 0.5f))
+                    .height((screenHeight * 0.48f))
                     .fillMaxWidth()
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.p_07),
+                    painter = painterResource(id = data.imageResId ),
                     contentDescription = null,
                     contentScale = ContentScale.FillBounds,
-                    modifier = Modifier.fillMaxSize().padding(bottom = 32.dp)
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(bottom = 32.dp)
                 )
 
                 Box(
@@ -87,7 +89,7 @@ fun HowToPrayCard(modifier: Modifier = Modifier) {
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        "1",
+                        data.indexOfObj.toString(),
                         color = Color.White,
                         style = TextStyle(fontSize = 22.sp, fontWeight = FontWeight.Bold)
                     )
@@ -101,7 +103,7 @@ fun HowToPrayCard(modifier: Modifier = Modifier) {
                         .padding(4.dp)
                 ) {
                     Text(
-                        "السجود الثاني",
+                        data.title ,
                         color = Color.Black,
                         style = TextStyle(
                             fontSize = 24.sp,
@@ -118,49 +120,50 @@ fun HowToPrayCard(modifier: Modifier = Modifier) {
                         .padding(12.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    IconButton(
-                        onClick = { },
-                        modifier = Modifier
-                            .background(Color(0x66000000), shape = CircleShape)
-                            .size(48.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
-                            tint = Color.White
-                        )
+                    if (!data.isFirst) {
+                        IconButton(
+                            onClick = {
+                                onBackClick()
+                            },
+                            modifier = Modifier
+                                .background(Color(0x66000000), shape = CircleShape)
+                                .size(48.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Back",
+                                tint = Color.White
+                            )
+                        }
+                    }else {
+                        Box(Modifier.size(48.dp)) {}
                     }
-
-                    IconButton(
-                        onClick = { },
-                        modifier = Modifier
-                            .background(Color(0x66000000), shape = CircleShape)
-                            .size(48.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                            contentDescription = "Next",
-                            tint = Color.White
-                        )
+                    if (!data.isLast) {
+                        IconButton(
+                            onClick = {
+                                onNextClick()
+                            },
+                            modifier = Modifier
+                                .background(Color(0x66000000), shape = CircleShape)
+                                .size(48.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                                contentDescription = "Next",
+                                tint = Color.White
+                            )
+                        }
+                    }else {
+                        Box(Modifier.size(48.dp)) {}
                     }
                 }
             }
 
             Text(
-                "ثم كان-صلى الله عليه وسلم- يجلس للتشهد بعد الفراغ من الر كعة الثانية ، فإذا كانت الصلاة ركعتين كالصبح جلس مفترشا كما كان يجلس بين السجدتين وكذلك «يجلس في التشهد الأول»(.) من الثلاثية أو الرباعية  \n" +
-                        "فإذا جلست في وسط الصلاة فاطمئن ، وافترش فخذك اليسرى ثم تشهد\n" +
-                        "و كان إذا قعد في التشهد؛ وضع كفه اليمنى عل فخذه ( وفي رواية\n" +
-                        "ركبته ) اليمنى ، ووضع كفه اليسرى على فخذه ( وفي رواية: ركبته ) اليسرى باسطها عليها \n" +
-                        "و كان يضع حد مرفقه الأيمن عل فخذه اليمنى\n" +
-                        " ونهى رجلا وهو جالس معتمد عل يده اليسرى في الصلاة فقال( إنها صلاة اليهود)\n" +
-                        "وكان يبسط كفه اليسرى عل ركبته اليسرى ، ويقبض أصابع كفه اليمنى كلها ، ويشير إصبعه التي تلي الابهام إلى القبلة، ويرمي ببصره إليها\n" +
-                        "و كان إذا أشار بإصبعه وضع إبهامه عل إصبعه الوسطى وتارة كان يحلق بهما حلقة \n" +
-                        "و كان يرفع إصبعه يحركها يدعو بها \n" +
-                        "\n" +
-                        "صيغة التشهد: {التَّحِيَّاتُ الطَّيِّبَاتُ الصَّلَوَاتُ لِلَّهِ السَّلَامُ عَلَيْكَ أيُّها النبيُّ ورَحْمَةُ اللهِ وبَرَكَاتُهُ، السَّلَامُ عَلَيْنَا وعلَى عِبَادِ اللهِ الصَّالِحِينَ، أشْهَدُ أنْ لا إلَهَ إلَّا اللَّهُ وأَشْهَدُ أنَّ مُحَمَّدًا عَبْدُهُ ورَسولُهُ}",
-
+                data.description,
                 color = Color.Black,
                 modifier = Modifier
+                    .height((screenHeight * 0.3f))
                     .background(Color(0xEBE7D3BB))
                     .padding(horizontal = 16.dp)
                     .padding(top = 4.dp, bottom = 12.dp)
