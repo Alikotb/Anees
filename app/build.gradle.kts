@@ -119,5 +119,6 @@ dependencies {
     implementation ("androidx.media3:media3-ui:1.3.1")
     implementation ("androidx.media:media:1.6.0")
 
+    implementation ("io.coil-kt:coil-compose:2.7.0")
 
 }

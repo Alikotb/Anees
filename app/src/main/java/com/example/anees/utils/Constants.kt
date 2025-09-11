@@ -11,7 +11,7 @@ object Constants {
     const val API_Tafsir_ = "https://quranenc.com/"
     const val REQUEST_LOCATION_CODE = 111
 
-
+    const val RECITERS_IMAGES_URL = "https://raw.githubusercontent.com/Alikotb/Anees_Images/refs/heads/main/Reciters/"
 
     //PDF Quran
     const val CURRENT_PAGE_INDEX="CURRENT_PAGE_INDEX"

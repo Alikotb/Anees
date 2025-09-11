@@ -1,8 +1,11 @@
 package com.example.anees.enums
 
-import com.example.anees.R
+import com.example.anees.utils.Constants
 
-enum class Reciters(val reciterName: String, val image: Int = R.drawable.default_person) {
+enum class Reciters(
+    val reciterName: String,
+    val proirty: Boolean = false
+) {
     Ibrahim_elAkhdar("إبراهيم الأخضر"),
     Akram_Alalaqmi("أكرم العلاقمي"),
     Maher_Almuaiqly("ماهر المعيقلي"),
@@ -14,7 +17,7 @@ enum class Reciters(val reciterName: String, val image: Int = R.drawable.default
     Mohamed_Seddik_Almenshawy("محمد صديق المنشاوي"),
     Mohamed_Abdelkarim("محمد عبدالكريم"),
     Mohamed_Abdelhakim_Saeed("محمد عبدالحكيم سعيد العبدالله"),
-    Mahmoud_Khalil_Alhusary("محمود خليل الحصري"),
+    Mahmoud_Khalil_Alhusary("محمود خليل الحصري" , proirty = true),
     Idris_Abkar("إدريس أبكر"),
     Mahmoud_Ali_Albanna("محمود علي البنا"),
     Meshary_Alafasy("مشاري العفاسي"),
@@ -99,7 +102,7 @@ enum class Reciters(val reciterName: String, val image: Int = R.drawable.default
     MalAllah_Abdulrahman("مال الله عبدالرحمن الجابر"),
     Salman_Alsedeq("سلمان الصديق"),
     Hassan_Saleh("حسن صالح"),
-    Abdurrahman_AlShehat("عبدالرحمن الشحات"),
+    Abdurrahman_AlShehat("ر"),
     Saleh_AlQureshi("صالح القريشي"),
     Ibrahim_AlAseeri("إبراهيم العسيري"),
     Saad_AlGhamdi("سعد الغامدي"),
@@ -157,8 +160,10 @@ enum class Reciters(val reciterName: String, val image: Int = R.drawable.default
     Waleed_Alnaeehi("وليد النائحي"),
     Yasser_AlDosary("ياسر الدوسري"),
     Yasser_AlQurashi("ياسر القرشي"),
-    Yasser_AlMazroui("ياسر المزروعي "),
+    Yasser_AlMazroui("ياسر المزروعي"),
     Yehia_Hawwa("يحيى حوا"),
     Yousif_AlShweay("يوسف الشويعي"),
     Abdullah_Abdal("عبدالله عبدل");
+
+    val imageUrl = "${Constants.RECITERS_IMAGES_URL}$name.jpg"
 }
