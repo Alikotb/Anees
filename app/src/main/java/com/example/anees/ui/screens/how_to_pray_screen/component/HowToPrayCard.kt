@@ -22,6 +22,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
@@ -41,6 +42,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.SubcomposeAsyncImage
 import com.example.anees.R
 import com.example.anees.ui.screens.how_to_pray_screen.model.HowToPrayPojo
 import com.example.anees.utils.extensions.convertNumbersToArabic
@@ -67,15 +69,36 @@ fun HowToPrayCard(modifier: Modifier = Modifier, data: HowToPrayPojo,onBackClick
                     .height((screenHeight * 0.48f))
                     .fillMaxWidth()
             ) {
-                Image(
-                    painter = painterResource(id = data.imageResId ),
+                SubcomposeAsyncImage(
+                    model = data.image,
                     contentDescription = null,
                     contentScale = ContentScale.FillBounds,
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(bottom = 32.dp)
+                        .padding(bottom = 32.dp),
+                    loading = {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator(
+                                color = Color.Black,
+                                strokeWidth = 2.dp,
+                                modifier = Modifier.size(48.dp)
+                            )
+                        }
+                    },
+                    error = {
+                        Image(
+                            painter = painterResource(id = R.drawable.anees),
+                            contentDescription = null,
+                            contentScale = ContentScale.FillBounds,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(bottom = 32.dp)
+                        )
+                    }
                 )
-
                 Box(
                     modifier = Modifier
                         .size(52.dp)
@@ -159,7 +182,6 @@ fun HowToPrayCard(modifier: Modifier = Modifier, data: HowToPrayPojo,onBackClick
                     }
                 }
             }
-
             Text(
                 data.description.convertNumbersToArabic(),
                 color = Color.Black,
@@ -174,7 +196,6 @@ fun HowToPrayCard(modifier: Modifier = Modifier, data: HowToPrayPojo,onBackClick
                 style = TextStyle(fontSize = 20.sp, fontFamily = FontFamily(Font(R.font.othmani)))
             )
         }
-
     }
 }
 

@@ -6,7 +6,7 @@ fun HowToPrayDto.toHowToPrayPojo(index: Int,isLast:Boolean): HowToPrayPojo {
     return HowToPrayPojo(
         title = this.title,
         description = this.description,
-        imageResId = this.imageResId,
+        image = this.image,
         indexOfObj = index,
         isFirst = index==1,
         isLast = isLast

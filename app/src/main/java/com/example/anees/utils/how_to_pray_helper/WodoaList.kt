@@ -15,59 +15,59 @@ val wodoaList = listOf(
                 "6- الموالاة بينها. (أي متابعة غسل الأعضاء بلا فاصل زمني طويل بينها).\n" +
                 "\n" +
                 "سنن الوضوء هي: أولاً: السواك، ومحله عند المضمضة؛ ليحصل به والمضمضة تنظيف الفم لاستقبال العبادة والتهيؤ لتلاوة القرآن ومناجاة الله عزَ وجل. ثانياً: غسل الكفين ثلاثا في أول الوضوء قبل غسل الوجه؛ لورود الأحاديث به، ولأن اليدين آلة نقل الماء إلى الأعضاء؛ ففي غسلهما احتياط لجميع الوضوء. ثالثا: البداءة بالمضمضة والاستنشاق قبل غسل الوجه؛ لورود البداءة بهما في الأحاديث، ويبالغ فيها إن كان غير صائم.",
-        imageResId = R.drawable.w_0
+        image = "https://github.com/Alikotb/Anees_Images/blob/main/%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1/w_0.png?raw=true"
     ),
     HowToPrayDto(
         title = "النية",
         description = "فقد ثبت عن النبي ﷺ ما يدل على أنه كان في أول الوضوء يغسل كفيه ثلاثا مع نية الوضوء، ويسمي؛ لأنه المشروع، وروي عنه ﷺ من طرق كثيرة أنه قال:{لا وضوء لمن لم يذكر اسم الله عليه}." +
                 "\n" +
                 "فيشرع للمتوضئ أن يسمي الله في أول الوضوء، وقد أوجب ذلك بعض أهل العلم مع الذكر، فإن نسي أو جهل فلا حرج",
-        imageResId = R.drawable.w_01
+        image = "https://github.com/Alikotb/Anees_Images/blob/main/%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1/w_01.png?raw=true"
     ),
     HowToPrayDto(
         title = "المضمضة",
         description = "ثم يتمضمض ويستنشق ثلاث مرات \n" +
                 "\n" +
                 "إن اقتصر على مرة أو مرتين فلا بأس؛ لأن النبي ﷺ توضأ مرة مرة، ومرتين مرتين، وثلاثا ثلاثا، وربما غسل بعض أعضائه مرتين وبعضها ثلاثا، وذلك يدل على أن الأمر فيه سعة، والحمد لله، لكن التثليث أفضل",
-        imageResId = R.drawable.w_02
+        image = "https://github.com/Alikotb/Anees_Images/blob/main/%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1/w_02.png?raw=true"
     ),
     HowToPrayDto(
         title ="الإستنشاق",
         description = "ثم يتمضمض ويستنشق ثلاث مرات \n" +
                 "\n" +
                 "إن اقتصر على مرة أو مرتين فلا بأس؛ لأن النبي ﷺ توضأ مرة مرة، ومرتين مرتين، وثلاثا ثلاثا، وربما غسل بعض أعضائه مرتين وبعضها ثلاثا، وذلك يدل على أن الأمر فيه سعة، والحمد لله، لكن التثليث أفضل",
-        imageResId = R.drawable.w_03
+        image = "https://github.com/Alikotb/Anees_Images/blob/main/%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1/w_03.png?raw=true"
     ),
     HowToPrayDto(
         title = "غسل الوجه",
         description = "ويغسل وجهه ثلاثا",
-        imageResId = R.drawable.w_04
+        image = "https://github.com/Alikotb/Anees_Images/blob/main/%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1/w_04.png?raw=true"
     ),
     HowToPrayDto(
         title = "غسل اليدين مع المرفقين",
         description = "ثم يغسل يديه مع المرفقين ثلاثا، يبدأ باليمنى ثم اليسرى",
-        imageResId = R.drawable.w_05
+        image = "https://github.com/Alikotb/Anees_Images/blob/main/%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1/w_05.png?raw=true"
     ),
     HowToPrayDto(
         title = "المسح على الرأس",
         description = "ثم يمسح رأسه وأذنيه مرة واحدة",
-        imageResId = R.drawable.w_06
+        image = "https://github.com/Alikotb/Anees_Images/blob/main/%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1/w_06.png?raw=true"
     ),
     HowToPrayDto(
         title = "المسح على الأذن",
         description = "ثم يمسح رأسه وأذنيه مرة واحدة",
-        imageResId = R.drawable.w_07
+        image = "https://github.com/Alikotb/Anees_Images/blob/main/%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1/w_07.png?raw=true"
     ),
     HowToPrayDto(
         title = "غسل القدمين",
         description = "يغسل رجليه مع الكعبين ثلاث مرات، يبدأ باليمين",
-        imageResId = R.drawable.w_08
+        image = "https://github.com/Alikotb/Anees_Images/blob/main/%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1/w_08.png?raw=true"
     ),
     HowToPrayDto(
         title = "الختام",
         description = "وإن اقتصر على مرة أو مرتين فلا بأس؛ لأن النبي ﷺ توضأ مرة مرة، ومرتين مرتين، وثلاثا ثلاثا، وربما غسل بعض أعضائه مرتين وبعضها ثلاثا، وذلك يدل على أن الأمر فيه سعة، والحمد لله، لكن التثليث أفضل، وهذا إذا لم يحصل بول أو غائط، فإن حصل شيء من ذلك فإنه يبدأ بالاستنجاء ثم يتوضأ الوضوء المذكور.\n" +
                 "\n" +
                 "أما الريح، والنوم، ومس الفرج، وأكل لحم الإبل، فكل ذلك لا يشرع منه الاستنجاء، بل يكفي الوضوء الشرعي الذي ذكرناه، وبعد الوضوء يشرع للمؤمن والمؤمنة أن يقولا: أشهد أن لا إله إلا الله وحده لا شريك له، وأشهد أن محمدا عبده ورسوله، اللهم اجعلني من التوابين، واجعلني من المتطهرين لثبوت ذلك عن النبي ﷺ.",
-        imageResId = R.drawable.w_08
+        image = "https://github.com/Alikotb/Anees_Images/blob/main/%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1/w_08.png?raw=true"
     ),
 )
