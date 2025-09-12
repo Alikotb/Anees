@@ -4,3 +4,6 @@ import com.example.anees.data.model.RecitationModel
 import com.example.anees.enums.Reciters
 
 val warshList : List<RecitationModel> = emptyList()
+val  hafsAnAsimList:List<RecitationModel> = listOf(
+
+)
