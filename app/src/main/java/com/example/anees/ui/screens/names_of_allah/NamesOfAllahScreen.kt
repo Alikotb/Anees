@@ -43,26 +43,6 @@ fun NamesOfAllahScreen(navToHome: () -> Unit) {
 
     val ctx = LocalContext.current
     val namesList= getAllNames(ctx)
-    var isPlaying by remember { mutableStateOf(false) }
-
-
-    val mediaPlayer = remember {
-        val assetFileDescriptor = ctx.assets.openFd("name.mp3")
-        MediaPlayer().apply {
-            setDataSource(assetFileDescriptor.fileDescriptor, assetFileDescriptor.startOffset, assetFileDescriptor.length)
-            prepare()
-            setOnCompletionListener {
-                isPlaying = false
-            }
-        }
-    }
-
-    DisposableEffect(Unit) {
-        onDispose {
-            if (mediaPlayer.isPlaying) mediaPlayer.stop()
-            mediaPlayer.release()
-        }
-    }
 
     ScreenBackground()
     Column(
@@ -86,19 +66,7 @@ fun NamesOfAllahScreen(navToHome: () -> Unit) {
                 ){
                     Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                 }
-                PlaybackButton(size = 36, iconResId = if (isPlaying) R.drawable.play else R.drawable.pause) {
-                    when {
-                        isPlaying -> {
-                            mediaPlayer.pause()
-                            isPlaying = false
-                        }
-                        else -> {
-                            mediaPlayer.start()
-                            isPlaying = true
-                        }
 
-                    }
-                }
 
                 Text(
                     text =  "أسماء الله الحسنى",

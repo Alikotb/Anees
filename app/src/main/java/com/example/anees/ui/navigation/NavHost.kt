@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.batoulapps.adhan.Coordinates
 import com.example.anees.ui.navigation.ScreenRoute.AzkarDetailsScreen
 import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
 import com.example.anees.ui.screens.hadith.HadithAuthorsScreen
@@ -35,6 +34,7 @@ import com.example.anees.ui.screens.azkar.screens.AdhkarScreen
 import com.example.anees.ui.screens.hisn_almuslim.HisnAlMuslimScreen
 import com.example.anees.ui.screens.home.HomeScreenWithDrawer
 import com.example.anees.ui.screens.names_of_allah.NamesOfAllahScreen
+import com.example.anees.ui.screens.how_to_pray_screen.HowToPrayScreen
 import com.example.anees.ui.screens.settings.SettingsScreen
 import com.example.anees.ui.screens.tafsir.screens.TafsirDetailsScreen
 import com.example.anees.ui.screens.tafsir.screens.TafsirScreen
@@ -100,6 +100,9 @@ fun SetUpNavHost(
                 },
                 navToSettings = {
                     navController.navigate(ScreenRoute.SettingsScreen)
+                },
+                navToPrayScreen = {
+                    navController.navigate(ScreenRoute.PrayScreen)
                 }
             )
         }
@@ -202,6 +205,12 @@ fun SetUpNavHost(
         composable<ScreenRoute.KhatmQuranDuaScreen> {
             KhatmQuranDuaScreen()
         }
+
+        composable<ScreenRoute.PrayScreen> {
+            HowToPrayScreen {
+                navController.navigateUp()
+            }
+        }
         composable<ScreenRoute.PrayerTimesScreen> {
             PrayerScreen(
                 location = location,
@@ -284,7 +293,7 @@ fun SetUpNavHost(
             }
         }
         composable<AzanPlayerScreen> {
-            val (prayEnum , time) = PrayerTimesHelper.getNextPrayer() ?: PrayEnum.FAJR to 0L
+            val (prayEnum , time) = PrayerTimesHelper.getNextPrayer() ?: (PrayEnum.FAJR to 0L)
             AzanScreen(
                 prayEnum = prayEnum,
                 prayerTime = time.toArabicTime().convertNumbersToArabic(),
@@ -294,7 +303,7 @@ fun SetUpNavHost(
         }
 
         composable<AzanSettingsPlayerScreen> {
-            var (prayEnum , time) = PrayerTimesHelper.getNextPrayer() ?: PrayEnum.ZUHR to 0L
+            var (prayEnum , time) = PrayerTimesHelper.getNextPrayer() ?: (PrayEnum.ZUHR to 0L)
             if (prayEnum == PrayEnum.FAJR){
                 prayEnum =  PrayerTimesHelper.getAllPrayers()[1].first
                 time = PrayerTimesHelper.getAllPrayers()[1].second
