@@ -21,6 +21,7 @@ enum class Recitations(
     AL_DURI_AN_AL_KISAI("الدوري عن الكسائي"),
     AL_DURI_AN_ABU_AMR("الدوري عن أبي عمرو"),
     SHUBA_AN_ASIM("شعبة عن عاصم"),
+    ABN_ZAKOON("ابن ذكوان عن ابن عامر"),
     WARSH_AZRAQ("ورش عن نافع من طريق الأزرق"),
     MUSHAF_MUALIM("المصحف المعلم"),//المصحف المرتل
     MUSHAF_MUJAWAD("المصحف المجود");
