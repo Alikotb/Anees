@@ -34,6 +34,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -54,6 +55,7 @@ import com.example.anees.R
 import com.example.anees.ui.screens.how_to_pray_screen.model.HowToPrayPojo
 import com.example.anees.ui.screens.radio.components.CustomSnackbar
 import com.example.anees.utils.extensions.convertNumbersToArabic
+import androidx.core.net.toUri
 
 
 @Composable
@@ -138,15 +140,11 @@ fun HowToPrayCard(
 
                 Box(
                     modifier = Modifier
-                        .size(64.dp)
+                        .size(70.dp)
                         .align(Alignment.TopEnd)
                         .padding(12.dp)
-                        .background(
-                            brush = Brush.radialGradient(
-                                colors = listOf(Color(0xFF803F0B), Color(0xFFB55C28))
-                            ),
-                            shape = CircleShape
-                        ),
+                        .clip(CircleShape)
+                     ,
                     contentAlignment = Alignment.Center
                 ) {
                     IconButton(
@@ -157,13 +155,15 @@ fun HowToPrayCard(
                             }
                             data.youtubeLink.let {
                                 snackbarMessage.value = "الانتقال الى اليوتيوب"
-                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
+                                val intent = Intent(Intent.ACTION_VIEW, it?.toUri())
                                 context.startActivity(intent)
                             }
                         },
                         modifier = Modifier
                             .background(Color(0x66FFFFFF), shape = CircleShape)
                             .size(64.dp)
+                            .padding(4.dp)
+
                     ) {
                         Icon(
                             imageVector = ImageVector.vectorResource(id = R.drawable.icon_youtube),
