@@ -102,7 +102,7 @@ enum class Reciters(
     MalAllah_Abdulrahman("مال الله عبدالرحمن الجابر"),
     Salman_Alsedeq("سلمان الصديق"),
     Hassan_Saleh("حسن صالح"),
-    Abdurrahman_AlShehat("ر"),
+    Abdurrahman_AlShehat("عبدالرحمن الشحات"),
     Saleh_AlQureshi("صالح القريشي"),
     Ibrahim_AlAseeri("إبراهيم العسيري"),
     Saad_AlGhamdi("سعد الغامدي"),
