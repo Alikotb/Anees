@@ -146,8 +146,4 @@ val hafsAnAsimList: List<RecitationModel> = listOf(
     RecitationModel(Reciters.Yousif_AlShweay,"https://server9.mp3quran.net/yousef/"),
     RecitationModel(Reciters.Abdullah_Abdal,"https://server16.mp3quran.net/a_abdl/Rewayat-Hafs-A-n-Assem/"),
 
-
-
-
-
 )
