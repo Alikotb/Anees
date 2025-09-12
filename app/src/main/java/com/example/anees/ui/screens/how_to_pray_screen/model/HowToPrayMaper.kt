@@ -7,6 +7,7 @@ fun HowToPrayDto.toHowToPrayPojo(index: Int,isLast:Boolean): HowToPrayPojo {
         title = this.title,
         description = this.description,
         image = this.image,
+        youtubeLink = "",
         indexOfObj = index,
         isFirst = index==1,
         isLast = isLast

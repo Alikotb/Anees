@@ -1,5 +1,7 @@
 package com.example.anees.ui.screens.how_to_pray_screen.component
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -28,13 +30,18 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -45,13 +52,23 @@ import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
 import com.example.anees.R
 import com.example.anees.ui.screens.how_to_pray_screen.model.HowToPrayPojo
+import com.example.anees.ui.screens.radio.components.CustomSnackbar
 import com.example.anees.utils.extensions.convertNumbersToArabic
 
+
 @Composable
-fun HowToPrayCard(modifier: Modifier = Modifier, data: HowToPrayPojo,onBackClick:()->Unit,onNextClick:()->Unit) {
+fun HowToPrayCard(
+    modifier: Modifier = Modifier,
+    data: HowToPrayPojo,
+    onBackClick: () -> Unit,
+    onNextClick: () -> Unit
+) {
 
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
+    val context = LocalContext.current
+    val snackbarMessage = remember { mutableStateOf<String?>(null) }
+
 
     Card(
         modifier = modifier
@@ -118,6 +135,44 @@ fun HowToPrayCard(modifier: Modifier = Modifier, data: HowToPrayPojo,onBackClick
                         style = TextStyle(fontSize = 22.sp, fontWeight = FontWeight.Bold)
                     )
                 }
+
+                Box(
+                    modifier = Modifier
+                        .size(64.dp)
+                        .align(Alignment.TopEnd)
+                        .padding(12.dp)
+                        .background(
+                            brush = Brush.radialGradient(
+                                colors = listOf(Color(0xFF803F0B), Color(0xFFB55C28))
+                            ),
+                            shape = CircleShape
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    IconButton(
+                        onClick = {
+                            if (data.youtubeLink.isNullOrEmpty() || data.youtubeLink == "") {
+                                snackbarMessage.value = "لا يوجد رابط"
+                                return@IconButton
+                            }
+                            data.youtubeLink.let {
+                                snackbarMessage.value = "الانتقال الى اليوتيوب"
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
+                                context.startActivity(intent)
+                            }
+                        },
+                        modifier = Modifier
+                            .background(Color(0x66FFFFFF), shape = CircleShape)
+                            .size(64.dp)
+                    ) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.icon_youtube),
+                            contentDescription = "youtube link",
+                            tint = Color.Unspecified
+                        )
+                    }
+
+                }
                 Surface(
                     color = Color(0xAAFFFFFF).copy(alpha = 0.4f),
                     shape = RoundedCornerShape(16.dp),
@@ -127,12 +182,12 @@ fun HowToPrayCard(modifier: Modifier = Modifier, data: HowToPrayPojo,onBackClick
                         .padding(4.dp)
                 ) {
                     Text(
-                        data.title ,
+                        data.title,
                         color = Color.Black,
                         style = TextStyle(
                             fontSize = 24.sp,
                             fontFamily = FontFamily(Font(R.font.amiri)),
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
                         ),
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
@@ -159,7 +214,7 @@ fun HowToPrayCard(modifier: Modifier = Modifier, data: HowToPrayPojo,onBackClick
                                 tint = Color.White
                             )
                         }
-                    }else {
+                    } else {
                         Box(Modifier.size(48.dp)) {}
                     }
                     if (!data.isLast) {
@@ -177,8 +232,13 @@ fun HowToPrayCard(modifier: Modifier = Modifier, data: HowToPrayPojo,onBackClick
                                 tint = Color.White
                             )
                         }
-                    }else {
+                    } else {
                         Box(Modifier.size(48.dp)) {}
+                    }
+                }
+                snackbarMessage.value?.let {
+                    CustomSnackbar(message = it) {
+                        snackbarMessage.value = null
                     }
                 }
             }

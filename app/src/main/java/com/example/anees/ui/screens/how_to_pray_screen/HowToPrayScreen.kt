@@ -23,6 +23,7 @@ import com.example.anees.ui.screens.how_to_pray_screen.component.HowToPrayChips
 import com.example.anees.ui.screens.how_to_pray_screen.model.toHowToPrayPojo
 import com.example.anees.ui.screens.radio.components.ScreenBackground
 import com.example.anees.utils.how_to_pray_helper.getHowToPrayChosenList
+import com.example.anees.utils.how_to_pray_helper.getHowToPrayYoutubeLink
 import com.example.anees.utils.how_to_pray_helper.prayList
 import com.example.anees.utils.how_to_pray_helper.wodoaList
 import kotlinx.coroutines.launch
@@ -62,7 +63,9 @@ fun HowToPrayScreen(modifier: Modifier = Modifier,navToHome : () -> Unit = {}) {
                     data = list.value[page].toHowToPrayPojo(
                         page + 1,
                         isLast = page == list.value.size - 1
-                    ),
+                    ).apply {
+                        youtubeLink = getHowToPrayYoutubeLink(list.value[page].title)
+                    },
                     onBackClick = {
                         if (page > 0) {
                             coroutineScope.launch {

@@ -6,5 +6,6 @@ data class HowToPrayPojo(
     val image: String,
     val indexOfObj: Int,
     val isFirst: Boolean,
-    val isLast: Boolean
+    val isLast: Boolean,
+    var youtubeLink: String?,
 )
