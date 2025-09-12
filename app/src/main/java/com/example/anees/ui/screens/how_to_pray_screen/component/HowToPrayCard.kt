@@ -2,6 +2,7 @@ package com.example.anees.ui.screens.how_to_pray_screen.component
 
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -149,6 +150,7 @@ fun HowToPrayCard(
                 ) {
                     IconButton(
                         onClick = {
+                            Log.d("Alxi", "HowToPrayCard: ${data.youtubeLink}")
                             if (data.youtubeLink.isNullOrEmpty() || data.youtubeLink == "") {
                                 snackbarMessage.value = "لا يوجد رابط"
                                 return@IconButton

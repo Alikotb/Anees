@@ -165,13 +165,21 @@ fun HomeScreen(
                     )
 
                 }
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                ) {
+                    Spacer(modifier = Modifier.width(8.dp))
+                    ComponentCard(
+                        size = .45f,
+                        title = "كيف أصلي؟",
+                        onClick = navToPrayScreen,
+                        id = R.drawable.prayer_icon
+                    )
+                }
                 Spacer(modifier = Modifier.height(48.dp))
-                ComponentCard(
-                    size = .45f,
-                    title = "حصن المسلم",
-                    onClick = navToPrayScreen,
-                    id = R.drawable.hisen
-                )
             }
         }
     }

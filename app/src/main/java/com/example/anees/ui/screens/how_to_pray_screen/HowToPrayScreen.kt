@@ -32,6 +32,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun HowToPrayScreen(modifier: Modifier = Modifier,navToHome : () -> Unit = {}) {
     val list = remember { mutableStateOf(wodoaList) }
+    val youtubeLink = remember { mutableStateOf(getHowToPrayYoutubeLink("الوضوء" )) }
     val pagerState = rememberPagerState(pageCount = { list.value.size })
     val coroutineScope = rememberCoroutineScope()
 
@@ -51,6 +52,7 @@ fun HowToPrayScreen(modifier: Modifier = Modifier,navToHome : () -> Unit = {}) {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
             HowToPrayChips(){
                 list.value = getHowToPrayChosenList(it).toMutableList()
+                youtubeLink.value = getHowToPrayYoutubeLink(it)
                 coroutineScope.launch {
                     pagerState.scrollToPage(0)
                 }
@@ -63,9 +65,9 @@ fun HowToPrayScreen(modifier: Modifier = Modifier,navToHome : () -> Unit = {}) {
                     data = list.value[page].toHowToPrayPojo(
                         page + 1,
                         isLast = page == list.value.size - 1
-                    ).apply {
-                        youtubeLink = getHowToPrayYoutubeLink(list.value[page].title)
-                    },
+                        ,
+                        link = youtubeLink.value
+                    ),
                     onBackClick = {
                         if (page > 0) {
                             coroutineScope.launch {
