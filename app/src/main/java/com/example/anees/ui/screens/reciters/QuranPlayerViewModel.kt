@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RecitersViewModel @Inject constructor(private val context: Application) :
+class QuranPlayerViewModel @Inject constructor(private val context: Application) :
     AndroidViewModel(context) {
 
     private val _currentSuraIndex = MutableStateFlow(0)
@@ -59,7 +59,7 @@ class RecitersViewModel @Inject constructor(private val context: Application) :
         _recitationModel.value = recitationModel
         RadioServiceManager.startRadioService(
             context,
-            this@RecitersViewModel.recitationModel.value.url + suraUrls[index].second,
+            this@QuranPlayerViewModel.recitationModel.value.url + suraUrls[index].second,
             _recitationModel.value.url,
             _currentSuraIndex.value,
             _recitationModel.value.reciter.reciterName,

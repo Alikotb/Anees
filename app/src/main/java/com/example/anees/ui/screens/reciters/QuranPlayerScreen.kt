@@ -50,7 +50,7 @@ fun QuranPlayerScreen(
     initialSuraIndex: Int = 0,
     onBackClick: () -> Unit = {}
 ) {
-    val viewModel: RecitersViewModel = viewModel()
+    val viewModel: QuranPlayerViewModel = viewModel()
     val currentSura by viewModel.currentSura.collectAsStateWithLifecycle()
     val currentSuraTypeIcon by viewModel.currentSuraTypeIcon.collectAsStateWithLifecycle()
     val reciterUrl by viewModel.recitationModel.collectAsStateWithLifecycle()
@@ -86,8 +86,7 @@ fun QuranPlayerScreen(
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
         Box(modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp)
-            .padding(top = 24.dp)) {
+        ) {
             ScreenBackground()
             IconButton(
                 onClick = {
@@ -166,7 +165,7 @@ fun QuranPlayerScreen(
 
 @Composable
 fun Mp3Playback(
-    viewModel: RecitersViewModel
+    viewModel: QuranPlayerViewModel
 ) {
     val isPlaying by viewModel.isPlaying.collectAsStateWithLifecycle()
     val progress by viewModel.progress.collectAsStateWithLifecycle()

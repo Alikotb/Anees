@@ -74,13 +74,11 @@ fun RecitersScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
             RecitationsDropdownMenu { recitation ->
                 selectedRecitation = recitation
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
