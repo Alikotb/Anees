@@ -34,9 +34,6 @@ class RadioService : Service() {
         const val ACTION_NEXT = "action_next"
         const val ACTION_PREV = "action_prev"
         const val ACTION_CLOSE = "action_close"
-        const val CHANNEL_ID = "radio_channel"
-        const val NOTIFICATION_ID = 1
-
         const val ACTION_PLAYBACK_STATE = "com.example.anees.ACTION_PLAYBACK_STATE"
         const val ACTION_STATION_CHANGED = "com.example.anees.ACTION_STATION_CHANGED"
         const val EXTRA_IS_PLAYING = "extra_is_playing"
@@ -44,7 +41,6 @@ class RadioService : Service() {
     }
 
     private lateinit var audioManager: AudioManager
-    private var audioFocusRequest: AudioFocusRequest? = null
     private lateinit var mediaSession: MediaSessionCompat
     private lateinit var notificationManager: RadioNotificationManager
     private lateinit var audioFocusHelper: AudioFocusHelper
@@ -60,12 +56,26 @@ class RadioService : Service() {
         super.onCreate()
         RadioPlayer.initializePlayer(this)
 
-        audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
         mediaSession = MediaSessionCompat(this, "AneesRadioSession").apply {
             isActive = true
         }
         notificationManager = RadioNotificationManager(this, mediaSession)
-
+        audioFocusHelper = AudioFocusHelper(
+            context = this,
+            onFocusGain = {
+                RadioPlayer.play()
+                sendPlaybackStateBroadcast(true)
+            },
+            onFocusLoss = {
+                RadioPlayer.pause()
+                sendPlaybackStateBroadcast(false)
+            } ,
+            onDuck = {
+                RadioPlayer.getPlayer()?.volume = 0.3f
+            } ,
+        )
+        
         RadioPlayer.setListener(object : Player.Listener {
             override fun onIsPlayingChanged(isPlaying: Boolean) {
                 updateNotification()
@@ -80,7 +90,7 @@ class RadioService : Service() {
                 return START_NOT_STICKY
             }
             ACTION_PLAY -> {
-                if (requestAudioFocus()) {
+                if (audioFocusHelper.requestAudioFocus()) {
                     RadioPlayer.play()
                     sendPlaybackStateBroadcast(true)
                 }
@@ -118,12 +128,12 @@ class RadioService : Service() {
             }
         }
 
-        startForeground(NOTIFICATION_ID, buildNotification())
+        startForeground(RadioNotificationManager.NOTIFICATION_ID, buildNotification())
         return START_NOT_STICKY
     }
 
     private fun startPlayback(url: String) {
-        if (requestAudioFocus()) {
+        if (audioFocusHelper.requestAudioFocus()) {
             RadioPlayer.setMediaItem(url)
             RadioPlayer.play()
         }
@@ -162,7 +172,7 @@ class RadioService : Service() {
     private fun updateNotification() {
         val notification = buildNotification()
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(NOTIFICATION_ID, notification)
+        notificationManager.notify(RadioNotificationManager.NOTIFICATION_ID, notification)
     }
 
     private fun sendPlaybackStateBroadcast(isPlaying: Boolean) {
@@ -189,39 +199,11 @@ class RadioService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).cancel(NOTIFICATION_ID)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            audioFocusRequest?.let {
-                audioManager.abandonAudioFocusRequest(it)
-            }
-        } else {
-            audioManager.abandonAudioFocus(audioFocusChangeListener)
-        }
         RadioPlayer.release()
-        abandonAudioFocus()
+        audioFocusHelper.abandonAudioFocus()
         mediaSession.release()
         sendPlaybackStateBroadcast(false)
-
         sendBroadcast(Intent(ACTION_CLOSE))
     }
 
-    private val audioFocusChangeListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
-        when (focusChange) {
-            AudioManager.AUDIOFOCUS_GAIN -> {
-                RadioPlayer.play()
-                sendPlaybackStateBroadcast(true)
-            }
-            AudioManager.AUDIOFOCUS_LOSS -> {
-                RadioPlayer.pause()
-                sendPlaybackStateBroadcast(false)
-            }
-            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
-                RadioPlayer.pause()
-                sendPlaybackStateBroadcast(false)
-            }
-            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
-                RadioPlayer.getPlayer()?.volume = 0.3f
-            }
-        }
-    }
 }
