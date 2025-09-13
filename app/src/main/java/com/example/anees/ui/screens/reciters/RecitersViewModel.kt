@@ -4,13 +4,13 @@ import android.app.Application
 import android.content.Context
 import android.content.IntentFilter
 import android.os.Build
-import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.anees.enums.RecitersEnum
+import com.example.anees.data.model.RecitationModel
 import com.example.anees.receivers.RadioBroadcastReceiver
 import com.example.anees.services.RadioService
+import com.example.anees.utils.hafsAnAsimList
 import com.example.anees.utils.media_helper.RadioPlayer
 import com.example.anees.utils.media_helper.RadioServiceManager
 import com.example.anees.utils.pdf_helper.SuraIndexes
@@ -23,13 +23,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RecitersViewModel @Inject constructor(private val context: Application) : AndroidViewModel(context) {
+class RecitersViewModel @Inject constructor(private val context: Application) :
+    AndroidViewModel(context) {
 
     private val _currentSuraIndex = MutableStateFlow(0)
     val currentSuraIndex = _currentSuraIndex.asStateFlow()
 
-    private val _reciterUrl = MutableStateFlow(RecitersEnum.Abdelbaset)
-    val reciterUrl = _reciterUrl.asStateFlow()
+    private val _recitationModel = MutableStateFlow<RecitationModel>(hafsAnAsimList.first())
+    val recitationModel = _recitationModel.asStateFlow()
 
     private val _currentSura = MutableStateFlow(SuraIndexes[0])
     val currentSura = _currentSura.asStateFlow()
@@ -51,12 +52,19 @@ class RecitersViewModel @Inject constructor(private val context: Application) : 
         setupBroadcastReceiver()
     }
 
-    fun setCurrentSura(index: Int, reciterUrl: RecitersEnum) {
+    fun setCurrentSura(index: Int, recitationModel: RecitationModel) {
         _currentSuraIndex.value = index
         _currentSura.value = SuraIndexes[index]
         _currentSuraTypeIcon.value = SuraIndexes[index].type
-        _reciterUrl.value = reciterUrl
-        RadioServiceManager.startRadioService(context, reciterUrl.url + suraUrls[index].second, _reciterUrl.value.url, _currentSuraIndex.value, _reciterUrl.value.reciter, false)
+        _recitationModel.value = recitationModel
+        RadioServiceManager.startRadioService(
+            context,
+            this@RecitersViewModel.recitationModel.value.url + suraUrls[index].second,
+            _recitationModel.value.url,
+            _currentSuraIndex.value,
+            _recitationModel.value.reciter.reciterName,
+            false
+        )
     }
 
     fun playPauseSura() {
@@ -89,7 +97,14 @@ class RecitersViewModel @Inject constructor(private val context: Application) : 
     }
 
     private fun startRadioService() {
-        RadioServiceManager.startRadioService(context, reciterUrl.value.url + suraUrls[_currentSuraIndex.value].second, reciterUrl.value.url, _currentSuraIndex.value,reciterUrl.value.reciter, false)
+        RadioServiceManager.startRadioService(
+            context,
+            recitationModel.value.url + suraUrls[_currentSuraIndex.value].second,
+            recitationModel.value.url,
+            _currentSuraIndex.value,
+            recitationModel.value.reciter.reciterName,
+            false
+        )
         _isPlaying.value = true
     }
 
@@ -135,7 +150,12 @@ class RecitersViewModel @Inject constructor(private val context: Application) : 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             context.registerReceiver(broadcastReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
         } else {
-            ContextCompat.registerReceiver(context, broadcastReceiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED)
+            ContextCompat.registerReceiver(
+                context,
+                broadcastReceiver,
+                filter,
+                ContextCompat.RECEIVER_NOT_EXPORTED
+            )
         }
     }
 

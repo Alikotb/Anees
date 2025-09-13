@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import com.batoulapps.adhan.Coordinates
 import com.example.anees.ui.navigation.ScreenRoute.AzkarDetailsScreen
 import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
+import com.example.anees.data.model.RecitationModel
 import com.example.anees.ui.screens.hadith.HadithAuthorsScreen
 import com.example.anees.ui.screens.hadith.HadithScreen
 import com.example.anees.ui.screens.hadith.HadithSectionsScreen
@@ -246,32 +247,37 @@ fun SetUpNavHost(
         composable<ScreenRoute.RecitersScreen> {
             RecitersScreen(onBackClick = {
                 navController.navigateUp()
-            }) {
-                navController.navigate(ScreenRoute.SuraMp3Screen(Gson().toJson(it)))
+            }) { recitationModel , recitationName ->
+                navController.navigate(ScreenRoute.SuraMp3Screen(Gson().toJson(recitationModel) , recitationName))
             }
         }
 
         composable<ScreenRoute.SuraMp3Screen> {
-            val reciter = Gson().fromJson(
-                it.arguments?.getString("reciter"),
-                RecitersEnum::class.java
+            val recitationModel = Gson().fromJson(
+                it.arguments?.getString("recitationModel"),
+                RecitationModel::class.java
             )
-            SuraMp3Screen(reciter, onBackClick = {
+
+            val recitationName = it.arguments?.getString("recitationName") ?: ""
+
+            SuraMp3Screen(recitationModel , recitationName, onBackClick = {
                 navController.navigateUp()
-            }) { reciter, index ->
-                navController.navigate(ScreenRoute.QuranPlayerScreen(reciter, index))
+            }) { recitationModel , recitationName, index ->
+                navController.navigate(ScreenRoute.QuranPlayerScreen(recitationModel , recitationName, index))
             }
         }
 
         composable<ScreenRoute.QuranPlayerScreen> {
-            val reciter = Gson().fromJson(
-                it.arguments?.getString("reciter"),
-                RecitersEnum::class.java
+            val recitationModel = Gson().fromJson(
+                it.arguments?.getString("recitationModel"),
+                RecitationModel::class.java
             )
+            val recitationName = it.arguments?.getString("recitationName") ?: ""
 
             val index = it.arguments?.getInt("index") ?: 0
             QuranPlayerScreen(
-                reciter = reciter,
+                recitationModel = recitationModel,
+                recitationName = recitationName,
                 initialSuraIndex = index
             ) {
                 navController.navigateUp()

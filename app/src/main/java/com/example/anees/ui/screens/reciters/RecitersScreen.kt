@@ -51,11 +51,10 @@ import androidx.compose.ui.graphics.Color
 import coil.compose.AsyncImage
 import com.example.anees.data.model.RecitationModel
 
-@Preview(showBackground = true)
 @Composable
 fun RecitersScreen(
     onBackClick: () -> Unit = {},
-    navToSuraMp3: (RecitersEnum) -> Unit = {}
+    navToSuraMp3: (RecitationModel , String) -> Unit
 ) {
     var selectedRecitation by remember { mutableStateOf(Recitations.HAFS_AN_ASIM) }
 
@@ -91,8 +90,9 @@ fun RecitersScreen(
                 contentPadding = PaddingValues(bottom = 48.dp)
             ) {
                 items(selectedRecitation.list) { reciter ->
-                    ReciterCard(recitation = reciter) {
-                        navToSuraMp3(it)
+                    ReciterCard(recitation = reciter
+                    ) {
+                        navToSuraMp3(it , selectedRecitation.recitationName)
                     }
                 }
             }
@@ -103,14 +103,14 @@ fun RecitersScreen(
 @Composable
 fun ReciterCard(
     recitation: RecitationModel,
-    navToSuraMp3: (RecitersEnum) -> Unit = {}
+    navToSuraMp3: (RecitationModel) -> Unit = {}
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(200.dp)
             .clickable {
-                navToSuraMp3(RecitersEnum.Abdelbaset)
+                navToSuraMp3(recitation)
             },
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)

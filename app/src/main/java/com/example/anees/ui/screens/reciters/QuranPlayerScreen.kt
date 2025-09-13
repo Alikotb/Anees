@@ -35,25 +35,27 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.anees.enums.RecitersEnum
+import coil.compose.AsyncImage
 import com.example.anees.enums.SuraTypeEnum
 import com.example.anees.R
+import com.example.anees.data.model.RecitationModel
 import com.example.anees.services.RadioService
 import com.example.anees.ui.screens.radio.components.ScreenBackground
 import com.example.anees.utils.SharedModel
 
 @Composable
 fun QuranPlayerScreen(
-    reciter: RecitersEnum = RecitersEnum.Abdelbaset,
+    recitationModel: RecitationModel,
+    recitationName: String,
     initialSuraIndex: Int = 0,
     onBackClick: () -> Unit = {}
 ) {
     val viewModel: RecitersViewModel = viewModel()
     val currentSura by viewModel.currentSura.collectAsStateWithLifecycle()
     val currentSuraTypeIcon by viewModel.currentSuraTypeIcon.collectAsStateWithLifecycle()
-    val reciterUrl by viewModel.reciterUrl.collectAsStateWithLifecycle()
+    val reciterUrl by viewModel.recitationModel.collectAsStateWithLifecycle()
     LaunchedEffect(reciterUrl) {
-        viewModel.setCurrentSura(initialSuraIndex, reciter)
+        viewModel.setCurrentSura(initialSuraIndex, recitationModel)
     }
 
     val context = LocalContext.current
@@ -109,8 +111,8 @@ fun QuranPlayerScreen(
                     shape = CircleShape,
                     modifier = Modifier.size(160.dp),
                 ) {
-                    Image(
-                        painter = painterResource(id = reciter.image),
+                    AsyncImage(
+                        model = recitationModel.reciter.imageUrl,
                         contentDescription = "صورة القارئ",
                         modifier = Modifier.fillMaxSize()
                     )
@@ -119,7 +121,7 @@ fun QuranPlayerScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = reciter.reciter,
+                    text = recitationModel.reciter.reciterName,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.ExtraBold
                 )
@@ -146,7 +148,7 @@ fun QuranPlayerScreen(
                 }
 
                 Text(
-                    text = reciterUrl.description,
+                    text = recitationName,
                     fontSize = 16.sp,
                     color = Color.Gray
                 )
