@@ -70,15 +70,11 @@ class RecitersViewModel @Inject constructor(private val context: Application) : 
         _currentSuraIndex.value = 0
     }
 
-    fun setDownloadsPlaylist() {
-
-    }
-
     fun playSura(index: Int) {
         if(index < 0 || index > _playList.value.lastIndex) return
         _currentSuraIndex.value = index
         val sura = _playList.value[index]
-        RadioServiceManager.startRadioService(context, sura.uri, sura.reciterBaseUrl, _currentSuraIndex.value, sura.reciter, false)
+        RadioServiceManager.startRadioService(context, sura, false)
         _isPlaying.value = true
     }
 

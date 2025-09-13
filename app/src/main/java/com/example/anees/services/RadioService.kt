@@ -17,6 +17,7 @@ import android.support.v4.media.session.MediaSessionCompat
 import androidx.core.app.NotificationCompat
 import androidx.media3.common.Player
 import com.example.anees.R
+import com.example.anees.data.model.audio.AudioTrack
 import com.example.anees.data.model.radio.RadioStations
 import com.example.anees.utils.media_helper.AudioFocusHelper
 import com.example.anees.utils.media_helper.RadioNotificationManager
@@ -108,20 +109,19 @@ class RadioService : Service() {
                 sendStationChangedBroadcast(currentIndex)
             }
             else -> {
-                val url = intent?.getStringExtra("url")
-                val index = intent?.getIntExtra("index", 0) ?: 0
+                val audio = intent?.getParcelableExtra<AudioTrack>("audio")
                 val isRadio = intent?.getBooleanExtra("isRadio", true) ?: true
-                val reciter = intent?.getStringExtra("reciterUrl") ?: ""
-                reciterName = intent?.getStringExtra("reciterName") ?: ""
-                url?.let {
-                    startPlayback(it)
+
+                audio?.let {
+                    startPlayback(audio.uri)
                     sendPlaybackStateBroadcast(true)
                     currentIndex = if (isRadio) {
-                        stations.indexOfFirst { station -> station.url == url }
+                        stations.indexOfFirst { station -> station.url == audio.uri  }
                     }else {
-                        reciterUrl = reciter
+                        reciterUrl = audio.reciter
+                        reciterName = audio.reciter
                         isSura = true
-                        index
+                        audio.index
                     }
                     sendStationChangedBroadcast(currentIndex)
                 }

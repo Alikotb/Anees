@@ -44,16 +44,19 @@ import com.example.anees.utils.SharedModel
 
 @Composable
 fun QuranPlayerScreen(
-    reciter: RecitersEnum = RecitersEnum.Abdelbaset,
+    reciter: RecitersEnum? = RecitersEnum.Abdelbaset,
     initialSuraIndex: Int = 0,
+    isOnline: Boolean = true,
     onBackClick: () -> Unit = {}
 ) {
     val viewModel: RecitersViewModel = viewModel()
     val currentTrack by viewModel.currentTrack.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.setOnlinePlaylist(reciter)
-        viewModel.playSura(initialSuraIndex)
+        if (isOnline) {
+            viewModel.setOnlinePlaylist(reciter!!)
+            viewModel.playSura(initialSuraIndex)
+        }
     }
 
     val context = LocalContext.current
@@ -110,7 +113,7 @@ fun QuranPlayerScreen(
                     modifier = Modifier.size(160.dp),
                 ) {
                     Image(
-                        painter = painterResource(id = reciter.image),
+                        painter = painterResource(id = currentTrack?.reciterImage!!),
                         contentDescription = "صورة القارئ",
                         modifier = Modifier.fillMaxSize()
                     )
@@ -119,7 +122,7 @@ fun QuranPlayerScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = reciter.reciter,
+                    text = currentTrack?.reciter ?: "",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.ExtraBold
                 )
