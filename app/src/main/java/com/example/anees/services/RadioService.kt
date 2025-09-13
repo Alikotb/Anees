@@ -18,6 +18,8 @@ import androidx.core.app.NotificationCompat
 import androidx.media3.common.Player
 import com.example.anees.R
 import com.example.anees.data.model.radio.RadioStations
+import com.example.anees.utils.media_helper.AudioFocusHelper
+import com.example.anees.utils.media_helper.RadioNotificationManager
 import com.example.anees.utils.media_helper.RadioPlayer
 import com.example.anees.utils.pdf_helper.SuraIndexes
 import com.example.anees.utils.sura_mp3_helper.suraUrls
@@ -44,6 +46,8 @@ class RadioService : Service() {
     private lateinit var audioManager: AudioManager
     private var audioFocusRequest: AudioFocusRequest? = null
     private lateinit var mediaSession: MediaSessionCompat
+    private lateinit var notificationManager: RadioNotificationManager
+    private lateinit var audioFocusHelper: AudioFocusHelper
 
     private val stations = RadioStations.stations
     private var isSura = false;
@@ -60,8 +64,7 @@ class RadioService : Service() {
         mediaSession = MediaSessionCompat(this, "AneesRadioSession").apply {
             isActive = true
         }
-
-        createNotificationChannel()
+        notificationManager = RadioNotificationManager(this, mediaSession)
 
         RadioPlayer.setListener(object : Player.Listener {
             override fun onIsPlayingChanged(isPlaying: Boolean) {
@@ -147,85 +150,19 @@ class RadioService : Service() {
     }
 
     private fun buildNotification(): Notification {
-        val playPauseAction = if (RadioPlayer.isPlaying()) {
-            NotificationCompat.Action(
-                R.drawable.play_notification, "Pause", notificationIntent(ACTION_PAUSE)
-            )
-        } else {
-            NotificationCompat.Action(
-                R.drawable.pause_notification, "Play", notificationIntent(ACTION_PLAY)
-            )
+        if (isSura) {
+            return notificationManager.buildNotification(reciterName, SuraIndexes[currentIndex].suraName)
         }
-
-        val nextAction = NotificationCompat.Action(
-            R.drawable.next_notification, "Next", notificationIntent(ACTION_NEXT)
+        return notificationManager.buildNotification(
+            getString(R.string.anees_radio),
+            stations[currentIndex].name
         )
-        val prevAction = NotificationCompat.Action(
-            R.drawable.prev_notification, "Previous", notificationIntent(ACTION_PREV)
-        )
-
-        val closeAction = NotificationCompat.Action(
-            R.drawable.ic_close, "Close", closeIntent()
-        )
-
-        return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle(if(isSura) {
-                reciterName
-            }else {
-                getString(R.string.anees_radio)
-            }
-            )
-            .setContentText(if (isSura) {
-                SuraIndexes[currentIndex].suraName
-            }else {
-                stations[currentIndex].name
-            }
-            )
-            .setSmallIcon(R.drawable.logo_foreground)
-            .setLargeIcon(BitmapFactory.decodeResource(resources,R.drawable.zekrback))
-            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .setStyle(
-                androidx.media.app.NotificationCompat.MediaStyle()
-                    .setMediaSession(mediaSession.sessionToken)
-                    .setShowActionsInCompactView(0,1,2)
-            )
-            .addAction(prevAction)
-            .addAction(playPauseAction)
-            .addAction(nextAction)
-            .addAction(closeAction)
-            .setOnlyAlertOnce(true)
-            .setOngoing(isAppInForeground())
-            .build()
     }
 
     private fun updateNotification() {
         val notification = buildNotification()
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(NOTIFICATION_ID, notification)
-    }
-
-    private fun closeIntent(): PendingIntent {
-        val intent = Intent(this, RadioService::class.java).apply {
-            action = ACTION_CLOSE
-        }
-        return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-    }
-
-    private fun notificationIntent(action: String): PendingIntent {
-        val intent = Intent(this, RadioService::class.java).apply {
-            this.action = action
-        }
-        return PendingIntent.getService(this, action.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-    }
-
-    private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                CHANNEL_ID, "Radio Channel", NotificationManager.IMPORTANCE_LOW
-            )
-            val manager = getSystemService(NotificationManager::class.java)
-            manager.createNotificationChannel(channel)
-        }
     }
 
     private fun sendPlaybackStateBroadcast(isPlaying: Boolean) {
@@ -240,20 +177,6 @@ class RadioService : Service() {
             putExtra(EXTRA_STATION_INDEX, index)
         }
         sendBroadcast(intent)
-    }
-
-    private fun isAppInForeground(): Boolean {
-        val activityManager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
-        val runningProcesses = activityManager.runningAppProcesses ?: return false
-        val packageName = packageName
-
-        for (processInfo in runningProcesses) {
-            if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND &&
-                processInfo.processName == packageName) {
-                return true
-            }
-        }
-        return false
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -299,44 +222,6 @@ class RadioService : Service() {
             AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
                 RadioPlayer.getPlayer()?.volume = 0.3f
             }
-        }
-    }
-
-    private fun requestAudioFocus(): Boolean {
-        val focusRequest = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
-                .setOnAudioFocusChangeListener(audioFocusChangeListener)
-                .setWillPauseWhenDucked(true)
-                .setAcceptsDelayedFocusGain(true)
-                .setAudioAttributes(RadioPlayer.getAudioAttributes())
-                .build().also {
-                    audioFocusRequest = it
-                }
-        }else {
-            null
-        }
-
-        val result = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            audioManager.requestAudioFocus(focusRequest!!)
-        } else {
-            audioManager.requestAudioFocus(
-                audioFocusChangeListener,
-                AudioManager.STREAM_MUSIC,
-                AudioManager.AUDIOFOCUS_GAIN
-            )
-        }
-
-        return result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
-    }
-
-    private fun abandonAudioFocus() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            audioFocusRequest?.let {
-                audioManager.abandonAudioFocusRequest(it)
-                audioFocusRequest = null
-            }
-        } else {
-            audioManager.abandonAudioFocus(audioFocusChangeListener)
         }
     }
 }
