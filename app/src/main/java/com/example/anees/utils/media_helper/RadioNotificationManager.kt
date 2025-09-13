@@ -79,7 +79,7 @@ class RadioNotificationManager(
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
-                RadioService.Companion.CHANNEL_ID, "Radio Channel", NotificationManager.IMPORTANCE_LOW
+                CHANNEL_ID, "Radio Channel", NotificationManager.IMPORTANCE_LOW
             )
             val manager = context.getSystemService(NotificationManager::class.java)
             manager.createNotificationChannel(channel)
