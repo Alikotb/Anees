@@ -48,13 +48,15 @@ import com.example.anees.ui.screens.radio.components.ScreenBackground
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
-import com.example.anees.ui.theme.Pink40
-import com.example.anees.ui.theme.PurpleGrey40
+import coil.compose.AsyncImage
+import com.example.anees.data.model.RecitationModel
 
 @Preview(showBackground = true)
 @Composable
 fun RecitersScreen(
-    onBackClick: () -> Unit = {}, navToSuraMp3: (RecitersEnum) -> Unit = {}) {
+    onBackClick: () -> Unit = {},
+    navToSuraMp3: (RecitersEnum) -> Unit = {}
+) {
     var selectedRecitation by remember { mutableStateOf(Recitations.HAFS_AN_ASIM) }
 
     Box {
@@ -77,7 +79,6 @@ fun RecitersScreen(
 
             RecitationsDropdownMenu { recitation ->
                 selectedRecitation = recitation
-                println("Selected Recitation: ${recitation.recitationName}")
             }
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -89,8 +90,8 @@ fun RecitersScreen(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(bottom = 48.dp)
             ) {
-                items(RecitersEnum.entries.toTypedArray()) { reciter ->
-                    ReciterCard(reciter = reciter) {
+                items(selectedRecitation.list) { reciter ->
+                    ReciterCard(recitation = reciter) {
                         navToSuraMp3(it)
                     }
                 }
@@ -99,10 +100,9 @@ fun RecitersScreen(
     }
 }
 
-@Preview(showBackground = true)
 @Composable
 fun ReciterCard(
-    reciter: RecitersEnum = RecitersEnum.Abdelbaset,
+    recitation: RecitationModel,
     navToSuraMp3: (RecitersEnum) -> Unit = {}
 ) {
     Card(
@@ -110,7 +110,7 @@ fun ReciterCard(
             .fillMaxWidth()
             .height(200.dp)
             .clickable {
-                navToSuraMp3(reciter)
+                navToSuraMp3(RecitersEnum.Abdelbaset)
             },
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
@@ -130,18 +130,20 @@ fun ReciterCard(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Image(
-                    painter = painterResource(id = reciter.image),
-                    contentDescription = null,
+                AsyncImage(
+                    model = recitation.reciter.imageUrl,
+                    contentDescription = recitation.reciter.reciterName,
                     modifier = Modifier
                         .size(120.dp)
                         .padding(8.dp)
-                        .shadow(8.dp, CircleShape, clip = true)
+                        .shadow(8.dp, CircleShape, clip = true),
+                    contentScale = ContentScale.FillBounds
+
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = reciter.reciter,
+                    text = recitation.reciter.reciterName,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
