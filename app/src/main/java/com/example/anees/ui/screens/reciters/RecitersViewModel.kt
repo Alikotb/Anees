@@ -58,6 +58,7 @@ class RecitersViewModel @Inject constructor(private val context: Application) : 
             AudioTrack(
                 index = index,
                 title = sura.suraName,
+                description = reciter.description,
                 reciter = reciter.reciter,
                 reciterImage = reciter.image,
                 typeIcon = sura.type.name,
@@ -67,6 +68,10 @@ class RecitersViewModel @Inject constructor(private val context: Application) : 
         }
         _playList.value = suras
         _currentSuraIndex.value = 0
+    }
+
+    fun setDownloadsPlaylist() {
+
     }
 
     fun playSura(index: Int) {
