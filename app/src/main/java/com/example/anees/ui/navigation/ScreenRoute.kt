@@ -64,4 +64,7 @@ sealed class ScreenRoute {
     //pray screens
     @Serializable
     object PrayScreen : ScreenRoute()
+
+    @Serializable
+    object DownloadQuranScreen : ScreenRoute()
 }

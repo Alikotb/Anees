@@ -1,4 +1,4 @@
-package com.example.anees.ui.screens.reciters
+package com.example.anees.ui.screens.reciters.view.screens
 
 import android.app.Activity
 import android.content.BroadcastReceiver
@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.SkipNext
@@ -40,6 +41,7 @@ import com.example.anees.enums.SuraTypeEnum
 import com.example.anees.R
 import com.example.anees.services.RadioService
 import com.example.anees.ui.screens.radio.components.ScreenBackground
+import com.example.anees.ui.screens.reciters.view_model.RecitersViewModel
 import com.example.anees.utils.SharedModel
 
 @Composable
@@ -219,6 +221,14 @@ fun Mp3Playback(
             }
         } else {
             Spacer(modifier = Modifier.size(48.dp))
+        }
+
+        IconButton(
+            onClick = {
+                viewModel.downloadCurrentSura()
+            }
+        ) {
+            Icon(Icons.Default.Download, contentDescription = "تحميل", modifier = Modifier.size(32.dp), tint =Color(0xFF4CAF50))
         }
     }
 }

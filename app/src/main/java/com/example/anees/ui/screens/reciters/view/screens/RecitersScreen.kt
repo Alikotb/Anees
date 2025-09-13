@@ -1,4 +1,4 @@
-package com.example.anees.ui.screens.reciters
+package com.example.anees.ui.screens.reciters.view.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

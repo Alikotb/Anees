@@ -23,14 +23,15 @@ import com.example.anees.ui.screens.radio.RadioScreen
 import com.example.anees.enums.QuranSurah
 import com.example.anees.enums.RecitersEnum
 import com.example.anees.ui.navigation.ScreenRoute.AzanPlayerScreen
-import com.example.anees.ui.screens.reciters.QuranPlayerScreen
-import com.example.anees.ui.screens.reciters.RecitersScreen
-import com.example.anees.ui.screens.reciters.SuraMp3Screen
+import com.example.anees.ui.screens.reciters.view.screens.QuranPlayerScreen
+import com.example.anees.ui.screens.reciters.view.screens.RecitersScreen
+import com.example.anees.ui.screens.reciters.view.screens.SuraMp3Screen
 import com.example.anees.ui.navigation.ScreenRoute.AzanSettingsPlayerScreen
 import com.example.anees.ui.navigation.ScreenRoute.FajrPlayerScreen
 import com.example.anees.ui.screens.azan.AzanScreen
 import com.example.anees.ui.screens.azkar.screens.AdhkarDetailsScreen
 import com.example.anees.ui.screens.azkar.screens.AdhkarScreen
+import com.example.anees.ui.screens.downloaded_audio.DownloadedAudioScreen
 import com.example.anees.ui.screens.hisn_almuslim.HisnAlMuslimScreen
 import com.example.anees.ui.screens.home.HomeScreenWithDrawer
 import com.example.anees.ui.screens.names_of_allah.NamesOfAllahScreen
@@ -103,6 +104,9 @@ fun SetUpNavHost(
                 },
                 navToPrayScreen = {
                     navController.navigate(ScreenRoute.PrayScreen)
+                },
+                navToDownloadQuran = {
+                    navController.navigate(ScreenRoute.DownloadQuranScreen)
                 }
             )
         }
@@ -111,6 +115,15 @@ fun SetUpNavHost(
                 navController.popBackStack()
                 navController.navigate(ScreenRoute.HomeScreen)
             }
+        }
+        composable<ScreenRoute.DownloadQuranScreen> {
+            DownloadedAudioScreen(
+                onBackClick = {
+                    navController.popBackStack()
+                    navController.navigate(ScreenRoute.HomeScreen)
+                },
+                onSuraClicked = {}
+            )
         }
         composable<ScreenRoute.QiblaScreen> {
             QiblaScreen{

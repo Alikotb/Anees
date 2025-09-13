@@ -1,6 +1,7 @@
 package com.example.anees.ui.screens.home
 
 import android.app.Activity
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,6 +36,7 @@ import com.example.anees.ui.screens.home.component.ComponentCard
 import com.example.anees.ui.screens.home.component.PrayerCardWithTimer
 import com.example.anees.ui.screens.home.component.QuranCard
 import com.example.anees.ui.screens.home.component.SubCards
+import com.example.anees.utils.downloaded_audio.loadAllAudio
 import com.example.anees.utils.location.checkPermission
 import com.example.anees.utils.location.handleLocationPermission
 import com.example.anees.utils.location.isLocationEnabled
@@ -55,7 +57,8 @@ fun HomeScreen(
     navToReciters: () -> Unit = {},
     navToNamesOfAllah: () -> Unit = {},
     navToHisnAlMuslim: () -> Unit = {},
-    navToPrayScreen: () -> Unit = {}
+    navToPrayScreen: () -> Unit = {},
+    navToDownloadQuran : () -> Unit = {}
 ) {
 
     val ctx = LocalContext.current
@@ -171,6 +174,12 @@ fun HomeScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
                 ) {
+                    ComponentCard(
+                        size = .45f,
+                        title = "المفضلة",
+                        onClick = navToDownloadQuran,
+                        id = R.drawable.sound
+                    )
                     Spacer(modifier = Modifier.width(8.dp))
                     ComponentCard(
                         size = .45f,

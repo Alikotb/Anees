@@ -1,4 +1,4 @@
-package com.example.anees.ui.screens.reciters
+package com.example.anees.ui.screens.downloaded_audio
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -24,23 +24,24 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import com.example.anees.enums.RecitersEnum
-import com.example.anees.ui.screens.reciters.component.Mp3Card
+import com.example.anees.R
+import com.example.anees.ui.screens.downloaded_audio.component.DownloadedAudioCard
 import com.example.anees.ui.screens.radio.components.ScreenBackground
-import com.example.anees.utils.sura_mp3_helper.suraUrls
-import com.google.gson.Gson
-
+import com.example.anees.utils.downloaded_audio.loadAllAudio
 
 @Composable
-fun SuraMp3Screen(reciter: RecitersEnum ,
-                  onBackClick: () -> Unit = {},
-                  onSuraClicked : (reciter: String, index: Int) -> Unit
+fun DownloadedAudioScreen(
+                          onBackClick: () -> Unit = {},
+                          onSuraClicked : () -> Unit
 ) {
+    val ctx = LocalContext.current
+    val audioList = loadAllAudio(ctx)
     Box(modifier = Modifier.fillMaxSize()) {
         ScreenBackground()
         Column(
@@ -58,14 +59,14 @@ fun SuraMp3Screen(reciter: RecitersEnum ,
                 ) {
 
                     Image(
-                        painter = painterResource(id = reciter.image),
+                        painter = painterResource(id = R.drawable.sound),
                         contentDescription = null,
                         modifier = Modifier
                             .size(48.dp)
                             .shadow(2.dp, CircleShape, clip = true)
                     )
                     Text(
-                        text = reciter.reciter,
+                        text = "reciter.reciter",
                         textAlign = TextAlign.Right,
                         style = MaterialTheme.typography.headlineSmall
                     )
@@ -85,13 +86,8 @@ fun SuraMp3Screen(reciter: RecitersEnum ,
                 modifier = Modifier.padding(bottom = 12.dp)
             ) {
 
-                items(suraUrls) { surah ->
-                    Mp3Card(
-                        surah = surah,
-                        index = suraUrls.indexOf(surah) + 1,
-                    ){
-                        onSuraClicked(Gson().toJson(reciter), it)
-                    }
+                items(audioList) { surah ->
+                    DownloadedAudioCard(surah)
                 }
             }
         }}

@@ -1,16 +1,20 @@
-package com.example.anees.ui.screens.reciters
+package com.example.anees.ui.screens.reciters.view_model
 
 import android.app.Application
+import android.app.DownloadManager
 import android.content.Context
 import android.content.IntentFilter
 import android.os.Build
-import android.util.Log
+import android.os.Environment
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.anees.data.model.AudioDto
 import com.example.anees.enums.RecitersEnum
 import com.example.anees.receivers.RadioBroadcastReceiver
 import com.example.anees.services.RadioService
+import com.example.anees.utils.downloaded_audio.loadAllAudio
 import com.example.anees.utils.media_helper.RadioPlayer
 import com.example.anees.utils.media_helper.RadioServiceManager
 import com.example.anees.utils.pdf_helper.SuraIndexes
@@ -23,7 +27,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RecitersViewModel @Inject constructor(private val context: Application) : AndroidViewModel(context) {
+class RecitersViewModel @Inject constructor(private val context: Application) :
+    AndroidViewModel(context) {
 
     private val _currentSuraIndex = MutableStateFlow(0)
     val currentSuraIndex = _currentSuraIndex.asStateFlow()
@@ -51,20 +56,34 @@ class RecitersViewModel @Inject constructor(private val context: Application) : 
         setupBroadcastReceiver()
     }
 
-    fun setCurrentSura(index: Int, reciterUrl: RecitersEnum) {
-        _currentSuraIndex.value = index
-        _currentSura.value = SuraIndexes[index]
-        _currentSuraTypeIcon.value = SuraIndexes[index].type
-        _reciterUrl.value = reciterUrl
-        RadioServiceManager.startRadioService(context, reciterUrl.url + suraUrls[index].second, _reciterUrl.value.url, _currentSuraIndex.value, _reciterUrl.value.reciter, false)
+    fun setCurrentSura(
+        index: Int = 0,
+        reciterUrl: RecitersEnum = RecitersEnum.Abdelbaset,
+    ) {
+
+            _currentSuraIndex.value = index
+            _currentSura.value = SuraIndexes[index]
+            _currentSuraTypeIcon.value = SuraIndexes[index].type
+            _reciterUrl.value = reciterUrl
+
+            RadioServiceManager.startRadioService(
+                context,
+                reciterUrl.url + suraUrls[index].second,
+                _reciterUrl.value.url,
+                _currentSuraIndex.value,
+                _reciterUrl.value.reciter,
+                false
+            )
+
+
     }
 
     fun playPauseSura() {
         if (RadioPlayer.isPlaying()) {
-            RadioServiceManager.sendRadioAction(context, RadioService.ACTION_PAUSE)
+            RadioServiceManager.sendRadioAction(context, RadioService.Companion.ACTION_PAUSE)
             _isPlaying.value = false
         } else {
-            RadioServiceManager.sendRadioAction(context, RadioService.ACTION_PLAY)
+            RadioServiceManager.sendRadioAction(context, RadioService.Companion.ACTION_PLAY)
             _isPlaying.value = true
         }
     }
@@ -89,17 +108,25 @@ class RecitersViewModel @Inject constructor(private val context: Application) : 
     }
 
     private fun startRadioService() {
-        RadioServiceManager.startRadioService(context, reciterUrl.value.url + suraUrls[_currentSuraIndex.value].second, reciterUrl.value.url, _currentSuraIndex.value,reciterUrl.value.reciter, false)
+        RadioServiceManager.startRadioService(
+            context,
+            reciterUrl.value.url + suraUrls[_currentSuraIndex.value].second,
+            reciterUrl.value.url,
+            _currentSuraIndex.value,
+            reciterUrl.value.reciter,
+            false
+        )
         _isPlaying.value = true
     }
 
     fun onNext() {
-        if (_currentSuraIndex.value < 113) {
-            _currentSuraIndex.value++
-            _currentSura.value = SuraIndexes[_currentSuraIndex.value]
-            _currentSuraTypeIcon.value = SuraIndexes[_currentSuraIndex.value].type
-        }
-        startRadioService()
+            if (_currentSuraIndex.value < 113) {
+                _currentSuraIndex.value++
+                _currentSura.value = SuraIndexes[_currentSuraIndex.value]
+                _currentSuraTypeIcon.value = SuraIndexes[_currentSuraIndex.value].type
+            }
+            startRadioService()
+
     }
 
     fun onPrev() {
@@ -127,17 +154,42 @@ class RecitersViewModel @Inject constructor(private val context: Application) : 
         )
 
         val filter = IntentFilter().apply {
-            addAction(RadioBroadcastReceiver.ACTION_PLAYBACK_STATE)
-            addAction(RadioBroadcastReceiver.ACTION_STATION_CHANGED)
+            addAction(RadioBroadcastReceiver.Companion.ACTION_PLAYBACK_STATE)
+            addAction(RadioBroadcastReceiver.Companion.ACTION_STATION_CHANGED)
             priority = IntentFilter.SYSTEM_HIGH_PRIORITY
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             context.registerReceiver(broadcastReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
         } else {
-            ContextCompat.registerReceiver(context, broadcastReceiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED)
+            ContextCompat.registerReceiver(
+                context,
+                broadcastReceiver,
+                filter,
+                ContextCompat.RECEIVER_NOT_EXPORTED
+            )
         }
     }
+
+    fun downloadCurrentSura() {
+        val index = _currentSuraIndex.value
+        val suraName = SuraIndexes[index].suraName
+        val suraUrl = _reciterUrl.value.url + suraUrls[index].second
+        val fileName =
+            "$suraName - ${_reciterUrl.value.reciter} - ${_reciterUrl.value.description}.mp3"
+        val request = DownloadManager.Request(suraUrl.toUri())
+            .setTitle("Downloading ${suraName + " " + reciterUrl.value.reciter}")
+            .setDescription("جارٍ تحميل السورة${suraName}")
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+        request.setDestinationInExternalPublicDir(
+            Environment.DIRECTORY_MUSIC,
+            "Anees/$fileName"
+        )
+
+        val dm = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        dm.enqueue(request)
+    }
+
 
     override fun onCleared() {
         super.onCleared()
