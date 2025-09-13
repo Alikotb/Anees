@@ -75,7 +75,7 @@ class RadioService : Service() {
                 RadioPlayer.getPlayer()?.volume = 0.3f
             } ,
         )
-        
+
         RadioPlayer.setListener(object : Player.Listener {
             override fun onIsPlayingChanged(isPlaying: Boolean) {
                 updateNotification()
