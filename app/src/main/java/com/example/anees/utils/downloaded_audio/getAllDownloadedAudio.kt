@@ -1,5 +1,6 @@
 package com.example.anees.utils.downloaded_audio
 
+import android.content.ContentUris
 import android.content.Context
 import android.os.Build
 import android.provider.MediaStore
@@ -44,19 +45,22 @@ import com.example.anees.data.model.audio.AudioDto
         val artistCol = it.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)
         val albumCol = it.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM)
         val durationCol = it.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)
-        val pathCol = it.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
         val sizeCol = it.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE)
         val dateCol = it.getColumnIndexOrThrow(MediaStore.Audio.Media.DATE_ADDED)
 
         while (it.moveToNext()) {
-            val path = it.getString(pathCol)
+            val id = it.getLong(idCol)
+            val contentUri = ContentUris.withAppendedId(
+                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                id
+            )
             val music = AudioDto(
                 id = it.getLong(idCol),
                 title = it.getString(titleCol),
                 artist = it.getString(artistCol),
                 album = it.getString(albumCol),
                 duration = it.getLong(durationCol),
-                path = path,
+                path = contentUri.toString(),
                 size = it.getLong(sizeCol),
                 dateAdded = it.getLong(dateCol),
             )
