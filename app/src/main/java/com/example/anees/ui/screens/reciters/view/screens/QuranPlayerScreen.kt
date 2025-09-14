@@ -46,16 +46,19 @@ import com.example.anees.utils.SharedModel
 
 @Composable
 fun QuranPlayerScreen(
-    reciter: RecitersEnum = RecitersEnum.Abdelbaset,
+    reciter: RecitersEnum? = RecitersEnum.Abdelbaset,
     initialSuraIndex: Int = 0,
+    isOnline: Boolean = true,
     onBackClick: () -> Unit = {}
 ) {
     val viewModel: RecitersViewModel = viewModel()
-    val currentSura by viewModel.currentSura.collectAsStateWithLifecycle()
-    val currentSuraTypeIcon by viewModel.currentSuraTypeIcon.collectAsStateWithLifecycle()
-    val reciterUrl by viewModel.reciterUrl.collectAsStateWithLifecycle()
-    LaunchedEffect(reciterUrl) {
-        viewModel.setCurrentSura(initialSuraIndex, reciter)
+    val currentTrack by viewModel.currentTrack.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        if (isOnline) {
+            viewModel.setOnlinePlaylist(reciter!!)
+            viewModel.playSura(initialSuraIndex)
+        }
     }
 
     val context = LocalContext.current
@@ -112,7 +115,7 @@ fun QuranPlayerScreen(
                     modifier = Modifier.size(160.dp),
                 ) {
                     Image(
-                        painter = painterResource(id = reciter.image),
+                        painter = painterResource(id = currentTrack?.reciterImage!!),
                         contentDescription = "صورة القارئ",
                         modifier = Modifier.fillMaxSize()
                     )
@@ -121,7 +124,7 @@ fun QuranPlayerScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = reciter.reciter,
+                    text = currentTrack?.reciter ?: "",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.ExtraBold
                 )
@@ -134,13 +137,13 @@ fun QuranPlayerScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Image(
-                        painter = painterResource(id = if (currentSuraTypeIcon == SuraTypeEnum.MECCA) R.drawable.kaaba else R.drawable.mosque),
+                        painter = painterResource(id = if (currentTrack?.typeIcon == SuraTypeEnum.MECCA.name) R.drawable.kaaba else R.drawable.mosque),
                         contentDescription = null,
                         modifier = Modifier.size(24.dp)
                     )
                     Spacer(modifier = Modifier.width(16.dp))
                     Text(
-                        text = "سُورَةٌ ${currentSura.suraName}",
+                        text = "سُورَةٌ ${currentTrack?.title}",
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Medium,
                         fontFamily = FontFamily(Font(R.font.othmani))
@@ -148,7 +151,7 @@ fun QuranPlayerScreen(
                 }
 
                 Text(
-                    text = reciterUrl.description,
+                    text = currentTrack?.description ?: "",
                     fontSize = 16.sp,
                     color = Color.Gray
                 )
@@ -171,6 +174,8 @@ fun Mp3Playback(
     val isPlaying by viewModel.isPlaying.collectAsStateWithLifecycle()
     val progress by viewModel.progress.collectAsStateWithLifecycle()
     val currentSuraIndex by viewModel.currentSuraIndex.collectAsStateWithLifecycle()
+    val playlist by viewModel.playList.collectAsStateWithLifecycle()
+
 
     LaunchedEffect(Unit) {
         viewModel.getNextSura()
@@ -213,7 +218,7 @@ fun Mp3Playback(
             )
         }
 
-        if (currentSuraIndex < 113) {
+        if (currentSuraIndex < playlist.lastIndex) {
             IconButton(onClick = {
                 viewModel.onNext()
             }) {
