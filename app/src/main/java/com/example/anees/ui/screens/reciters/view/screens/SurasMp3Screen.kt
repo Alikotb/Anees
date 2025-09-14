@@ -30,8 +30,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.example.anees.enums.RecitersEnum
-import com.example.anees.ui.screens.reciters.view.component.Mp3Card
 import com.example.anees.ui.screens.radio.components.ScreenBackground
+import com.example.anees.ui.screens.reciters.view.component.Mp3Card
 import com.example.anees.utils.sura_mp3_helper.suraUrls
 import com.google.gson.Gson
 

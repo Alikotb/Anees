@@ -1,6 +1,5 @@
 package com.example.anees.utils.media_helper
 
-import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build

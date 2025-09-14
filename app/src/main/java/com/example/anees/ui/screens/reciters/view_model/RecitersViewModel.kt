@@ -6,14 +6,17 @@ import android.content.Context
 import android.content.IntentFilter
 import android.os.Build
 import android.os.Environment
+import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.anees.data.model.audio.AudioTrack
+import com.example.anees.data.model.audio.toAudioTrack
 import com.example.anees.enums.RecitersEnum
 import com.example.anees.receivers.RadioBroadcastReceiver
 import com.example.anees.services.RadioService
+import com.example.anees.utils.downloaded_audio.loadAllAudio
 import com.example.anees.utils.media_helper.RadioPlayer
 import com.example.anees.utils.media_helper.RadioServiceManager
 import com.example.anees.utils.pdf_helper.SuraIndexes
@@ -69,6 +72,13 @@ class RecitersViewModel @Inject constructor(private val context: Application) :
                 reciterBaseUrl = reciter.url,
                 uri = reciter.url + suraUrls[index].second,
             )
+        }
+        _playList.value = suras
+        _currentSuraIndex.value = 0
+    }
+    fun setOfflinePlaylist() {
+        val suras = loadAllAudio(context).map {
+            it.toAudioTrack(loadAllAudio(context).indexOf(it))
         }
         _playList.value = suras
         _currentSuraIndex.value = 0
@@ -146,6 +156,25 @@ class RecitersViewModel @Inject constructor(private val context: Application) :
         } else {
             ContextCompat.registerReceiver(context, broadcastReceiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED)
         }
+    }
+    fun downloadCurrentSura() {
+        val index = _currentSuraIndex.value
+        val suraName = SuraIndexes[index].suraName
+        val suraUrl =_playList.value[index].uri
+        Log.d("Asd", "downloadCurrentSura:$suraUrl ")
+        val fileName =
+            "$suraName - ${_playList.value[index].reciter} - ${_playList.value[index].description}.mp3"
+        val request = DownloadManager.Request(suraUrl.toUri())
+            .setTitle("Downloading ${suraName + " " + _playList.value[index].reciter}")
+            .setDescription("جارٍ تحميل السورة${suraName}")
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+        request.setDestinationInExternalPublicDir(
+            Environment.DIRECTORY_MUSIC,
+            "Anees/$fileName"
+        )
+
+        val dm = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        dm.enqueue(request)
     }
 
     override fun onCleared() {

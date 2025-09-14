@@ -45,7 +45,7 @@ sealed class ScreenRoute {
     @Serializable
     data class  SuraMp3Screen(val reciter: String) : ScreenRoute()
     @Serializable
-    data class  QuranPlayerScreen(val reciter: String , val index: Int) : ScreenRoute()
+    data class  QuranPlayerScreen(val reciter: String?, val index: Int,val isOnline: Boolean = true) : ScreenRoute()
     @Serializable
     object HisnAlMuslimScreen : ScreenRoute()
     @Serializable

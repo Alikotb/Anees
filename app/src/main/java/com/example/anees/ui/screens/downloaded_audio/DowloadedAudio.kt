@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
@@ -37,8 +37,8 @@ import com.example.anees.utils.downloaded_audio.loadAllAudio
 
 @Composable
 fun DownloadedAudioScreen(
-                          onBackClick: () -> Unit = {},
-                          onSuraClicked : () -> Unit
+    onBackClick: () -> Unit = {},
+    onSuraClicked: (index: Int) -> Unit
 ) {
     val ctx = LocalContext.current
     val audioList = loadAllAudio(ctx)
@@ -46,7 +46,8 @@ fun DownloadedAudioScreen(
         ScreenBackground()
         Column(
             modifier = Modifier
-                .fillMaxSize()  .padding(horizontal = 16.dp)
+                .fillMaxSize()
+                .padding(horizontal = 16.dp)
                 .padding(top = 24.dp)
         ) {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
@@ -74,7 +75,7 @@ fun DownloadedAudioScreen(
                     IconButton(
                         onClick = onBackClick,
                         modifier = Modifier.size(48.dp),
-                    ){
+                    ) {
                         Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = "Back")
                     }
                 }
@@ -86,10 +87,15 @@ fun DownloadedAudioScreen(
                 modifier = Modifier.padding(bottom = 12.dp)
             ) {
 
-                items(audioList) { surah ->
-                    DownloadedAudioCard(surah)
+                itemsIndexed(audioList) { index, surah ->
+                    DownloadedAudioCard(
+                        index = index,
+                        surah = surah,
+                        onClick = onSuraClicked
+                    )
                 }
             }
-        }}
+        }
+    }
 
 }

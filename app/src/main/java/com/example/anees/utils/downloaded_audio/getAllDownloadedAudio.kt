@@ -3,7 +3,7 @@ package com.example.anees.utils.downloaded_audio
 import android.content.Context
 import android.os.Build
 import android.provider.MediaStore
-import com.example.anees.data.model.AudioDto
+import com.example.anees.data.model.audio.AudioDto
 
 
  fun loadAllAudio( context: Context): List<AudioDto> {

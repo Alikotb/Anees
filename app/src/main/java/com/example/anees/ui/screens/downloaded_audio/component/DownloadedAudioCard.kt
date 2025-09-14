@@ -25,14 +25,15 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.anees.R
-import com.example.anees.data.model.AudioDto
+import com.example.anees.data.model.audio.AudioDto
 import com.example.anees.ui.screens.tafsir.component.SurahNumber
 import com.example.anees.utils.extensions.convertNumbersToArabic
 
 @Composable
 fun DownloadedAudioCard(
     surah: AudioDto ,
-    onClick: () -> Unit={}
+    index: Int,
+    onClick: (index: Int) -> Unit={}
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Row(
@@ -44,6 +45,7 @@ fun DownloadedAudioCard(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(color = Color(0xFF6AB0AB)),
                     onClick = {
+                        onClick(index)
                     }
                 )
                 .padding(horizontal = 12.dp, vertical = 12.dp)

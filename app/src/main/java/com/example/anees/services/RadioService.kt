@@ -1,20 +1,12 @@
 package com.example.anees.services
 
-import android.app.ActivityManager
 import android.app.Notification
-import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.app.Service
-import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
-import android.media.AudioFocusRequest
 import android.media.AudioManager
-import android.os.Build
 import android.os.IBinder
 import android.support.v4.media.session.MediaSessionCompat
-import androidx.core.app.NotificationCompat
 import androidx.media3.common.Player
 import com.example.anees.R
 import com.example.anees.data.model.audio.AudioTrack
@@ -22,7 +14,6 @@ import com.example.anees.data.model.radio.RadioStations
 import com.example.anees.utils.media_helper.AudioFocusHelper
 import com.example.anees.utils.media_helper.RadioNotificationManager
 import com.example.anees.utils.media_helper.RadioPlayer
-import com.example.anees.utils.pdf_helper.SuraIndexes
 import com.example.anees.utils.sura_mp3_helper.suraUrls
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -52,6 +43,7 @@ class RadioService : Service() {
     private lateinit var reciterUrl: String
     private var currentIndex = 0
 
+    var audio: AudioTrack? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -109,19 +101,19 @@ class RadioService : Service() {
                 sendStationChangedBroadcast(currentIndex)
             }
             else -> {
-                val audio = intent?.getParcelableExtra<AudioTrack>("audio")
+                audio = intent?.getParcelableExtra("audio")
                 val isRadio = intent?.getBooleanExtra("isRadio", true) ?: true
 
-                audio?.let {
-                    startPlayback(audio.uri)
+                audio.let {
+                    startPlayback(audio?.uri!!)
                     sendPlaybackStateBroadcast(true)
                     currentIndex = if (isRadio) {
-                        stations.indexOfFirst { station -> station.url == audio.uri  }
+                        stations.indexOfFirst { station -> station.url == audio?.uri  }
                     }else {
-                        reciterUrl = audio.reciter
-                        reciterName = audio.reciter
+                        reciterUrl = audio?.reciter!!
+                        reciterName = audio?.reciter!!
                         isSura = true
-                        audio.index
+                        audio?.index!!
                     }
                     sendStationChangedBroadcast(currentIndex)
                 }
@@ -161,7 +153,7 @@ class RadioService : Service() {
 
     private fun buildNotification(): Notification {
         if (isSura) {
-            return notificationManager.buildNotification(reciterName, SuraIndexes[currentIndex].suraName)
+            return notificationManager.buildNotification(reciterName, audio?.title?:"")
         }
         return notificationManager.buildNotification(
             getString(R.string.anees_radio),
@@ -177,6 +169,7 @@ class RadioService : Service() {
 
     private fun sendPlaybackStateBroadcast(isPlaying: Boolean) {
         val intent = Intent(ACTION_PLAYBACK_STATE).apply {
+            setPackage(packageName)
             putExtra(EXTRA_IS_PLAYING, isPlaying)
         }
         sendBroadcast(intent)
@@ -184,6 +177,7 @@ class RadioService : Service() {
 
     private fun sendStationChangedBroadcast(index: Int) {
         val intent = Intent(ACTION_STATION_CHANGED).apply {
+            setPackage(packageName)
             putExtra(EXTRA_STATION_INDEX, index)
         }
         sendBroadcast(intent)

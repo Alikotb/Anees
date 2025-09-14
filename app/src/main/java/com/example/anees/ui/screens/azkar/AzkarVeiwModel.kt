@@ -3,8 +3,6 @@ package com.example.anees.ui.screens.azkar
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.anees.data.repository.Repository
-import com.example.anees.enums.AzanRecitersEnum
-import com.example.anees.enums.FajrRecitersEnum
 import com.example.anees.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
