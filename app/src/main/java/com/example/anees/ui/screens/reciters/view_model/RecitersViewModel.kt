@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.IntentFilter
 import android.os.Build
 import android.os.Environment
-import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.AndroidViewModel
@@ -161,7 +160,6 @@ class RecitersViewModel @Inject constructor(private val context: Application) :
         val index = _currentSuraIndex.value
         val suraName = SuraIndexes[index].suraName
         val suraUrl =_playList.value[index].uri
-        Log.d("Asd", "downloadCurrentSura:$suraUrl ")
         val fileName =
             "$suraName - ${_playList.value[index].reciter} - ${_playList.value[index].description}.mp3"
         val request = DownloadManager.Request(suraUrl.toUri())

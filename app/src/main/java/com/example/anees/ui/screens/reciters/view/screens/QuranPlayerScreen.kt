@@ -41,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
@@ -61,6 +62,7 @@ import com.example.anees.services.RadioService
 import com.example.anees.ui.screens.radio.components.ScreenBackground
 import com.example.anees.ui.screens.reciters.view_model.RecitersViewModel
 import com.example.anees.utils.SharedModel
+import com.example.anees.utils.downloaded_audio.getAlbumArt
 
 @Composable
 fun QuranPlayerScreen(
@@ -146,13 +148,28 @@ fun QuranPlayerScreen(
                     shape = CircleShape,
                     modifier = Modifier.size(160.dp),
                 ) {
-                    Image(
-                        painter = painterResource(
-                            id = currentTrack?.reciterImage ?: R.drawable.sound
-                        ),
-                        contentDescription = "صورة القارئ",
-                        modifier = Modifier.fillMaxSize()
-                    )
+                    if (isOnline) {
+                        Image(
+                            painter = painterResource(
+                                id = currentTrack?.reciterImage ?: R.drawable.sound
+                            ),
+                            contentDescription = "صورة القارئ",
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    } else {
+                        getAlbumArt(context, currentTrack?.uri ?: "")?.let { bmp ->
+                            Image(
+                                bitmap = bmp.asImageBitmap(),
+                                contentDescription = "صورة القارئ",
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        } ?: Image(
+                            painter = painterResource(id = R.drawable.sound),
+                            contentDescription = "صورة القارئ",
+                            modifier = Modifier.fillMaxSize()
+                        )
+
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -170,12 +187,14 @@ fun QuranPlayerScreen(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Image(
-                        painter = painterResource(id = if (currentTrack?.typeIcon == SuraTypeEnum.MECCA.name) R.drawable.kaaba else R.drawable.mosque),
-                        contentDescription = null,
-                        modifier = Modifier.size(24.dp)
-                    )
-                    Spacer(modifier = Modifier.width(16.dp))
+                    if (isOnline) {
+                        Image(
+                            painter = painterResource(id = if (currentTrack?.typeIcon == SuraTypeEnum.MECCA.name) R.drawable.kaaba else R.drawable.mosque),
+                            contentDescription = null,
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Spacer(modifier = Modifier.width(16.dp))
+                    }
                     Text(
                         text = "سُورَةٌ ${currentTrack?.title}",
                         fontSize = 22.sp,

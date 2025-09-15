@@ -51,7 +51,7 @@ fun DownloadedAudioCard(
                 .padding(horizontal = 12.dp, vertical = 12.dp)
         ) {
             Text(
-                text = surah.title,
+                text ="سورة ${surah.title+" - "+surah.artist+" - "+surah.album}",
                 fontSize = 16.sp,
                 color = Color(0xFF311403),
                 fontFamily = FontFamily(Font(R.font.othmani)),

@@ -176,7 +176,7 @@ fun HomeScreen(
                         size = .45f,
                         title = "المفضلة",
                         onClick = navToDownloadQuran,
-                        id = R.drawable.sound
+                        id = R.drawable.downloaded_audio_card_icon
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     ComponentCard(

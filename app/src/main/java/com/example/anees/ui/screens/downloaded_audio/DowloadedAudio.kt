@@ -60,14 +60,14 @@ fun DownloadedAudioScreen(
                 ) {
 
                     Image(
-                        painter = painterResource(id = R.drawable.sound),
+                        painter = painterResource(id = R.drawable.downloaded_audio_icon),
                         contentDescription = null,
                         modifier = Modifier
-                            .size(48.dp)
+                            .size(36.dp)
                             .shadow(2.dp, CircleShape, clip = true)
                     )
                     Text(
-                        text = "reciter.reciter",
+                        text = "المفضلة",
                         textAlign = TextAlign.Right,
                         style = MaterialTheme.typography.headlineSmall
                     )
