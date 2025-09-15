@@ -4,9 +4,15 @@ import com.example.anees.data.model.RecitationModel
 import com.example.anees.enums.Reciters
 
 val hafsAnAsimList: List<RecitationModel> = listOf(
-    RecitationModel(Reciters.Ibrahim_elAkhdar, "https://server6.mp3quran.net/akdr/"),
-    RecitationModel(Reciters.Akram_Alalaqmi, "https://server9.mp3quran.net/akrm/"),
+    RecitationModel(Reciters.Mahmoud_Khalil_Alhusary, "https://server13.mp3quran.net/husr/"),
+    RecitationModel(Reciters.Mohamed_Seddik_Almenshawy, "https://server10.mp3quran.net/minsh/"),
+    RecitationModel(Reciters.Meshary_Alafasy, "https://server8.mp3quran.net/afs/"),
+    RecitationModel(Reciters.Abdulbasit_AbdulSamad, "https://server7.mp3quran.net/basit/"),
+    RecitationModel(Reciters.Yasser_AlDosary, "https://server11.mp3quran.net/yasser/"),
     RecitationModel(Reciters.Maher_Almuaiqly, "https://server12.mp3quran.net/maher/}"),
+    RecitationModel(Reciters.Akram_Alalaqmi, "https://server9.mp3quran.net/akrm/"),
+    RecitationModel(Reciters.Abdurrahman_Alsodes, "https://server11.mp3quran.net/sds/"),
+    RecitationModel(Reciters.Ibrahim_elAkhdar, "https://server6.mp3quran.net/akdr/"),
     RecitationModel(Reciters.Mohamed_Altblawy, "https://server12.mp3quran.net/tblawi/"),
     RecitationModel(Reciters.Mohamed_Allohaidan, "https://server8.mp3quran.net/lhdan/"),
     RecitationModel(
@@ -15,12 +21,9 @@ val hafsAnAsimList: List<RecitationModel> = listOf(
     ),
     RecitationModel(Reciters.Mohamed_Saleh_AlemShah, "https://server12.mp3quran.net/shah/"),
     RecitationModel(Reciters.Mohamed_Jebril, "https://server8.mp3quran.net/jbrl/"),
-    RecitationModel(Reciters.Mohamed_Seddik_Almenshawy, "https://server10.mp3quran.net/minsh/"),
     RecitationModel(Reciters.Mohamed_Abdelkarim, "https://server12.mp3quran.net/m_krm/"),
-    RecitationModel(Reciters.Mahmoud_Khalil_Alhusary, "https://server13.mp3quran.net/husr/"),
     RecitationModel(Reciters.Idris_Abkar, "https://server6.mp3quran.net/abkr//"),
     RecitationModel(Reciters.Mahmoud_Ali_Albanna, "https://server8.mp3quran.net/bna/"),
-    RecitationModel(Reciters.Meshary_Alafasy, "https://server8.mp3quran.net/afs/"),
     RecitationModel(Reciters.Mostafa_Ismail, "https://server8.mp3quran.net/mustafa/"),
     RecitationModel(Reciters.Mostafa_ElLahouny, "https://server6.mp3quran.net/lahoni//"),
     RecitationModel(Reciters.Mostafa_Raad_Alazawy, "https://server8.mp3quran.net/ra3ad/"),
@@ -94,8 +97,6 @@ val hafsAnAsimList: List<RecitationModel> = listOf(
     RecitationModel(Reciters.Abdurrahman_AlMajed, "https://server10.mp3quran.net/a_majed/"),
     RecitationModel(Reciters.Khalifa_AlTunaiji, "https://server12.mp3quran.net/tnjy/"),
     RecitationModel(Reciters.Ahmed_AlAjmi, "https://server10.mp3quran.net/ajm/"),
-    RecitationModel(Reciters.Abdulbasit_AbdulSamad, "https://server7.mp3quran.net/basit/"),
-    RecitationModel(Reciters.Abdurrahman_Alsodes, "https://server11.mp3quran.net/sds/"),
     RecitationModel(
         Reciters.Abdullah_AlMousa,
         "https://server14.mp3quran.net/mousa/Rewayat-Hafs-A-n-Assem/"
@@ -256,7 +257,6 @@ val hafsAnAsimList: List<RecitationModel> = listOf(
     ),
     RecitationModel(Reciters.Hani_AlRefaei, "https://server8.mp3quran.net/hani/"),
     RecitationModel(Reciters.Ahmed_Nueina, "https://server11.mp3quran.net/ahmad_nu/"),
-    RecitationModel(Reciters.Yasser_AlDosary, "https://server11.mp3quran.net/yasser/"),
     RecitationModel(Reciters.Yasser_AlQurashi, "https://server9.mp3quran.net/qurashi/"),
     RecitationModel(Reciters.Yehia_Hawwa, "https://server12.mp3quran.net/yahya/"),
     RecitationModel(Reciters.Yousif_AlShweay, "https://server9.mp3quran.net/yousef/"),
@@ -266,10 +266,20 @@ val hafsAnAsimList: List<RecitationModel> = listOf(
     ),
 
     )
+
+
 val warshAnNafiList = listOf(
     RecitationModel(
         Reciters.Mahmoud_Khalil_Alhusary,
         "https://server13.mp3quran.net/husr/Rewayat-Warsh-A-n-Nafi/"
+    ),
+    RecitationModel(
+        Reciters.Abdulbasit_AbdulSamad,
+        "https://server7.mp3quran.net/basit/Rewayat-Warsh-A-n-Nafi/"
+    ),
+    RecitationModel(
+        Reciters.Ibrahim_AdDosary,
+        "https://server10.mp3quran.net/ibrahim_dosri/Rewayat-Warsh-A-n-Nafi/"
     ),
     RecitationModel(
         Reciters.Mohamed_Saeed,
@@ -277,18 +287,12 @@ val warshAnNafiList = listOf(
     ),
     RecitationModel(Reciters.Yaseen, "https://server11.mp3quran.net/qari/"),
     RecitationModel(Reciters.ElAyyoun_AlKouchy, "https://server11.mp3quran.net/koshi/"),
-    RecitationModel(
-        Reciters.Ibrahim_AdDosary,
-        "https://server10.mp3quran.net/ibrahim_dosri/Rewayat-Warsh-A-n-Nafi/"
-    ),
+
     RecitationModel(
         Reciters.Rachid_Belalia,
         "https://server6.mp3quran.net/bl3/Rewayat-Warsh-A-n-Nafi/"
     ),
-    RecitationModel(
-        Reciters.Abdulbasit_AbdulSamad,
-        "https://server7.mp3quran.net/basit/Rewayat-Warsh-A-n-Nafi/"
-    ),
+
     RecitationModel(Reciters.Omar_AlQazabri, "https://server9.mp3quran.net/omar_warsh/"),
 )
 
@@ -452,6 +456,10 @@ val mushafMujawadList = listOf(
         "https://server13.mp3quran.net/husr/Almusshaf-Al-Mojawwad/"
     ),
     RecitationModel(
+        Reciters.Abdulbasit_AbdulSamad,
+        "https://server7.mp3quran.net/basit/Almusshaf-Al-Mojawwad/"
+    ),
+    RecitationModel(
         Reciters.Mahmoud_Ali_Albanna,
         "https://server8.mp3quran.net/bna/Almusshaf-Al-Mojawwad/"
     ),
@@ -459,8 +467,5 @@ val mushafMujawadList = listOf(
         Reciters.Mostafa_Ismail,
         "https://server8.mp3quran.net/mustafa/Almusshaf-Al-Mojawwad/"
     ),
-    RecitationModel(
-        Reciters.Abdulbasit_AbdulSamad,
-        "https://server7.mp3quran.net/basit/Almusshaf-Al-Mojawwad/"
-    ),
+
 )

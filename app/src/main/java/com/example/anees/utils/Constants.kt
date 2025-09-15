@@ -25,7 +25,7 @@ object Constants {
     const val CURRENT_AZAN_RECITER = "CURRENT_AZAN_RECITER"
     const val CURRENT_FAJR_RECITER = "CURRENT_FAJR_RECITER"
 
-    //reiters
+    //Reicters
     const val KEY_SELECTED_RECITATION = "KEY_SELECTED_RECITATION"
 
 
