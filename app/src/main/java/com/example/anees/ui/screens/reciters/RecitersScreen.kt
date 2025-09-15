@@ -26,6 +26,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -48,6 +49,7 @@ import com.example.anees.ui.screens.radio.components.ScreenBackground
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.anees.data.model.RecitationModel
 
@@ -56,7 +58,9 @@ fun RecitersScreen(
     onBackClick: () -> Unit = {},
     navToSuraMp3: (RecitationModel , String) -> Unit
 ) {
-    var selectedRecitation by remember { mutableStateOf(Recitations.HAFS_AN_ASIM) }
+    val reciterManagerViewModel: ReciterManagerViewModel = hiltViewModel()
+    val selectedRecitation by reciterManagerViewModel.selectedRecitation.collectAsState()
+
 
     Box {
         ScreenBackground()
@@ -73,10 +77,13 @@ fun RecitersScreen(
                     size = 24
                 )
             }
+            RecitationsDropdownMenu(
+                selectedRecitation = selectedRecitation,
+                onRecitationSelected = { recitation ->
+                    reciterManagerViewModel.setSelectedRecitation(recitation)
+                }
+            )
 
-            RecitationsDropdownMenu { recitation ->
-                selectedRecitation = recitation
-            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -151,27 +158,23 @@ fun ReciterCard(
     }
 }
 
-
 @Composable
 fun RecitationsDropdownMenu(
+    selectedRecitation: Recitations,
     onRecitationSelected: (Recitations) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedRecitation by remember { mutableStateOf(Recitations.HAFS_AN_ASIM) }
 
     Box {
         Button(
             onClick = { expanded = true },
             colors = ButtonDefaults.buttonColors(
-                containerColor =   Color(0xFF5A2E0E),
-
+                containerColor = Color(0xFF5A2E0E),
                 contentColor = Color.White
             )
         ) {
             Text(text = selectedRecitation.recitationName)
-
-
-    }
+        }
 
         DropdownMenu(
             expanded = expanded,
@@ -181,7 +184,6 @@ fun RecitationsDropdownMenu(
                 DropdownMenuItem(
                     text = { Text(recitation.recitationName) },
                     onClick = {
-                        selectedRecitation = recitation
                         expanded = false
                         onRecitationSelected(recitation)
                     }
