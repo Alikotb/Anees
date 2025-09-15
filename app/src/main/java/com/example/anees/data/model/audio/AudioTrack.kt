@@ -9,7 +9,7 @@ data class AudioTrack(
     val title: String,
     val description: String,
     val reciter: String,
-    val reciterImage: Int,
+    val reciterImage: String,
     val typeIcon: String,
     val reciterBaseUrl: String,
     val uri: String,

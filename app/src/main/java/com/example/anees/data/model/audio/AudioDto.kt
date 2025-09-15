@@ -19,7 +19,7 @@ fun AudioDto.toAudioTrack(index: Int): AudioTrack {
         title = title,
         description = album ?: "غير معروف",
         reciter = artist ?: "غير معروف",
-        reciterImage = R.drawable.sound,
+        reciterImage = "",
         typeIcon = "local",
         reciterBaseUrl = "",
         uri = path,

@@ -41,7 +41,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
@@ -55,28 +54,31 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.anees.R
-import com.example.anees.enums.RecitersEnum
+import coil.compose.AsyncImage
 import com.example.anees.enums.SuraTypeEnum
+import com.example.anees.R
+import com.example.anees.data.model.RecitationModel
 import com.example.anees.services.RadioService
 import com.example.anees.ui.screens.radio.components.ScreenBackground
-import com.example.anees.ui.screens.reciters.view_model.RecitersViewModel
+import com.example.anees.ui.screens.reciters.view_model.QuranPlayerViewModel
 import com.example.anees.utils.SharedModel
-import com.example.anees.utils.downloaded_audio.getAlbumArt
 
 @Composable
 fun QuranPlayerScreen(
-    reciter: RecitersEnum? = RecitersEnum.Abdelbaset,
+    recitationModel: RecitationModel?,
+    recitationName: String?,
     initialSuraIndex: Int = 0,
     isOnline: Boolean = true,
     onBackClick: () -> Unit = {}
 ) {
-    val viewModel: RecitersViewModel = viewModel()
+    val viewModel: QuranPlayerViewModel = viewModel()
     val currentTrack by viewModel.currentTrack.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
 
     LaunchedEffect(Unit) {
         if (isOnline) {
-            viewModel.setOnlinePlaylist(reciter!!)
+            viewModel.setOnlinePlaylist(recitationModel!!, recitationName!!)
             viewModel.playSura(initialSuraIndex)
         } else {
             viewModel.setOfflinePlaylist()
@@ -84,8 +86,7 @@ fun QuranPlayerScreen(
         }
     }
 
-    val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
+
     DisposableEffect(lifecycleOwner) {
         val receiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
@@ -119,11 +120,8 @@ fun QuranPlayerScreen(
     }
 
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp)
-                .padding(top = 24.dp)
+        Box(modifier = Modifier
+            .fillMaxSize()
         ) {
             ScreenBackground()
             IconButton(
@@ -149,33 +147,24 @@ fun QuranPlayerScreen(
                     modifier = Modifier.size(160.dp),
                 ) {
                     if (isOnline) {
-                        Image(
-                            painter = painterResource(
-                                id = currentTrack?.reciterImage ?: R.drawable.sound
-                            ),
+                        AsyncImage(
+                            model = currentTrack?.reciterImage,
                             contentDescription = "صورة القارئ",
                             modifier = Modifier.fillMaxSize()
                         )
                     } else {
-                        getAlbumArt(context, currentTrack?.uri ?: "")?.let { bmp ->
-                            Image(
-                                bitmap = bmp.asImageBitmap(),
-                                contentDescription = "صورة القارئ",
-                                modifier = Modifier.fillMaxSize()
-                            )
-                        } ?: Image(
-                            painter = painterResource(id = R.drawable.sound),
+                        Image(
+                            painter = painterResource(id = R.drawable.logo_foreground),
                             contentDescription = "صورة القارئ",
                             modifier = Modifier.fillMaxSize()
                         )
-
                     }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = currentTrack?.reciter ?: "",
+                    text = currentTrack?.reciter ?: "انيس",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.ExtraBold
                 )
@@ -204,7 +193,7 @@ fun QuranPlayerScreen(
                 }
 
                 Text(
-                    text = currentTrack?.description ?: "",
+                    text = currentTrack?.description ?: "انيس",
                     fontSize = 16.sp,
                     color = Color.Gray
                 )
@@ -223,7 +212,7 @@ fun QuranPlayerScreen(
 
 @Composable
 fun Mp3Playback(
-    viewModel: RecitersViewModel,
+    viewModel: QuranPlayerViewModel,
     isOnline: Boolean
 ) {
     val isPlaying by viewModel.isPlaying.collectAsStateWithLifecycle()

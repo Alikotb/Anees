@@ -5,10 +5,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
+import com.example.anees.data.model.RecitationModel
 import com.example.anees.enums.AuthorEdition
 import com.example.anees.enums.PrayEnum
 import com.example.anees.enums.QuranSurah
-import com.example.anees.enums.RecitersEnum
 import com.example.anees.ui.navigation.ScreenRoute.AzanPlayerScreen
 import com.example.anees.ui.navigation.ScreenRoute.AzanSettingsPlayerScreen
 import com.example.anees.ui.navigation.ScreenRoute.AzkarDetailsScreen
@@ -124,9 +124,10 @@ fun SetUpNavHost(
                 },
                 onSuraClicked = {
                     navController.navigate(ScreenRoute.QuranPlayerScreen(
+                        recitationModel = null,
+                        recitationName = null,
                         index = it,
-                        reciter = null,
-                        isOnline = false,
+                        isOnline = false
                     ))
                 }
             )
@@ -274,35 +275,40 @@ fun SetUpNavHost(
         composable<ScreenRoute.RecitersScreen> {
             RecitersScreen(onBackClick = {
                 navController.navigateUp()
-            }) {
-                navController.navigate(ScreenRoute.SuraMp3Screen(Gson().toJson(it)))
+            }) { recitationModel , recitationName ->
+                navController.navigate(ScreenRoute.SuraMp3Screen(Gson().toJson(recitationModel) , recitationName))
             }
         }
 
         composable<ScreenRoute.SuraMp3Screen> {
-            val reciter = Gson().fromJson(
-                it.arguments?.getString("reciter"),
-                RecitersEnum::class.java
+            val recitationModel = Gson().fromJson(
+                it.arguments?.getString("recitationModel"),
+                RecitationModel::class.java
             )
-            SuraMp3Screen(reciter, onBackClick = {
+
+            val recitationName = it.arguments?.getString("recitationName") ?: ""
+
+            SuraMp3Screen(recitationModel , recitationName, onBackClick = {
                 navController.navigateUp()
-            }) { reciter, index ->
-                navController.navigate(ScreenRoute.QuranPlayerScreen(reciter, index))
+            }) { recitationModel , recitationName, index ->
+                navController.navigate(ScreenRoute.QuranPlayerScreen(recitationModel , recitationName, index))
             }
         }
 
         composable<ScreenRoute.QuranPlayerScreen> {
-            val reciter = Gson().fromJson(
-                it.arguments?.getString("reciter"),
-                RecitersEnum::class.java
+            val recitationModel = Gson().fromJson(
+                it.arguments?.getString("recitationModel"),
+                RecitationModel::class.java
             )
             val isOnline = it.arguments?.getBoolean("isOnline") ?: true
+            val recitationName = it.arguments?.getString("recitationName") ?: ""
 
             val index = it.arguments?.getInt("index") ?: 0
             QuranPlayerScreen(
-                reciter = reciter,
                 initialSuraIndex = index,
-                isOnline = isOnline
+                isOnline = isOnline,
+                recitationModel = recitationModel,
+                recitationName = recitationName,
             ) {
                 navController.navigateUp()
             }

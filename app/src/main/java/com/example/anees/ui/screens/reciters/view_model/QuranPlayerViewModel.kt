@@ -10,9 +10,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.anees.data.model.RecitationModel
 import com.example.anees.data.model.audio.AudioTrack
 import com.example.anees.data.model.audio.toAudioTrack
-import com.example.anees.enums.RecitersEnum
 import com.example.anees.receivers.RadioBroadcastReceiver
 import com.example.anees.services.RadioService
 import com.example.anees.utils.downloaded_audio.loadAllAudio
@@ -32,7 +32,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RecitersViewModel @Inject constructor(private val context: Application) :
+class QuranPlayerViewModel @Inject constructor(private val context: Application) :
     AndroidViewModel(context) {
 
     private val _playList = MutableStateFlow<List<AudioTrack>>(emptyList())
@@ -59,14 +59,14 @@ class RecitersViewModel @Inject constructor(private val context: Application) :
         setupBroadcastReceiver()
     }
 
-    fun setOnlinePlaylist(reciter: RecitersEnum) {
+    fun setOnlinePlaylist(reciter: RecitationModel, description: String) {
         val suras = SuraIndexes.mapIndexed { index, sura ->
             AudioTrack(
                 index = index,
                 title = sura.suraName,
-                description = reciter.description,
-                reciter = reciter.reciter,
-                reciterImage = reciter.image,
+                description = description,
+                reciter = reciter.reciter.reciterName,
+                reciterImage = reciter.reciter.imageUrl,
                 typeIcon = sura.type.name,
                 reciterBaseUrl = reciter.url,
                 uri = reciter.url + suraUrls[index].second,

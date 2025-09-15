@@ -27,8 +27,12 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import com.example.anees.data.model.RecitationModel
+import com.example.anees.enums.Recitations
 import com.example.anees.enums.RecitersEnum
 import com.example.anees.ui.screens.radio.components.ScreenBackground
 import com.example.anees.ui.screens.reciters.view.component.Mp3Card
@@ -37,9 +41,10 @@ import com.google.gson.Gson
 
 
 @Composable
-fun SuraMp3Screen(reciter: RecitersEnum ,
+fun SuraMp3Screen(reciter: RecitationModel ,
+                  recitationName: String ,
                   onBackClick: () -> Unit = {},
-                  onSuraClicked : (reciter: String, index: Int) -> Unit
+                  onSuraClicked : (reciter: String,recitationName: String, index: Int) -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         ScreenBackground()
@@ -57,15 +62,15 @@ fun SuraMp3Screen(reciter: RecitersEnum ,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
 
-                    Image(
-                        painter = painterResource(id = reciter.image),
+                    AsyncImage(
+                        model =  reciter.reciter.imageUrl,
                         contentDescription = null,
                         modifier = Modifier
                             .size(48.dp)
                             .shadow(2.dp, CircleShape, clip = true)
                     )
                     Text(
-                        text = reciter.reciter,
+                        text = reciter.reciter.reciterName,
                         textAlign = TextAlign.Right,
                         style = MaterialTheme.typography.headlineSmall
                     )
@@ -89,8 +94,8 @@ fun SuraMp3Screen(reciter: RecitersEnum ,
                     Mp3Card(
                         surah = surah,
                         index = suraUrls.indexOf(surah) + 1,
-                    ) {
-                        onSuraClicked(Gson().toJson(reciter), it)
+                    ){
+                        onSuraClicked(Gson().toJson(reciter), recitationName , it)
                     }
                 }
             }
