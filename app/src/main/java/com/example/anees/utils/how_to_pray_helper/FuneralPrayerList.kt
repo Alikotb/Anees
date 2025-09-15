@@ -1,6 +1,5 @@
 package com.example.anees.utils.how_to_pray_helper
 
-import com.example.anees.R
 import com.example.anees.data.model.HowToPrayDto
 
 val funeralPrayerList = listOf(

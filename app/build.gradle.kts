@@ -6,18 +6,17 @@ plugins {
     kotlin("kapt")
     id("com.google.devtools.ksp")
     id("org.jetbrains.kotlin.plugin.serialization") version "1.9.22"
-
-
+    id ("kotlin-parcelize")
 }
 
 android {
     namespace = "com.example.anees"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.anees"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -121,5 +120,8 @@ dependencies {
 
     //glide
     implementation ("io.coil-kt:coil-compose:2.7.0")
+
+    //serialization
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
 }

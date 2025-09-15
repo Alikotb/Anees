@@ -19,8 +19,6 @@ import androidx.core.content.ContextCompat
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.batoulapps.adhan.Coordinates
-import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
 import com.example.anees.enums.PrayEnum
 import com.example.anees.receivers.AzanAlarmReceiver
 import com.example.anees.utils.prayer_helper.PrayerTimesHelper

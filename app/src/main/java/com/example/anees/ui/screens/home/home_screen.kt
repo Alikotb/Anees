@@ -55,7 +55,8 @@ fun HomeScreen(
     navToReciters: () -> Unit = {},
     navToNamesOfAllah: () -> Unit = {},
     navToHisnAlMuslim: () -> Unit = {},
-    navToPrayScreen: () -> Unit = {}
+    navToPrayScreen: () -> Unit = {},
+    navToDownloadQuran : () -> Unit = {}
 ) {
 
     val ctx = LocalContext.current
@@ -171,6 +172,12 @@ fun HomeScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
                 ) {
+                    ComponentCard(
+                        size = .45f,
+                        title = "المفضلة",
+                        onClick = navToDownloadQuran,
+                        id = R.drawable.downloaded_audio_card_icon
+                    )
                     Spacer(modifier = Modifier.width(8.dp))
                     ComponentCard(
                         size = .45f,

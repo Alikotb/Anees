@@ -2,8 +2,8 @@ package com.example.anees.hilt
 
 
 import android.content.Context
-import com.example.anees.data.local.database.dao.AneesDao
 import com.example.anees.data.local.database.AneesDatabase
+import com.example.anees.data.local.database.dao.AneesDao
 import com.example.anees.data.local.database.dao.TafsirDao
 import com.example.anees.data.remote.service.HadithApiService
 import com.example.anees.data.remote.service.TafsirService
