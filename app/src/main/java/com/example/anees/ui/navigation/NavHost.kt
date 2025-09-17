@@ -108,10 +108,7 @@ fun SetUpNavHost(
                 },
                 navToElMahfogat = {
                     navController.navigate(ScreenRoute.ElMahfogatScreen)
-                },
-                navToDownloadQuran = {
-                    navController.navigate(ScreenRoute.DownloadQuranScreen)
-                },
+                }
             )
         }
         composable<ScreenRoute.Sebiha> {
@@ -255,6 +252,14 @@ fun SetUpNavHost(
                 navToAzkarDetails = { azkarCategoty ->
                     navController.navigateUp()
                     navController.navigate(AzkarDetailsScreen(azkarCategoty))
+                },
+                navToReciter = {
+                    navController.navigate(ScreenRoute.QuranPlayerScreen(
+                        recitationModel = null,
+                        recitationName = null,
+                        index = it,
+                        isOnline = false
+                    ))
                 }
             )
         }

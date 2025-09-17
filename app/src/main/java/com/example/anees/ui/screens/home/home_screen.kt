@@ -56,7 +56,6 @@ fun HomeScreen(
     navToNamesOfAllah: () -> Unit = {},
     navToHisnAlMuslim: () -> Unit = {},
     navToPrayScreen: () -> Unit = {},
-    navToDownloadQuran : () -> Unit = {},
     navToElMahfogat: () -> Unit = {}
 ) {
 
@@ -154,30 +153,9 @@ fun HomeScreen(
                 ) {
                     ComponentCard(
                         size = .45f,
-                        title = "اسماء الله الحسنى",
-                        onClick = navToNamesOfAllah,
-                        id = R.drawable.allah
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    ComponentCard(
-                        size = .45f,
                         title = "حصن المسلم",
                         onClick = navToHisnAlMuslim,
                         id = R.drawable.hisen
-                    )
-
-                }
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                ) {
-                    ComponentCard(
-                        size = .45f,
-                        title = "المفضلة",
-                        onClick = navToDownloadQuran,
-                        id = R.drawable.downloaded_audio_card_icon
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     ComponentCard(
@@ -187,20 +165,28 @@ fun HomeScreen(
                         id = R.drawable.prayer_icon
                     )
                 }
+
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
                 ) {
-                    Spacer(modifier = Modifier.width(8.dp))
                     ComponentCard(
                         size = .45f,
                         title = "المحفوظات",
                         onClick = navToElMahfogat,
-                        id = R.drawable.elmahfogat
+                        id = R.drawable.downloaded_audio_card_icon
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    ComponentCard(
+                        size = .45f,
+                        title = "اسماء الله الحسنى",
+                        onClick = navToNamesOfAllah,
+                        id = R.drawable.allah
                     )
                 }
+
                 Spacer(modifier = Modifier.height(48.dp))
             }
         }
