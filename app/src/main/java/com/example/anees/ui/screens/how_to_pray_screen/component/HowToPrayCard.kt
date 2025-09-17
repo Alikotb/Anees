@@ -1,7 +1,6 @@
 package com.example.anees.ui.screens.how_to_pray_screen.component
 
 import android.content.Intent
-import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -51,12 +50,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import coil.compose.SubcomposeAsyncImage
 import com.example.anees.R
 import com.example.anees.ui.screens.how_to_pray_screen.model.HowToPrayPojo
 import com.example.anees.ui.screens.radio.components.CustomSnackbar
 import com.example.anees.utils.extensions.convertNumbersToArabic
-import androidx.core.net.toUri
 
 
 @Composable

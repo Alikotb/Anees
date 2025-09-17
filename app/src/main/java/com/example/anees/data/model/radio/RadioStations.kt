@@ -1,6 +1,7 @@
 package com.example.anees.data.model.radio
 
 import com.example.anees.R
+import com.example.anees.data.model.audio.AudioTrack
 
 object RadioStations {
     val stations = listOf(
@@ -222,3 +223,16 @@ object RadioStations {
         )
     )
 }
+
+val audioStations = RadioStations.stations.mapIndexed { index, station ->
+    AudioTrack(
+        index = index,
+        title = station.name,
+        description = station.description,
+        reciter = station.name,
+        reciterImage = "",
+        typeIcon = "",
+        reciterBaseUrl = "",
+        uri = station.url,
+    )
+ }

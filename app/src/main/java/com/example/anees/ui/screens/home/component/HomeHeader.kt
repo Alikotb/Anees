@@ -33,18 +33,13 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.batoulapps.adhan.Coordinates
 import com.example.anees.R
-import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
 import com.example.anees.enums.PrayEnum
 import com.example.anees.utils.date_helper.DateHelper
 import com.example.anees.utils.extensions.convertNumbersToArabic
-import com.example.anees.utils.extensions.getCityAndCountryInArabic
 import com.example.anees.utils.extensions.toArabicTime
 import com.example.anees.utils.prayer_helper.PrayerTimesHelper
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 
 

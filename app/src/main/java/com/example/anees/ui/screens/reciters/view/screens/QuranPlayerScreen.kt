@@ -1,4 +1,4 @@
-package com.example.anees.ui.screens.reciters
+package com.example.anees.ui.screens.reciters.view.screens
 
 import android.app.Activity
 import android.content.BroadcastReceiver
@@ -7,17 +7,36 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.SkipPrevious
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,43 +54,62 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.anees.enums.RecitersEnum
+import coil.compose.AsyncImage
 import com.example.anees.enums.SuraTypeEnum
 import com.example.anees.R
+import com.example.anees.data.model.RecitationModel
 import com.example.anees.services.RadioService
 import com.example.anees.ui.screens.radio.components.ScreenBackground
+import com.example.anees.ui.screens.reciters.view_model.QuranPlayerViewModel
 import com.example.anees.utils.SharedModel
 
 @Composable
 fun QuranPlayerScreen(
-    reciter: RecitersEnum = RecitersEnum.Abdelbaset,
+    recitationModel: RecitationModel?,
+    recitationName: String?,
     initialSuraIndex: Int = 0,
+    isOnline: Boolean = true,
     onBackClick: () -> Unit = {}
 ) {
-    val viewModel: RecitersViewModel = viewModel()
-    val currentSura by viewModel.currentSura.collectAsStateWithLifecycle()
-    val currentSuraTypeIcon by viewModel.currentSuraTypeIcon.collectAsStateWithLifecycle()
-    val reciterUrl by viewModel.reciterUrl.collectAsStateWithLifecycle()
-    LaunchedEffect(reciterUrl) {
-        viewModel.setCurrentSura(initialSuraIndex, reciter)
-    }
-
+    val viewModel: QuranPlayerViewModel = viewModel()
+    val currentTrack by viewModel.currentTrack.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+
+    LaunchedEffect(Unit) {
+        if (isOnline) {
+            viewModel.setOnlinePlaylist(recitationModel!!, recitationName!!)
+            viewModel.playSura(initialSuraIndex)
+        } else {
+            viewModel.setOfflinePlaylist()
+            viewModel.playSura(initialSuraIndex)
+        }
+    }
+
+
     DisposableEffect(lifecycleOwner) {
         val receiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 if (SharedModel.isAppActive) {
                     onBackClick()
-                }else {
+                } else {
                     (context as Activity).finishAffinity()
                 }
             }
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            context.registerReceiver(receiver, IntentFilter(RadioService.ACTION_CLOSE), Context.RECEIVER_NOT_EXPORTED)
-        }else {
-            ContextCompat.registerReceiver(context, receiver, IntentFilter(RadioService.ACTION_CLOSE), ContextCompat.RECEIVER_NOT_EXPORTED)
+            context.registerReceiver(
+                receiver,
+                IntentFilter(RadioService.ACTION_CLOSE),
+                Context.RECEIVER_NOT_EXPORTED
+            )
+        } else {
+            ContextCompat.registerReceiver(
+                context,
+                receiver,
+                IntentFilter(RadioService.ACTION_CLOSE),
+                ContextCompat.RECEIVER_NOT_EXPORTED
+            )
         }
 
         onDispose {
@@ -84,8 +122,7 @@ fun QuranPlayerScreen(
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
         Box(modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp)
-            .padding(top = 24.dp)) {
+        ) {
             ScreenBackground()
             IconButton(
                 onClick = {
@@ -94,7 +131,7 @@ fun QuranPlayerScreen(
                 modifier = Modifier
                     .padding(vertical = 24.dp)
                     .size(48.dp),
-            ){
+            ) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
             }
             Column(
@@ -109,17 +146,25 @@ fun QuranPlayerScreen(
                     shape = CircleShape,
                     modifier = Modifier.size(160.dp),
                 ) {
-                    Image(
-                        painter = painterResource(id = reciter.image),
-                        contentDescription = "صورة القارئ",
-                        modifier = Modifier.fillMaxSize()
-                    )
+                    if (isOnline) {
+                        AsyncImage(
+                            model = currentTrack?.reciterImage,
+                            contentDescription = "صورة القارئ",
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    } else {
+                        Image(
+                            painter = painterResource(id = R.drawable.logo_foreground),
+                            contentDescription = "صورة القارئ",
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = reciter.reciter,
+                    text = currentTrack?.reciter ?: "انيس",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.ExtraBold
                 )
@@ -131,14 +176,16 @@ fun QuranPlayerScreen(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Image(
-                        painter = painterResource(id = if (currentSuraTypeIcon == SuraTypeEnum.MECCA) R.drawable.kaaba else R.drawable.mosque),
-                        contentDescription = null,
-                        modifier = Modifier.size(24.dp)
-                    )
-                    Spacer(modifier = Modifier.width(16.dp))
+                    if (isOnline) {
+                        Image(
+                            painter = painterResource(id = if (currentTrack?.typeIcon == SuraTypeEnum.MECCA.name) R.drawable.kaaba else R.drawable.mosque),
+                            contentDescription = null,
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Spacer(modifier = Modifier.width(16.dp))
+                    }
                     Text(
-                        text = "سُورَةٌ ${currentSura.suraName}",
+                        text = "سُورَةٌ ${currentTrack?.title}",
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Medium,
                         fontFamily = FontFamily(Font(R.font.othmani))
@@ -146,7 +193,7 @@ fun QuranPlayerScreen(
                 }
 
                 Text(
-                    text = reciterUrl.description,
+                    text = currentTrack?.description ?: "انيس",
                     fontSize = 16.sp,
                     color = Color.Gray
                 )
@@ -154,7 +201,8 @@ fun QuranPlayerScreen(
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Mp3Playback(
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    isOnline = isOnline
                 )
             }
         }
@@ -164,11 +212,14 @@ fun QuranPlayerScreen(
 
 @Composable
 fun Mp3Playback(
-    viewModel: RecitersViewModel
+    viewModel: QuranPlayerViewModel,
+    isOnline: Boolean
 ) {
     val isPlaying by viewModel.isPlaying.collectAsStateWithLifecycle()
     val progress by viewModel.progress.collectAsStateWithLifecycle()
     val currentSuraIndex by viewModel.currentSuraIndex.collectAsStateWithLifecycle()
+    val playlist by viewModel.playList.collectAsStateWithLifecycle()
+
 
     LaunchedEffect(Unit) {
         viewModel.getNextSura()
@@ -194,7 +245,12 @@ fun Mp3Playback(
             IconButton(onClick = {
                 viewModel.onPrev()
             }) {
-                Icon(Icons.Default.SkipPrevious, contentDescription = "السورة السابقة", modifier = Modifier.size(48.dp), tint = Color(0xFF4CAF50))
+                Icon(
+                    Icons.Default.SkipPrevious,
+                    contentDescription = "السورة السابقة",
+                    modifier = Modifier.size(48.dp),
+                    tint = Color(0xFF4CAF50)
+                )
             }
         } else {
             Spacer(modifier = Modifier.size(48.dp))
@@ -211,14 +267,33 @@ fun Mp3Playback(
             )
         }
 
-        if (currentSuraIndex < 113) {
+        if (currentSuraIndex < playlist.lastIndex) {
             IconButton(onClick = {
                 viewModel.onNext()
             }) {
-                Icon(Icons.Default.SkipNext, contentDescription = "السورة التالية", modifier = Modifier.size(48.dp), tint = Color(0xFF4CAF50))
+                Icon(
+                    Icons.Default.SkipNext,
+                    contentDescription = "السورة التالية",
+                    modifier = Modifier.size(48.dp),
+                    tint = Color(0xFF4CAF50)
+                )
             }
         } else {
             Spacer(modifier = Modifier.size(48.dp))
+        }
+        if (isOnline) {
+            IconButton(
+                onClick = {
+                    viewModel.downloadCurrentSura()
+                }
+            ) {
+                Icon(
+                    Icons.Default.Download,
+                    contentDescription = "تحميل",
+                    modifier = Modifier.size(32.dp),
+                    tint = Color(0xFF4CAF50)
+                )
+            }
         }
     }
 }

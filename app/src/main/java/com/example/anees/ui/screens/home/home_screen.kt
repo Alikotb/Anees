@@ -56,6 +56,7 @@ fun HomeScreen(
     navToNamesOfAllah: () -> Unit = {},
     navToHisnAlMuslim: () -> Unit = {},
     navToPrayScreen: () -> Unit = {},
+    navToDownloadQuran : () -> Unit = {},
     navToElMahfogat: () -> Unit = {}
 ) {
 
@@ -172,6 +173,12 @@ fun HomeScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
                 ) {
+                    ComponentCard(
+                        size = .45f,
+                        title = "المفضلة",
+                        onClick = navToDownloadQuran,
+                        id = R.drawable.downloaded_audio_card_icon
+                    )
                     Spacer(modifier = Modifier.width(8.dp))
                     ComponentCard(
                         size = .45f,
@@ -179,6 +186,13 @@ fun HomeScreen(
                         onClick = navToPrayScreen,
                         id = R.drawable.prayer_icon
                     )
+                }
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                ) {
                     Spacer(modifier = Modifier.width(8.dp))
                     ComponentCard(
                         size = .45f,
