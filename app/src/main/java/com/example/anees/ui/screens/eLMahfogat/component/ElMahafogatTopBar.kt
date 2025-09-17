@@ -40,7 +40,7 @@ fun ElMahfogatTopBar(
         ) {
 
             Image(
-                painter = painterResource(id = R.drawable.elmahfogat),
+                painter = painterResource(id = R.drawable.downloaded_audio_card_icon),
                 contentDescription = null,
                 modifier = Modifier.size(24.dp)
             )

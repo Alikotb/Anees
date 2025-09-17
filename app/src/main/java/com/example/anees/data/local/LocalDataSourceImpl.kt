@@ -48,7 +48,7 @@ class LocalDataSourceImpl @Inject constructor(
     }
 
     // --- Mahafogat (Saved Azkar / Ad3ya) ---
-    override suspend fun addAzkar(azkar: AzkarEntity) {
+    override suspend fun insertAzkar(azkar: AzkarEntity) {
         mahafogatDao.addAzkar(azkar)
     }
 
@@ -65,7 +65,7 @@ class LocalDataSourceImpl @Inject constructor(
     }
 
     // Ad3ya
-    override suspend fun addAd3ya(ad3ya: Ad3yaEntity) {
+    override suspend fun insertAd3ya(ad3ya: Ad3yaEntity) {
         mahafogatDao.addAd3ya(ad3ya)
     }
 

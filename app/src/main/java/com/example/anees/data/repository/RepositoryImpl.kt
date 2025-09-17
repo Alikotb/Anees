@@ -1,6 +1,8 @@
 package com.example.anees.data.repository
 
 import com.example.anees.data.local.LocalDataSource
+import com.example.anees.data.model.Ad3yaEntity
+import com.example.anees.data.model.AzkarEntity
 import com.example.anees.data.model.EditionResponse
 import com.example.anees.data.model.Sebiha
 import com.example.anees.data.model.TafsierModel
@@ -14,7 +16,16 @@ class RepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource
 ) : Repository {
 
+    // --- SharedPreferences ---
+    override fun saveData(key: String, value: Any) {
+        localDataSource.saveData(key, value)
+    }
 
+    override fun <T> fetchData(key: String, defaultValue: T): T {
+        return localDataSource.fetchData(key,defaultValue)
+    }
+
+    // --- Sebiha ---
     override suspend fun addSebiha(sebiha: Sebiha) {
         localDataSource.insertSebiha(sebiha)
     }
@@ -27,17 +38,9 @@ class RepositoryImpl @Inject constructor(
         return flowOf(remoteDataSource.getAllSections(name))
     }
 
+    // --- Tafsier ---
     override suspend fun getAllTafsier(name: String): Flow<TafsierModel> {
         return flowOf(remoteDataSource.getAllTafsier(name))
-    }
-
-
-    override fun saveData(key: String, value: Any) {
-        localDataSource.saveData(key, value)
-    }
-
-    override fun <T> fetchData(key: String, defaultValue: T): T {
-        return localDataSource.fetchData(key,defaultValue)
     }
 
     override suspend fun addTafsir(tafsir: TafsierModel) {
@@ -47,4 +50,39 @@ class RepositoryImpl @Inject constructor(
     override fun getTafsir(id: Int): Flow<TafsierModel?> {
         return localDataSource.getTafsir(id)
     }
+
+    // --- Azkar ---
+    override suspend fun insertAzkar(azkar: AzkarEntity) {
+        return localDataSource.insertAzkar(azkar)
+    }
+
+    override suspend fun deleteAzkar(azkar: AzkarEntity) {
+        return localDataSource.deleteAzkar(azkar)
+    }
+
+    override suspend fun isAzkarSaved(category: String): Boolean {
+        return localDataSource.isAzkarSaved(category)
+    }
+
+    override fun getSavedAzkarFlow(): Flow<List<AzkarEntity>> {
+        return localDataSource.getSavedAzkarFlow()
+    }
+
+    // --- Ad3ya ---
+    override suspend fun insertAd3ya(ad3ya: Ad3yaEntity) {
+        return localDataSource.insertAd3ya(ad3ya)
+    }
+
+    override suspend fun deleteAd3ya(ad3ya: Ad3yaEntity) {
+        return localDataSource.deleteAd3ya(ad3ya)
+    }
+
+    override suspend fun isAd3yaSaved(title: String): Boolean {
+        return localDataSource.isAd3yaSaved(title)
+    }
+
+    override fun getSavedAd3yaFlow(): Flow<List<Ad3yaEntity>> {
+        return localDataSource.getSavedAd3yaFlow()
+    }
+
 }

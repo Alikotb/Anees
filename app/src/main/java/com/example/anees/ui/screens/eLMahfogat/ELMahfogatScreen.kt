@@ -75,7 +75,7 @@ fun ElMahfogatScreen(
     }
     val ad3yaExpanded = remember { mutableStateMapOf<String, Boolean>() }
 
-    val tabs = listOf("الأذكار", "الأدعية", "القراءات")
+    val tabs = listOf("القراءات","الأذكار", "الأدعية")
     val pagerState = rememberPagerState(initialPage = 0) { tabs.size }
     val coroutineScope = rememberCoroutineScope()
 
@@ -135,6 +135,27 @@ fun ElMahfogatScreen(
             ) { page ->
                 when (page) {
                     0 -> {
+                        if (audioList.isEmpty()) {
+                            EmptyPlaceholder("لا توجد قراءات محفوظة")
+                        } else {
+                            LazyColumn(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(16.dp),
+                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                itemsIndexed(audioList) { index, audio ->
+                                    ElMahafogatDownloadedAudioCard(
+                                        surah = audio,
+                                        index = index,
+                                        onClick = navToReciter
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    1 -> {
                         if (categories.isEmpty()) {
                             EmptyPlaceholder("لا يوجد أذكار محفوظة")
                         } else {
@@ -154,7 +175,7 @@ fun ElMahfogatScreen(
                         }
                     }
 
-                    1 -> {
+                    2 -> {
                         if (ad3yaTitles.isEmpty()) {
                             EmptyPlaceholder("لا يوجد أدعية محفوظة")
                         } else {
@@ -167,27 +188,6 @@ fun ElMahfogatScreen(
                                     ElMahfogatContentList(
                                         titlesWithTexts = ad3yaTitles,
                                         expandedStates = ad3yaExpanded
-                                    )
-                                }
-                            }
-                        }
-                    }
-
-                    2 -> {
-                        if (audioList.isEmpty()) {
-                            EmptyPlaceholder("لا توجد قراءات محفوظة")
-                        } else {
-                            LazyColumn(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(16.dp),
-                                verticalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                itemsIndexed(audioList) { index, audio ->
-                                    ElMahafogatDownloadedAudioCard(
-                                        surah = audio,
-                                        index = index,
-                                        onClick = navToReciter
                                     )
                                 }
                             }
