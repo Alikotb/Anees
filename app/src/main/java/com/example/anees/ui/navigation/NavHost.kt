@@ -31,6 +31,7 @@ import com.example.anees.ui.navigation.ScreenRoute.FajrPlayerScreen
 import com.example.anees.ui.screens.azan.AzanScreen
 import com.example.anees.ui.screens.azkar.screens.AdhkarDetailsScreen
 import com.example.anees.ui.screens.azkar.screens.AdhkarScreen
+import com.example.anees.ui.screens.eLMahfogat.ElMahfogatScreen
 import com.example.anees.ui.screens.hisn_almuslim.HisnAlMuslimScreen
 import com.example.anees.ui.screens.home.HomeScreenWithDrawer
 import com.example.anees.ui.screens.names_of_allah.NamesOfAllahScreen
@@ -103,6 +104,9 @@ fun SetUpNavHost(
                 },
                 navToPrayScreen = {
                     navController.navigate(ScreenRoute.PrayScreen)
+                },
+                navToElMahfogat = {
+                    navController.navigate(ScreenRoute.ElMahfogatScreen)
                 }
             )
         }
@@ -143,7 +147,8 @@ fun SetUpNavHost(
                 navToDetails = { cat ->
                     navController.navigateUp()
                     navController.navigate(AzkarDetailsScreen(cat))
-                })
+                }
+            )
         }
         composable<AzkarDetailsScreen> {
             val asd = it.arguments?.getString("category") ?: ""
@@ -222,6 +227,18 @@ fun SetUpNavHost(
             }
         }
 
+        composable<ScreenRoute.ElMahfogatScreen> {
+            ElMahfogatScreen(
+                navToHome = {
+                    navController.navigateUp()
+                },
+                navToAzkarDetails = { azkarCategoty ->
+                    navController.navigateUp()
+                    navController.navigate(AzkarDetailsScreen(azkarCategoty))
+                }
+            )
+        }
+
         composable<ScreenRoute.RadioScreen> {
             RadioScreen{
                 navController.navigateUp()
@@ -237,11 +254,13 @@ fun SetUpNavHost(
             }
             )
         }
+
         composable<ScreenRoute.NamesOfAllahScreen> {
             NamesOfAllahScreen {
                 navController.navigateUp()
             }
         }
+
         composable<ScreenRoute.TafsirDetailsScreen> {
             val surah = Gson().fromJson(
                 it.arguments?.getString("surah"),
@@ -292,6 +311,7 @@ fun SetUpNavHost(
                 navController.navigateUp()
             }
         }
+
         composable<AzanPlayerScreen> {
             val (prayEnum , time) = PrayerTimesHelper.getNextPrayer() ?: (PrayEnum.FAJR to 0L)
             AzanScreen(

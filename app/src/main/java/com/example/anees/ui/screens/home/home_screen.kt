@@ -55,7 +55,8 @@ fun HomeScreen(
     navToReciters: () -> Unit = {},
     navToNamesOfAllah: () -> Unit = {},
     navToHisnAlMuslim: () -> Unit = {},
-    navToPrayScreen: () -> Unit = {}
+    navToPrayScreen: () -> Unit = {},
+    navToElMahfogat: () -> Unit = {}
 ) {
 
     val ctx = LocalContext.current
@@ -177,6 +178,13 @@ fun HomeScreen(
                         title = "كيف أصلي؟",
                         onClick = navToPrayScreen,
                         id = R.drawable.prayer_icon
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    ComponentCard(
+                        size = .45f,
+                        title = "المحفوظات",
+                        onClick = navToElMahfogat,
+                        id = R.drawable.elmahfogat
                     )
                 }
                 Spacer(modifier = Modifier.height(48.dp))

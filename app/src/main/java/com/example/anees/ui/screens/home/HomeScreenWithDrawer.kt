@@ -65,7 +65,8 @@ fun HomeScreenWithDrawer(
     navToNamesOfAllah: () -> Unit = {},
     navToSettings: () -> Unit = {},
     navToHisnAlMuslim: () -> Unit = {},
-    navToPrayScreen: () -> Unit
+    navToPrayScreen: () -> Unit,
+    navToElMahfogat: () -> Unit
 ) {
     val drawerState = remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
@@ -201,7 +202,8 @@ fun HomeScreenWithDrawer(
                             navToReciters = navToReciters,
                             navToNamesOfAllah = navToNamesOfAllah,
                             navToHisnAlMuslim = navToHisnAlMuslim,
-                            navToPrayScreen = navToPrayScreen
+                            navToPrayScreen = navToPrayScreen,
+                            navToElMahfogat = navToElMahfogat
                         )
                     }
                 }
