@@ -40,6 +40,7 @@ import com.example.anees.utils.extensions.requestOverlayPermission
 import com.example.anees.utils.extensions.setAllAlarms
 import com.example.anees.utils.location.LocationProvider
 import com.example.anees.utils.location.checkPermission
+import com.example.anees.utils.prayer_helper.PrayerTimesHelper
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
@@ -183,7 +184,7 @@ class MainActivity : ComponentActivity() {
         val dateComponents = DateComponents.from(Date())
 
         val params = CalculationMethod.EGYPTIAN.parameters
-        val prayerTimes = PrayerTimes(getCoordinates(context), dateComponents, params)
+        val prayerTimes = PrayerTimes(PrayerTimesHelper.getCoordinates(), dateComponents, params)
 
         //1- define time
         val times = listOf(
@@ -225,12 +226,6 @@ class MainActivity : ComponentActivity() {
                 pendingIntent
             )
         }
-    }
-
-    private fun getCoordinates(context: Context): Coordinates {
-        val latitude = SharedPreferencesImpl(context).fetchData("latitude", 30.033333)
-        val longitude = SharedPreferencesImpl(context).fetchData("longitude", 31.233334)
-        return Coordinates(latitude, longitude)
     }
 }
 

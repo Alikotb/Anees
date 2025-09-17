@@ -21,6 +21,7 @@ import com.batoulapps.adhan.Coordinates
 import com.batoulapps.adhan.PrayerTimes
 import com.batoulapps.adhan.data.DateComponents
 import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
+import com.example.anees.utils.prayer_helper.PrayerTimesHelper
 import java.util.Date
 
 class AzanReminderReceiver: BroadcastReceiver()  {
@@ -82,7 +83,7 @@ class AzanReminderReceiver: BroadcastReceiver()  {
         val dateComponents = DateComponents.from(Date())
 
         val params = CalculationMethod.EGYPTIAN.parameters
-        val prayerTimes = PrayerTimes(getCoordinates(context), dateComponents, params)
+        val prayerTimes = PrayerTimes(PrayerTimesHelper.getCoordinates(), dateComponents, params)
 
         val calendar = Calendar.getInstance().apply {
             add(Calendar.DAY_OF_YEAR, 1) // tomorrow
@@ -125,11 +126,5 @@ class AzanReminderReceiver: BroadcastReceiver()  {
             5 -> R.drawable.isha
             else -> R.drawable.maghrib
         }
-    }
-
-    private fun getCoordinates(context: Context): Coordinates {
-        val latitude = SharedPreferencesImpl(context).fetchData("latitude", 30.033333)
-        val longitude = SharedPreferencesImpl(context).fetchData("longitude", 31.233334)
-        return Coordinates(latitude, longitude)
     }
 }
