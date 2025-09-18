@@ -4,8 +4,10 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.anees.data.model.HadithEntity
+import com.example.anees.data.model.audio.AudioDto
 import com.example.anees.data.repository.Repository
 import com.example.anees.utils.azkar_helper.AzkarUtils
+import com.example.anees.utils.downloaded_audio.loadAllAudio
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -22,9 +24,9 @@ class ElMahfogatViewModel @Inject constructor(
     private val _savedHadith = MutableStateFlow<List<HadithEntity>>(emptyList())
     val savedHadith: StateFlow<List<HadithEntity>> = _savedHadith.asStateFlow()
 
-    init {
-        loadSavedHadiths()
-    }
+    private val _audioList = MutableStateFlow<List<AudioDto>>(emptyList())
+    val audioList: StateFlow<List<AudioDto>> = _audioList.asStateFlow()
+
 
     fun loadAzkarCategories(context: Context) {
         viewModelScope.launch {
@@ -38,7 +40,13 @@ class ElMahfogatViewModel @Inject constructor(
         }
     }
 
-    private fun loadSavedHadiths() {
+    fun loadAudio(context: Context) {
+        viewModelScope.launch {
+            _audioList.value = loadAllAudio(context)
+        }
+    }
+
+     fun loadSavedHadiths() {
         viewModelScope.launch {
             repository.getSavedHadithFlow()
                 .collect { hadithList ->

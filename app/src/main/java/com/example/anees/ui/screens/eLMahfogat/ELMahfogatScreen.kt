@@ -50,18 +50,26 @@ fun ElMahfogatScreen(
     viewModel: ElMahfogatViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val audioList = loadAllAudio(context)
-
     val azkarCategories by viewModel.azkarCategories.collectAsStateWithLifecycle()
     val hadithContent by viewModel.savedHadith.collectAsStateWithLifecycle()
-
-    LaunchedEffect(Unit) {
-        viewModel.loadAzkarCategories(context)
-    }
 
     val tabs = listOf("القراءات","الأذكار", "الأحاديث")
     val pagerState = rememberPagerState(initialPage = 0) { tabs.size }
     val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(pagerState.currentPage) {
+        when (pagerState.currentPage) {
+            0 -> {
+                viewModel.loadAudio(context)
+            }
+            1 -> {
+                viewModel.loadAzkarCategories(context)
+            }
+            2 -> {
+                viewModel.loadSavedHadiths()
+            }
+        }
+    }
 
     ScreenBackground()
 
@@ -119,6 +127,7 @@ fun ElMahfogatScreen(
             ) { page ->
                 when (page) {
                     0 -> {
+                        val audioList = viewModel.audioList.collectAsStateWithLifecycle().value
                         if (audioList.isEmpty()) {
                             EmptyPlaceholder("لا توجد قراءات محفوظة")
                         } else {
