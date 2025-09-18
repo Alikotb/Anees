@@ -21,6 +21,7 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
@@ -39,8 +40,6 @@ import com.example.anees.ui.screens.eLMahfogat.component.ElMahfogatTopBar
 import com.example.anees.ui.screens.eLMahfogat.component.EmptyPlaceholder
 import com.example.anees.ui.screens.eLMahfogat.components.ElMahfogatContentList
 import com.example.anees.ui.screens.radio.components.ScreenBackground
-import com.example.anees.utils.hisn_almuslim_helper.HisnAlMuslimHelper
-import com.example.anees.utils.azkar_helper.AzkarUtils
 import com.example.anees.utils.downloaded_audio.loadAllAudio
 import kotlinx.coroutines.launch
 
@@ -55,24 +54,14 @@ fun ElMahfogatScreen(
     val context = LocalContext.current
     val audioList = loadAllAudio(context)
 
-    val savedAzkar by viewModel.savedAzkarCategories.collectAsState()
-    val savedAd3ya by viewModel.savedAd3yaTitles.collectAsState()
+    val azkarCategories by viewModel.azkarCategories.collectAsState()
+    val ad3yaTitles by viewModel.ad3yaTitles.collectAsState()
 
-    val categories = remember {
-        val azkarList = AzkarUtils.parseAdhkar(context)
-        AzkarUtils.getAdhkarCategories(azkarList)
-            .filter { it in savedAzkar }
+    LaunchedEffect(Unit) {
+        viewModel.loadCategories(context)
+        viewModel.loadAd3ya(context)
     }
 
-    val ad3yaFile = "hisn/hisn_almuslim.json"
-    val ad3yaTitles = remember {
-        HisnAlMuslimHelper.getTitles(context, ad3yaFile)
-            .filter { it in savedAd3ya }
-            .map { title ->
-                val (texts, _) = HisnAlMuslimHelper.getSectionContent(context, ad3yaFile, title)
-                title to texts
-            }
-    }
     val ad3yaExpanded = remember { mutableStateMapOf<String, Boolean>() }
 
     val tabs = listOf("القراءات","الأذكار", "الأدعية")
@@ -156,7 +145,7 @@ fun ElMahfogatScreen(
                     }
 
                     1 -> {
-                        if (categories.isEmpty()) {
+                        if (azkarCategories.isEmpty()) {
                             EmptyPlaceholder("لا يوجد أذكار محفوظة")
                         } else {
                             LazyColumn(
@@ -165,7 +154,7 @@ fun ElMahfogatScreen(
                                     .padding(16.dp),
                                 verticalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
-                                items(categories) { category ->
+                                items(azkarCategories) { category ->
                                     ElMahafogatTitleCard(
                                         title = category,
                                         navToAzkarDetails = { navToAzkarDetails(category) }

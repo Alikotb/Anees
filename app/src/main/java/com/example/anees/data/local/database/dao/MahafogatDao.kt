@@ -15,8 +15,8 @@ interface MahafogatDao {
     @Insert
     suspend fun addAzkar(azkar: AzkarEntity)
 
-    @Delete
-    suspend fun deleteAzkar(azkar: AzkarEntity)
+    @Query("DELETE FROM mahafogat_azkar WHERE category = :category")
+    suspend fun deleteAzkar(category: String)
 
     @Query("SELECT EXISTS(SELECT 1 FROM mahafogat_azkar WHERE category = :category)")
     suspend fun isAzkarSaved(category: String): Boolean
@@ -28,8 +28,8 @@ interface MahafogatDao {
     @Insert
     suspend fun addAd3ya(ad3ya: Ad3yaEntity)
 
-    @Delete
-    suspend fun deleteAd3ya(ad3ya: Ad3yaEntity)
+    @Query("DELETE FROM mahafogat_ad3ya WHERE title = :title")
+    suspend fun deleteAd3ya(title: String)
 
     @Query("SELECT EXISTS(SELECT 1 FROM mahafogat_ad3ya WHERE title = :title)")
     suspend fun isAd3yaSaved(title: String): Boolean

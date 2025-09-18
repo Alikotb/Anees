@@ -30,11 +30,13 @@ interface Repository {
     suspend fun insertAzkar(azkar: AzkarEntity)
     suspend fun deleteAzkar(azkar: AzkarEntity)
     suspend fun isAzkarSaved(category: String): Boolean
+    suspend fun toggleAzkar(category: String)
     fun getSavedAzkarFlow(): Flow<List<AzkarEntity>>
 
     // --- Ad3ya ---
     suspend fun insertAd3ya(ad3ya: Ad3yaEntity)
     suspend fun deleteAd3ya(ad3ya: Ad3yaEntity)
     suspend fun isAd3yaSaved(title: String): Boolean
+    suspend fun toggleAd3ya(title: String)
     fun getSavedAd3yaFlow(): Flow<List<Ad3yaEntity>>
 }

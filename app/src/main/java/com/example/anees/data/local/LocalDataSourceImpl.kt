@@ -53,7 +53,7 @@ class LocalDataSourceImpl @Inject constructor(
     }
 
     override suspend fun deleteAzkar(azkar: AzkarEntity) {
-        mahafogatDao.deleteAzkar(azkar)
+        mahafogatDao.deleteAzkar(azkar.category)
     }
 
     override fun getSavedAzkarFlow(): Flow<List<AzkarEntity>> {
@@ -70,7 +70,7 @@ class LocalDataSourceImpl @Inject constructor(
     }
 
     override suspend fun deleteAd3ya(ad3ya: Ad3yaEntity) {
-        mahafogatDao.deleteAd3ya(ad3ya)
+        mahafogatDao.deleteAd3ya(ad3ya.title)
     }
 
     override fun getSavedAd3yaFlow(): Flow<List<Ad3yaEntity>> {

@@ -1,5 +1,6 @@
 package com.example.anees.data.repository
 
+import android.util.Log
 import com.example.anees.data.local.LocalDataSource
 import com.example.anees.data.model.Ad3yaEntity
 import com.example.anees.data.model.AzkarEntity
@@ -68,6 +69,15 @@ class RepositoryImpl @Inject constructor(
         return localDataSource.getSavedAzkarFlow()
     }
 
+    override suspend fun toggleAzkar(category: String) {
+        val exists = localDataSource.isAzkarSaved(category)
+        if (exists) {
+            localDataSource.deleteAzkar(AzkarEntity(category = category))
+        } else {
+            localDataSource.insertAzkar(AzkarEntity(category = category))
+        }
+    }
+
     // --- Ad3ya ---
     override suspend fun insertAd3ya(ad3ya: Ad3yaEntity) {
         return localDataSource.insertAd3ya(ad3ya)
@@ -83,6 +93,15 @@ class RepositoryImpl @Inject constructor(
 
     override fun getSavedAd3yaFlow(): Flow<List<Ad3yaEntity>> {
         return localDataSource.getSavedAd3yaFlow()
+    }
+
+    override suspend fun toggleAd3ya(title: String) {
+        val exists = localDataSource.isAd3yaSaved(title)
+        if (exists) {
+            localDataSource.deleteAd3ya(Ad3yaEntity(title = title))
+        } else {
+            localDataSource.insertAd3ya(Ad3yaEntity(title = title))
+        }
     }
 
 }

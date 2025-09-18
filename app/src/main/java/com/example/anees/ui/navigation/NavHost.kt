@@ -162,7 +162,7 @@ fun SetUpNavHost(
                     navController.navigateUp()
                 },
                 navToDetails = { cat ->
-                    navController.navigateUp()
+                    //  navController.navigateUp()
                     navController.navigate(AzkarDetailsScreen(cat))
                 }
             )
@@ -171,7 +171,7 @@ fun SetUpNavHost(
             val asd = it.arguments?.getString("category") ?: ""
             AdhkarDetailsScreen(asd) {
                 navController.popBackStack()
-                navController.navigate(ScreenRoute.AdhkarScreen)
+                // navController.navigate(ScreenRoute.AdhkarScreen)
             }
         }
         composable<ScreenRoute.HadithScreen> {
@@ -250,7 +250,6 @@ fun SetUpNavHost(
                     navController.navigateUp()
                 },
                 navToAzkarDetails = { azkarCategoty ->
-                    navController.navigateUp()
                     navController.navigate(AzkarDetailsScreen(azkarCategoty))
                 },
                 navToReciter = {

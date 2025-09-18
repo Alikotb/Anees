@@ -34,6 +34,8 @@ import com.example.anees.R
 @Composable
 fun ZekrCard(
     text: String,
+    isSaved: Boolean,
+    onStarClick: () -> Unit,
     onClick: () -> Unit
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
@@ -42,9 +44,13 @@ fun ZekrCard(
             modifier = Modifier.fillMaxWidth()
         ) {
             Image(
-                painter = painterResource(id = R.drawable.star),
+                painter = painterResource(
+                    id = if (isSaved) R.drawable.box else R.drawable.star
+                ),
                 contentDescription = null,
-                modifier = Modifier.size(36.dp),
+                modifier = Modifier
+                    .size(36.dp)
+                    .clickable { onStarClick() },
                 colorFilter = ColorFilter.tint(Color(0xFF311403))
             )
 

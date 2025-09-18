@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +35,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.anees.ui.screens.azkar.AzkarViewModel
 import com.example.anees.ui.screens.azkar.component.ZekrCard
 import com.example.anees.ui.screens.hadith.components.ScreenTitle
 import com.example.anees.ui.screens.radio.components.ScreenBackground
@@ -41,11 +44,18 @@ import com.example.anees.utils.azkar_helper.AzkarUtils
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AdhkarScreen(navToHome: () -> Unit = {}, navToDetails: (String) -> Unit = {}) {
+fun AdhkarScreen(
+    navToHome: () -> Unit = {},
+    navToDetails: (String) -> Unit = {},
+    azkarViewModel: AzkarViewModel = hiltViewModel()
+) {
     val context = LocalContext.current
     val azkarList = remember { AzkarUtils.parseAdhkar(context) }
     val categories = remember { AzkarUtils.getAdhkarCategories(azkarList) }
     var searchQuery by remember { mutableStateOf("") }
+
+    val savedZekr by azkarViewModel.savedZekr.collectAsState()
+
 
     ScreenBackground()
 
@@ -101,9 +111,9 @@ fun AdhkarScreen(navToHome: () -> Unit = {}, navToDetails: (String) -> Unit = {}
             items(filteredCategories) { category ->
                 ZekrCard(
                     text = category,
-                    onClick = {
-                        navToDetails(category)
-                    }
+                    isSaved = savedZekr.any { it.category == category },
+                    onStarClick = { azkarViewModel.toggleSave(category) },
+                    onClick = { navToDetails(category) }
                 )
             }
             item {
