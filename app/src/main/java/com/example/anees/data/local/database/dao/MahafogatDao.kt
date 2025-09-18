@@ -1,10 +1,9 @@
 package com.example.anees.data.local.database.dao
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.anees.data.model.Ad3yaEntity
+import com.example.anees.data.model.HadithEntity
 import com.example.anees.data.model.AzkarEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -24,16 +23,17 @@ interface MahafogatDao {
     @Query("SELECT * FROM mahafogat_azkar")
     fun getAllSavedAzkarFlow(): Flow<List<AzkarEntity>>
 
-    // Ad3ya
+    // Hadith
     @Insert
-    suspend fun addAd3ya(ad3ya: Ad3yaEntity)
+    suspend fun addHadith(hadith: HadithEntity)
 
-    @Query("DELETE FROM mahafogat_ad3ya WHERE title = :title")
-    suspend fun deleteAd3ya(title: String)
+    @Query("DELETE FROM mahafogat_hadith WHERE title = :title")
+    suspend fun deleteHadith(title: String)
 
-    @Query("SELECT EXISTS(SELECT 1 FROM mahafogat_ad3ya WHERE title = :title)")
-    suspend fun isAd3yaSaved(title: String): Boolean
+    @Query("SELECT EXISTS(SELECT 1 FROM mahafogat_hadith WHERE title = :title)")
+    suspend fun isHadithSaved(title: String): Boolean
 
-    @Query("SELECT * FROM mahafogat_ad3ya")
-    fun getAllSavedAd3yaFlow(): Flow<List<Ad3yaEntity>>
+    @Query("SELECT * FROM mahafogat_hadith")
+    fun getAllSavedHadithFlow(): Flow<List<HadithEntity>>
+
 }

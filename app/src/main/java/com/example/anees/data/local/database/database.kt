@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 import com.example.anees.data.local.database.dao.AneesDao
 import com.example.anees.data.local.database.dao.MahafogatDao
 import com.example.anees.data.local.database.dao.TafsirDao
-import com.example.anees.data.model.Ad3yaEntity
+import com.example.anees.data.model.HadithEntity
 import com.example.anees.data.model.AzkarEntity
 import com.example.anees.data.model.Sebiha
 import com.example.anees.data.model.TafsierModel
@@ -17,7 +17,7 @@ import com.example.anees.utils.Constants
 
 @TypeConverters(TafsierConverter::class)
 @Database(entities =
-    [Sebiha::class, TafsierModel::class,  AzkarEntity::class, Ad3yaEntity::class ],
+    [Sebiha::class, TafsierModel::class,  AzkarEntity::class, HadithEntity::class ],
     version = 2
 )
 abstract class AneesDatabase : RoomDatabase(){

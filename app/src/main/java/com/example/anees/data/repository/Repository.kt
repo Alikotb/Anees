@@ -1,6 +1,6 @@
 package com.example.anees.data.repository
 
-import com.example.anees.data.model.Ad3yaEntity
+import com.example.anees.data.model.HadithEntity
 import com.example.anees.data.model.AzkarEntity
 import com.example.anees.data.model.EditionResponse
 import com.example.anees.data.model.Sebiha
@@ -33,10 +33,10 @@ interface Repository {
     suspend fun toggleAzkar(category: String)
     fun getSavedAzkarFlow(): Flow<List<AzkarEntity>>
 
-    // --- Ad3ya ---
-    suspend fun insertAd3ya(ad3ya: Ad3yaEntity)
-    suspend fun deleteAd3ya(ad3ya: Ad3yaEntity)
-    suspend fun isAd3yaSaved(title: String): Boolean
-    suspend fun toggleAd3ya(title: String)
-    fun getSavedAd3yaFlow(): Flow<List<Ad3yaEntity>>
+    // --- Hadith ---
+    suspend fun insertHadith(hadith: HadithEntity)
+    suspend fun deleteHadith(hadith: HadithEntity)
+    suspend fun isHadithSaved(title: String): Boolean
+    suspend fun toggleHadith(title: String)
+    fun getSavedHadithFlow(): Flow<List<HadithEntity>>
 }

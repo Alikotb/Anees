@@ -1,6 +1,6 @@
 package com.example.anees.data.local
 
-import com.example.anees.data.model.Ad3yaEntity
+import com.example.anees.data.model.HadithEntity
 import com.example.anees.data.model.AzkarEntity
 import com.example.anees.data.model.Sebiha
 import com.example.anees.data.model.TafsierModel
@@ -28,10 +28,10 @@ interface LocalDataSource {
     suspend fun isAzkarSaved(category: String): Boolean
     fun getSavedAzkarFlow(): Flow<List<AzkarEntity>>
 
-    // Ad3ya
-    suspend fun insertAd3ya(ad3ya: Ad3yaEntity)
-    suspend fun deleteAd3ya(ad3ya: Ad3yaEntity)
-    suspend fun isAd3yaSaved(title: String): Boolean
-    fun getSavedAd3yaFlow(): Flow<List<Ad3yaEntity>>
+    // Hadith
+    suspend fun insertHadith(hadith: HadithEntity)
+    suspend fun deleteHadith(hadith: HadithEntity)
+    suspend fun isHadithSaved(title: String): Boolean
+    fun getSavedHadithFlow(): Flow<List<HadithEntity>>
 
 }

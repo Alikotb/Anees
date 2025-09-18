@@ -22,10 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,11 +31,12 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.anees.ui.screens.eLMahfogat.component.ElMahafogatDownloadedAudioCard
-import com.example.anees.ui.screens.eLMahfogat.component.ElMahafogatTitleCard
+import com.example.anees.ui.screens.eLMahfogat.component.ElMahafogatZekrTitleCard
 import com.example.anees.ui.screens.eLMahfogat.component.ElMahfogatTopBar
 import com.example.anees.ui.screens.eLMahfogat.component.EmptyPlaceholder
-import com.example.anees.ui.screens.eLMahfogat.components.ElMahfogatContentList
+import com.example.anees.ui.screens.hadith.components.HadithCard
 import com.example.anees.ui.screens.radio.components.ScreenBackground
 import com.example.anees.utils.downloaded_audio.loadAllAudio
 import kotlinx.coroutines.launch
@@ -54,17 +52,14 @@ fun ElMahfogatScreen(
     val context = LocalContext.current
     val audioList = loadAllAudio(context)
 
-    val azkarCategories by viewModel.azkarCategories.collectAsState()
-    val ad3yaTitles by viewModel.ad3yaTitles.collectAsState()
+    val azkarCategories by viewModel.azkarCategories.collectAsStateWithLifecycle()
+    val hadithContent by viewModel.savedHadith.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.loadCategories(context)
-        viewModel.loadAd3ya(context)
+        viewModel.loadAzkarCategories(context)
     }
 
-    val ad3yaExpanded = remember { mutableStateMapOf<String, Boolean>() }
-
-    val tabs = listOf("القراءات","الأذكار", "الأدعية")
+    val tabs = listOf("القراءات","الأذكار", "الأحاديث")
     val pagerState = rememberPagerState(initialPage = 0) { tabs.size }
     val coroutineScope = rememberCoroutineScope()
 
@@ -155,8 +150,10 @@ fun ElMahfogatScreen(
                                 verticalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
                                 items(azkarCategories) { category ->
-                                    ElMahafogatTitleCard(
+                                    ElMahafogatZekrTitleCard(
                                         title = category,
+                                        isSaved = true,
+                                        onSaveClick = { viewModel.toggleAzkarSaved(category) },
                                         navToAzkarDetails = { navToAzkarDetails(category) }
                                     )
                                 }
@@ -165,18 +162,20 @@ fun ElMahfogatScreen(
                     }
 
                     2 -> {
-                        if (ad3yaTitles.isEmpty()) {
-                            EmptyPlaceholder("لا يوجد أدعية محفوظة")
+                        if (hadithContent.isEmpty()) {
+                            EmptyPlaceholder("لا يوجد أحاديث محفوظة")
                         } else {
                             LazyColumn(
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .padding(16.dp)
+                                    .padding(16.dp),
+                                verticalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
-                                item {
-                                    ElMahfogatContentList(
-                                        titlesWithTexts = ad3yaTitles,
-                                        expandedStates = ad3yaExpanded
+                                items(hadithContent) { content ->
+                                    HadithCard(
+                                        hadithText = content.title,
+                                        isSaved = true,
+                                        onSaveClick = { viewModel.toggleHadithSaved(content.title) }
                                     )
                                 }
                             }

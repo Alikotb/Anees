@@ -4,13 +4,11 @@ import com.abdok.atmosphere.data.local.sharedPreference.ISharedPreferences
 import com.example.anees.data.local.database.dao.AneesDao
 import com.example.anees.data.local.database.dao.MahafogatDao
 import com.example.anees.data.local.database.dao.TafsirDao
-import com.example.anees.data.model.Ad3yaEntity
+import com.example.anees.data.model.HadithEntity
 import com.example.anees.data.model.AzkarEntity
 import com.example.anees.data.model.Sebiha
 import com.example.anees.data.model.TafsierModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class LocalDataSourceImpl @Inject constructor(
@@ -47,7 +45,7 @@ class LocalDataSourceImpl @Inject constructor(
         tafsirDao.insertTafsir(tafsir)
     }
 
-    // --- Mahafogat (Saved Azkar / Ad3ya) ---
+    // --- Azkar ---
     override suspend fun insertAzkar(azkar: AzkarEntity) {
         mahafogatDao.addAzkar(azkar)
     }
@@ -64,20 +62,20 @@ class LocalDataSourceImpl @Inject constructor(
         return mahafogatDao.isAzkarSaved(category)
     }
 
-    // Ad3ya
-    override suspend fun insertAd3ya(ad3ya: Ad3yaEntity) {
-        mahafogatDao.addAd3ya(ad3ya)
+    // --- Hadith ---
+    override suspend fun insertHadith(hadith: HadithEntity) {
+        mahafogatDao.addHadith(hadith)
     }
 
-    override suspend fun deleteAd3ya(ad3ya: Ad3yaEntity) {
-        mahafogatDao.deleteAd3ya(ad3ya.title)
+    override suspend fun deleteHadith(hadith: HadithEntity) {
+        mahafogatDao.deleteHadith(hadith.title)
     }
 
-    override fun getSavedAd3yaFlow(): Flow<List<Ad3yaEntity>> {
-        return mahafogatDao.getAllSavedAd3yaFlow()
+    override fun getSavedHadithFlow(): Flow<List<HadithEntity>> {
+        return mahafogatDao.getAllSavedHadithFlow()
     }
 
-    override suspend fun isAd3yaSaved(title: String): Boolean {
-        return mahafogatDao.isAd3yaSaved(title)
+    override suspend fun isHadithSaved(title: String): Boolean {
+        return mahafogatDao.isHadithSaved(title)
     }
 }

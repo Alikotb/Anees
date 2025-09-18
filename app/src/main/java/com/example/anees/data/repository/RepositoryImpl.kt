@@ -1,8 +1,7 @@
 package com.example.anees.data.repository
 
-import android.util.Log
 import com.example.anees.data.local.LocalDataSource
-import com.example.anees.data.model.Ad3yaEntity
+import com.example.anees.data.model.HadithEntity
 import com.example.anees.data.model.AzkarEntity
 import com.example.anees.data.model.EditionResponse
 import com.example.anees.data.model.Sebiha
@@ -78,29 +77,29 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    // --- Ad3ya ---
-    override suspend fun insertAd3ya(ad3ya: Ad3yaEntity) {
-        return localDataSource.insertAd3ya(ad3ya)
+    // --- Hadith ---
+    override suspend fun insertHadith(hadith: HadithEntity) {
+        return localDataSource.insertHadith(hadith)
     }
 
-    override suspend fun deleteAd3ya(ad3ya: Ad3yaEntity) {
-        return localDataSource.deleteAd3ya(ad3ya)
+    override suspend fun deleteHadith(hadith: HadithEntity) {
+        return localDataSource.deleteHadith(hadith)
     }
 
-    override suspend fun isAd3yaSaved(title: String): Boolean {
-        return localDataSource.isAd3yaSaved(title)
+    override suspend fun isHadithSaved(title: String): Boolean {
+        return localDataSource.isHadithSaved(title)
     }
 
-    override fun getSavedAd3yaFlow(): Flow<List<Ad3yaEntity>> {
-        return localDataSource.getSavedAd3yaFlow()
+    override fun getSavedHadithFlow(): Flow<List<HadithEntity>> {
+        return localDataSource.getSavedHadithFlow()
     }
 
-    override suspend fun toggleAd3ya(title: String) {
-        val exists = localDataSource.isAd3yaSaved(title)
+    override suspend fun toggleHadith(title: String) {
+        val exists = localDataSource.isHadithSaved(title)
         if (exists) {
-            localDataSource.deleteAd3ya(Ad3yaEntity(title = title))
+            localDataSource.deleteHadith(HadithEntity(title = title))
         } else {
-            localDataSource.insertAd3ya(Ad3yaEntity(title = title))
+            localDataSource.insertHadith(HadithEntity(title = title))
         }
     }
 

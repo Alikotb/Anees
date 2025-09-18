@@ -4,10 +4,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Text
@@ -26,8 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.anees.R
 import com.example.anees.data.model.audio.AudioDto
-import com.example.anees.ui.screens.tafsir.component.SurahNumber
-import com.example.anees.utils.extensions.convertNumbersToArabic
 
 @Composable
 fun ElMahafogatDownloadedAudioCard(
@@ -44,9 +40,7 @@ fun ElMahafogatDownloadedAudioCard(
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(color = Color(0xFF6AB0AB)),
-                    onClick = {
-                        onClick(index)
-                    }
+                    onClick = { onClick(index) }
                 )
                 .padding(horizontal = 12.dp, vertical = 12.dp)
         ) {
@@ -58,10 +52,6 @@ fun ElMahafogatDownloadedAudioCard(
                 textAlign = TextAlign.Right,
                 modifier = Modifier.weight(1f)
             )
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            SurahNumber("".convertNumbersToArabic())
         }
     }
 

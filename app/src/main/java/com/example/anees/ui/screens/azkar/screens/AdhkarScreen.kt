@@ -112,7 +112,7 @@ fun AdhkarScreen(
                 ZekrCard(
                     text = category,
                     isSaved = savedZekr.any { it.category == category },
-                    onStarClick = { azkarViewModel.toggleSave(category) },
+                    onSaveClick = { azkarViewModel.toggleSave(category) },
                     onClick = { navToDetails(category) }
                 )
             }
