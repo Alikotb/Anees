@@ -76,4 +76,7 @@ object RadioPlayer {
         return player?.duration ?: 0L
     }
 
+    fun seekTo(milliseconds: Long) {
+        player?.seekTo(milliseconds)
+    }
 }

@@ -51,6 +51,7 @@ class QuranPlayerViewModel @Inject constructor(private val context: Application)
 
     private var broadcastReceiver: RadioBroadcastReceiver? = null
 
+
     val currentTrack: StateFlow<AudioTrack?> = combine(_playList, _currentSuraIndex) { playList, index ->
         playList.getOrNull(index)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
@@ -183,4 +184,9 @@ class QuranPlayerViewModel @Inject constructor(private val context: Application)
             context.unregisterReceiver(it)
         }
     }
+
+    fun seekTo(milliseconds: Long) {
+        RadioPlayer.seekTo(milliseconds)
+    }
+
 }
