@@ -35,18 +35,6 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".receivers.AzanReminderBootReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-            </intent-filter>
-        </receiver>
-
-        <receiver android:name=".receivers.AzanReminderReceiver"
-            android:enabled="true"
-            android:exported="true"/>
-
         <activity
             android:name=".ui.screens.azan.AzanOverlayActivity"
             android:exported="false"

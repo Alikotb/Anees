@@ -10,6 +10,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -29,7 +30,6 @@ import com.batoulapps.adhan.Coordinates
 import com.batoulapps.adhan.PrayerTimes
 import com.batoulapps.adhan.data.DateComponents
 import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
-import com.example.anees.receivers.AzanReminderReceiver
 import com.example.anees.ui.navigation.SetUpNavHost
 import com.example.anees.utils.Constants
 import com.example.anees.utils.Constants.REQUEST_LOCATION_CODE
@@ -57,7 +57,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        scheduleNotification(this)
         SharedModel.isAppOpen = true
         requestNotificationPermission(this)
         locationProvider = LocationProvider(this)
@@ -174,57 +173,6 @@ class MainActivity : ComponentActivity() {
                 Toast.makeText(this, "Permission Denied (${currentCount + 1})", Toast.LENGTH_SHORT)
                     .show()
             }
-        }
-    }
-
-    @SuppressLint("ScheduleExactAlarm")
-    fun scheduleNotification(context: Context) {
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-        val dateComponents = DateComponents.from(Date())
-
-        val params = CalculationMethod.EGYPTIAN.parameters
-        val prayerTimes = PrayerTimes(PrayerTimesHelper.getCoordinates(), dateComponents, params)
-
-        //1- define time
-        val times = listOf(
-            prayerTimes.fajr,
-            prayerTimes.dhuhr,
-            prayerTimes.asr,
-            prayerTimes.maghrib,
-            prayerTimes.isha
-        )
-
-        //2- schedule
-        for ((index, time) in times.withIndex()) {
-            val intent = Intent(context, AzanReminderReceiver::class.java).apply {
-                putExtra("soundType", index + 1) // sound type = 1..5
-            }
-
-            val pendingIntent = PendingIntent.getBroadcast(
-                context,
-                index,
-                intent,
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-            )
-
-            val calendar = Calendar.getInstance().apply {
-                set(Calendar.HOUR_OF_DAY, time.hours)
-                set(Calendar.MINUTE, time.minutes )
-                set(Calendar.SECOND, 0)
-            }
-
-            if (calendar.timeInMillis < System.currentTimeMillis()) {
-                calendar.add(Calendar.DAY_OF_YEAR, 1) // schedule tomorrow if already passed
-            }
-
-            calendar.timeInMillis -= 5* 60 * 1000
-
-            alarmManager.setExactAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP,
-                calendar.timeInMillis,
-                pendingIntent
-            )
         }
     }
 }
