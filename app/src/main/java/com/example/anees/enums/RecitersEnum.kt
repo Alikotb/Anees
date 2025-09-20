@@ -1,12 +1,11 @@
 package com.example.anees.enums
 
 import com.example.anees.R
-
 enum class RecitersEnum(val reciter : String, val url : String, val image : Int , val description : String) {
 
     Abdelbaset("عبدالباسط عبدالصمد","https://server7.mp3quran.net/basit/Almusshaf-Al-Mojawwad/",R.drawable.abdulbasit,"المصحف المجود - المصحف المجود"),
     Maher("ماهر المعيقلي","https://server12.mp3quran.net/maher/",R.drawable.maher,"حفص عن عاصم - مرتل"),
-   // Hosary("محمود خليل الحصري","https://server13.mp3quran.net/husr/Almusshaf-Al-Mojawwad/",R.drawable.hosary,"ورش عن نافع - مرتل"),
+    // Hosary("محمود خليل الحصري","https://server13.mp3quran.net/husr/Almusshaf-Al-Mojawwad/",R.drawable.hosary,"ورش عن نافع - مرتل"),
     Banna("محمود علي البنا","https://server8.mp3quran.net/bna/Almusshaf-Al-Mojawwad/",R.drawable.banna,"المصحف المجود - المصحف المجود"),
     Refaat("محمد رفعت","https://server14.mp3quran.net/refat/",R.drawable.refaat,"حفص عن عاصم - مرتل"),
     Menshawy("محمد صديق المنشاوي","https://server10.mp3quran.net/minsh/Almusshaf-Al-Mojawwad/",R.drawable.menshawy,"المصحف المجود - المصحف المجود"),
