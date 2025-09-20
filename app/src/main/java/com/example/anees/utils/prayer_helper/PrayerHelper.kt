@@ -3,10 +3,14 @@ package com.example.anees.utils.prayer_helper
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.media.RingtoneManager
+import android.net.Uri
+import androidx.core.net.toUri
 import com.batoulapps.adhan.CalculationMethod
 import com.batoulapps.adhan.Coordinates
 import com.batoulapps.adhan.PrayerTimes
 import com.batoulapps.adhan.data.DateComponents
+import com.example.anees.R
 import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
 import com.example.anees.enums.PrayEnum
 import java.util.Calendar
@@ -22,7 +26,7 @@ object PrayerTimesHelper {
         this.context = context
     }
 
-    private fun getCoordinates(): Coordinates {
+    fun getCoordinates(): Coordinates {
         val latitude = SharedPreferencesImpl(context).fetchData("latitude", 30.033333)
         val longitude = SharedPreferencesImpl(context).fetchData("longitude", 31.233334)
         return Coordinates(latitude, longitude)
