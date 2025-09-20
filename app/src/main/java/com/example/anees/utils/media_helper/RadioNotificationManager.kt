@@ -19,6 +19,8 @@ import com.example.anees.services.RadioService.Companion.ACTION_NEXT
 import com.example.anees.services.RadioService.Companion.ACTION_PAUSE
 import com.example.anees.services.RadioService.Companion.ACTION_PLAY
 import com.example.anees.services.RadioService.Companion.ACTION_PREV
+import com.example.anees.services.RadioService.Companion.ACTION_SKIP_BACKWARD
+import com.example.anees.services.RadioService.Companion.ACTION_SKIP_FORWARD
 
 class RadioNotificationManager(
     private val context: Context,
@@ -34,7 +36,8 @@ class RadioNotificationManager(
         createNotificationChannel()
     }
 
-    fun buildNotification(title: String, subtitle: String): Notification {
+    fun buildNotification(title: String, subtitle: String, showSkipButtons: Boolean, currentPosition: Long = 0,
+                          duration: Long = 0): Notification {
         val playPauseAction = if (RadioPlayer.isPlaying()) {
             NotificationCompat.Action(
                 R.drawable.play_notification, "Pause", notificationIntent(ACTION_PAUSE)
@@ -56,26 +59,71 @@ class RadioNotificationManager(
             R.drawable.ic_close, "Close", closeIntent()
         )
 
-        return NotificationCompat.Builder(context, CHANNEL_ID)
+        val actions = mutableListOf<NotificationCompat.Action>().apply {
+            add(prevAction)
+
+            if (showSkipButtons) {
+                add(NotificationCompat.Action(
+                    R.drawable.fast_rewind_24, "Skip Backward", notificationIntent(ACTION_SKIP_BACKWARD)
+                ))
+            }
+
+            add(playPauseAction)
+
+            if (showSkipButtons) {
+                add(NotificationCompat.Action(
+                    R.drawable.fast_forward_24, "Skip Forward", notificationIntent(ACTION_SKIP_FORWARD)
+                ))
+            }
+
+            add(nextAction)
+            add(closeAction)
+        }
+
+        val compactViewIndices = if (showSkipButtons) {
+            intArrayOf(1, 3, 5)
+        } else {
+            intArrayOf(0, 1, 3)
+        }
+
+        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setContentTitle(title)
             .setContentText(subtitle)
             .setSmallIcon(R.drawable.logo_foreground)
-            .setLargeIcon(BitmapFactory.decodeResource(context.resources,R.drawable.zekrback))
+            .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.zekrback))
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setStyle(
                 androidx.media.app.NotificationCompat.MediaStyle()
                     .setMediaSession(mediaSession.sessionToken)
-                    .setShowActionsInCompactView(0,1,2)
+                    .setShowActionsInCompactView(*compactViewIndices)
             )
-            .addAction(prevAction)
-            .addAction(playPauseAction)
-            .addAction(nextAction)
-            .addAction(closeAction)
             .setOnlyAlertOnce(true)
             .setOngoing(isAppInForeground())
-            .build()
+
+        if (showSkipButtons && duration > 0) {
+            builder.setProgress(
+                duration.toInt(),
+                currentPosition.toInt(),
+                false
+            )
+
+            val timeText = formatTime(currentPosition) + " / " + formatTime(duration)
+            builder.setContentText("$subtitle • $timeText")
+        }
+
+        actions.forEach { action ->
+            builder.addAction(action)
+        }
+
+        return builder.build()
     }
 
+    private fun formatTime(millis: Long): String {
+        val totalSeconds = millis / 1000
+        val minutes = totalSeconds / 60
+        val seconds = totalSeconds % 60
+        return String.format("%d:%02d", minutes, seconds)
+    }
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(

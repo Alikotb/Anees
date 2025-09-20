@@ -31,12 +31,17 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -62,6 +67,7 @@ import com.example.anees.services.RadioService
 import com.example.anees.ui.screens.radio.components.ScreenBackground
 import com.example.anees.ui.screens.reciters.view_model.QuranPlayerViewModel
 import com.example.anees.utils.SharedModel
+import com.example.anees.utils.media_helper.RadioPlayer
 
 @Composable
 fun QuranPlayerScreen(
@@ -219,19 +225,42 @@ fun Mp3Playback(
     val progress by viewModel.progress.collectAsStateWithLifecycle()
     val currentSuraIndex by viewModel.currentSuraIndex.collectAsStateWithLifecycle()
     val playlist by viewModel.playList.collectAsStateWithLifecycle()
+    val rawDuration = RadioPlayer.getDuration()
+    val duration = if (rawDuration > 0) rawDuration.toFloat() else 0f
+    var sliderPosition by remember { mutableFloatStateOf(progress * duration) }
 
+    LaunchedEffect(progress) {
+        sliderPosition = progress * duration
+    }
 
     LaunchedEffect(Unit) {
         viewModel.getNextSura()
     }
 
-    LinearProgressIndicator(
-        progress = progress.coerceIn(0f, 1f),
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(8.dp)
-            .clip(RoundedCornerShape(4.dp)),
-        color = Color(0xFF4CAF50)
+//    LinearProgressIndicator(
+//        progress = progress.coerceIn(0f, 1f),
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .height(8.dp)
+//            .clip(RoundedCornerShape(4.dp)),
+//        color = Color(0xFF4CAF50)
+//    )
+    Slider(
+        value = sliderPosition.coerceIn(0f, duration),
+        onValueChange = { newValue ->
+            sliderPosition = newValue
+        },
+        onValueChangeFinished = {
+            viewModel.seekTo(sliderPosition.toLong())
+
+        },
+        valueRange = 0f..maxOf(1f, duration),
+        modifier = Modifier.fillMaxWidth(),
+        colors = SliderDefaults.colors(
+            thumbColor = Color(0xFF4CAF50),
+            activeTrackColor = Color(0xFF4CAF50),
+            inactiveTrackColor = Color(0xFFBDBDBD)
+        )
     )
 
     Spacer(modifier = Modifier.height(32.dp))
