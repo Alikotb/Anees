@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Download
@@ -30,7 +29,6 @@ import androidx.compose.material.icons.filled.SkipPrevious
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
@@ -40,11 +38,12 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -60,9 +59,9 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import com.example.anees.enums.SuraTypeEnum
 import com.example.anees.R
 import com.example.anees.data.model.RecitationModel
+import com.example.anees.enums.SuraTypeEnum
 import com.example.anees.services.RadioService
 import com.example.anees.ui.screens.radio.components.ScreenBackground
 import com.example.anees.ui.screens.reciters.view_model.QuranPlayerViewModel
@@ -221,13 +220,15 @@ fun Mp3Playback(
     viewModel: QuranPlayerViewModel,
     isOnline: Boolean
 ) {
-    val isPlaying by viewModel.isPlaying.collectAsStateWithLifecycle()
-    val progress by viewModel.progress.collectAsStateWithLifecycle()
+   val progress by viewModel.progress.collectAsStateWithLifecycle()
     val currentSuraIndex by viewModel.currentSuraIndex.collectAsStateWithLifecycle()
+    val isPlaying by viewModel.isPlaying.collectAsStateWithLifecycle()
     val playlist by viewModel.playList.collectAsStateWithLifecycle()
     val rawDuration = RadioPlayer.getDuration()
     val duration = if (rawDuration > 0) rawDuration.toFloat() else 0f
     var sliderPosition by remember { mutableFloatStateOf(progress * duration) }
+    val downloadingMap = remember { mutableStateMapOf<Int, Boolean>() }
+    val isDownloading = downloadingMap[currentSuraIndex] ?: false
 
     LaunchedEffect(progress) {
         sliderPosition = progress * duration
@@ -237,14 +238,6 @@ fun Mp3Playback(
         viewModel.getNextSura()
     }
 
-//    LinearProgressIndicator(
-//        progress = progress.coerceIn(0f, 1f),
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .height(8.dp)
-//            .clip(RoundedCornerShape(4.dp)),
-//        color = Color(0xFF4CAF50)
-//    )
     Slider(
         value = sliderPosition.coerceIn(0f, duration),
         onValueChange = { newValue ->
@@ -314,12 +307,15 @@ fun Mp3Playback(
             IconButton(
                 onClick = {
                     viewModel.downloadCurrentSura()
-                }
+                    downloadingMap[currentSuraIndex] = true
+                },
+                enabled = !isDownloading
             ) {
                 Icon(
                     Icons.Default.Download,
                     contentDescription = "تحميل",
-                    modifier = Modifier.size(32.dp),
+                    modifier = Modifier.size(32.dp)
+                        .alpha(if (isDownloading) 0.5f else 1f),
                     tint = Color(0xFF4CAF50)
                 )
             }

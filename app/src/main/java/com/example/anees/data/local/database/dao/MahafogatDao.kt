@@ -3,8 +3,8 @@ package com.example.anees.data.local.database.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.anees.data.model.HadithEntity
 import com.example.anees.data.model.AzkarEntity
+import com.example.anees.data.model.HadithEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
