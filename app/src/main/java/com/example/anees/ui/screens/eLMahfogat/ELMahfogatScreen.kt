@@ -38,7 +38,6 @@ import com.example.anees.ui.screens.eLMahfogat.component.ElMahfogatTopBar
 import com.example.anees.ui.screens.eLMahfogat.component.EmptyPlaceholder
 import com.example.anees.ui.screens.hadith.components.HadithCard
 import com.example.anees.ui.screens.radio.components.ScreenBackground
-import com.example.anees.utils.downloaded_audio.loadAllAudio
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)

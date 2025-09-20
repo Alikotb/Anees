@@ -2,7 +2,6 @@ package com.example.anees.ui.screens.hadith
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.anees.data.model.AzkarEntity
 import com.example.anees.data.model.EditionResponse
 import com.example.anees.data.model.HadithEntity
 import com.example.anees.data.model.Response

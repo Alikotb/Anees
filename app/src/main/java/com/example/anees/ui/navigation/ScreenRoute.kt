@@ -1,7 +1,6 @@
 package com.example.anees.ui.navigation
 
-import com.example.anees.enums.Recitations
-import com.example.anees.enums.RecitersEnum
+
 import kotlinx.serialization.Serializable
 
 

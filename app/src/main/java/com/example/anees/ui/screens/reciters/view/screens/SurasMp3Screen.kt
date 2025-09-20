@@ -1,6 +1,5 @@
 package com.example.anees.ui.screens.reciters.view.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,15 +24,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.anees.data.model.RecitationModel
-import com.example.anees.enums.Recitations
-import com.example.anees.enums.RecitersEnum
 import com.example.anees.ui.screens.radio.components.ScreenBackground
 import com.example.anees.ui.screens.reciters.view.component.Mp3Card
 import com.example.anees.utils.sura_mp3_helper.suraUrls

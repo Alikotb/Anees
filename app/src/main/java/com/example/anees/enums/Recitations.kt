@@ -1,7 +1,24 @@
 package com.example.anees.enums
 
 import com.example.anees.data.model.RecitationModel
-import com.example.anees.utils.*
+import com.example.anees.utils.IbnZakoonList
+import com.example.anees.utils.KhalafAnHamzaList
+import com.example.anees.utils.QalunAbuNashitList
+import com.example.anees.utils.QalunAnNafiList
+import com.example.anees.utils.QunbulAnIbnKathirList
+import com.example.anees.utils.ShubaAnAsimList
+import com.example.anees.utils.WarshAbuBakrList
+import com.example.anees.utils.WarshAzraqList
+import com.example.anees.utils.YaqoubRowaisRuhList
+import com.example.anees.utils.alBazziAnIbnKathirList
+import com.example.anees.utils.alBazziQunbulList
+import com.example.anees.utils.alDuriAnAbuAmrList
+import com.example.anees.utils.alDuriAnAlKisaiList
+import com.example.anees.utils.alSusiAnAbuAmrList
+import com.example.anees.utils.hafsAnAsimList
+import com.example.anees.utils.mushafMualimList
+import com.example.anees.utils.mushafMujawadList
+import com.example.anees.utils.warshAnNafiList
 
 enum class Recitations(
     val recitationName: String,
