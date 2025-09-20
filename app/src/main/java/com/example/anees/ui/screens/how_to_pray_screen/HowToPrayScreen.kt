@@ -50,7 +50,7 @@ fun HowToPrayScreen(modifier: Modifier = Modifier,navToHome : () -> Unit = {}) {
             }, size = 24)
         }
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-            HowToPrayChips(){
+            HowToPrayChips{
                 list.value = getHowToPrayChosenList(it).toMutableList()
                 youtubeLink.value = getHowToPrayYoutubeLink(it)
                 coroutineScope.launch {
@@ -60,6 +60,7 @@ fun HowToPrayScreen(modifier: Modifier = Modifier,navToHome : () -> Unit = {}) {
             Spacer(Modifier.height(8.dp))
             HorizontalPager(
                 state = pagerState,
+                modifier = Modifier.padding(bottom = 32.dp)
             ) { page ->
                 HowToPrayCard(
                     data = list.value[page].toHowToPrayPojo(
@@ -84,6 +85,7 @@ fun HowToPrayScreen(modifier: Modifier = Modifier,navToHome : () -> Unit = {}) {
                     }
                 )
             }
+
         }
 
     }
