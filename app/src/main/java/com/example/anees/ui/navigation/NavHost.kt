@@ -4,39 +4,40 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.anees.ui.navigation.ScreenRoute.AzkarDetailsScreen
 import com.example.anees.data.local.sharedpreference.SharedPreferencesImpl
 import com.example.anees.data.model.RecitationModel
+import com.example.anees.ui.screens.hadith.HadithAuthorsScreen
+import com.example.anees.ui.screens.hadith.HadithScreen
+import com.example.anees.ui.screens.hadith.HadithSectionsScreen
+import com.example.anees.ui.screens.quran_pdf.juz_index.JuzIndexScreen
+import com.example.anees.ui.screens.quran_pdf.khatm.KhatmQuranDuaScreen
+import com.example.anees.ui.screens.qibla.QiblaScreen
+import com.example.anees.ui.screens.quran_pdf.quran_index.QuranIndexScreen
+import com.example.anees.ui.screens.quran_pdf.quran.QuranPDFViewerScreen
+import com.example.anees.ui.screens.sebha.SebihaScreen
+import com.example.anees.ui.screens.splash.SplashScreen
 import com.example.anees.enums.AuthorEdition
 import com.example.anees.enums.PrayEnum
+import com.example.anees.ui.screens.prayer.PrayerScreen
+import com.example.anees.ui.screens.radio.RadioScreen
 import com.example.anees.enums.QuranSurah
 import com.example.anees.ui.navigation.ScreenRoute.AzanPlayerScreen
 import com.example.anees.ui.navigation.ScreenRoute.AzanSettingsPlayerScreen
-import com.example.anees.ui.navigation.ScreenRoute.AzkarDetailsScreen
 import com.example.anees.ui.navigation.ScreenRoute.FajrPlayerScreen
 import com.example.anees.ui.screens.azan.AzanScreen
 import com.example.anees.ui.screens.azkar.screens.AdhkarDetailsScreen
 import com.example.anees.ui.screens.azkar.screens.AdhkarScreen
 import com.example.anees.ui.screens.downloaded_audio.DownloadedAudioScreen
-import com.example.anees.ui.screens.hadith.HadithAuthorsScreen
-import com.example.anees.ui.screens.hadith.HadithScreen
-import com.example.anees.ui.screens.hadith.HadithSectionsScreen
+import com.example.anees.ui.screens.eLMahfogat.ElMahfogatScreen
 import com.example.anees.ui.screens.hisn_almuslim.HisnAlMuslimScreen
 import com.example.anees.ui.screens.home.HomeScreenWithDrawer
 import com.example.anees.ui.screens.how_to_pray_screen.HowToPrayScreen
 import com.example.anees.ui.screens.names_of_allah.NamesOfAllahScreen
-import com.example.anees.ui.screens.prayer.PrayerScreen
-import com.example.anees.ui.screens.qibla.QiblaScreen
-import com.example.anees.ui.screens.quran_pdf.juz_index.JuzIndexScreen
-import com.example.anees.ui.screens.quran_pdf.khatm.KhatmQuranDuaScreen
-import com.example.anees.ui.screens.quran_pdf.quran.QuranPDFViewerScreen
-import com.example.anees.ui.screens.quran_pdf.quran_index.QuranIndexScreen
-import com.example.anees.ui.screens.radio.RadioScreen
 import com.example.anees.ui.screens.reciters.view.screens.QuranPlayerScreen
 import com.example.anees.ui.screens.reciters.view.screens.RecitersScreen
 import com.example.anees.ui.screens.reciters.view.screens.SuraMp3Screen
-import com.example.anees.ui.screens.sebha.SebihaScreen
 import com.example.anees.ui.screens.settings.SettingsScreen
-import com.example.anees.ui.screens.splash.SplashScreen
 import com.example.anees.ui.screens.tafsir.screens.TafsirDetailsScreen
 import com.example.anees.ui.screens.tafsir.screens.TafsirScreen
 import com.example.anees.utils.Constants
@@ -105,8 +106,8 @@ fun SetUpNavHost(
                 navToPrayScreen = {
                     navController.navigate(ScreenRoute.PrayScreen)
                 },
-                navToDownloadQuran = {
-                    navController.navigate(ScreenRoute.DownloadQuranScreen)
+                navToElMahfogat = {
+                    navController.navigate(ScreenRoute.ElMahfogatScreen)
                 }
             )
         }
@@ -161,15 +162,16 @@ fun SetUpNavHost(
                     navController.navigateUp()
                 },
                 navToDetails = { cat ->
-                    navController.navigateUp()
+                    //  navController.navigateUp()
                     navController.navigate(AzkarDetailsScreen(cat))
-                })
+                }
+            )
         }
         composable<AzkarDetailsScreen> {
             val asd = it.arguments?.getString("category") ?: ""
             AdhkarDetailsScreen(asd) {
                 navController.popBackStack()
-                navController.navigate(ScreenRoute.AdhkarScreen)
+                // navController.navigate(ScreenRoute.AdhkarScreen)
             }
         }
         composable<ScreenRoute.HadithScreen> {
@@ -242,6 +244,25 @@ fun SetUpNavHost(
             }
         }
 
+        composable<ScreenRoute.ElMahfogatScreen> {
+            ElMahfogatScreen(
+                navToHome = {
+                    navController.navigateUp()
+                },
+                navToAzkarDetails = { azkarCategoty ->
+                    navController.navigate(AzkarDetailsScreen(azkarCategoty))
+                },
+                navToReciter = {
+                    navController.navigate(ScreenRoute.QuranPlayerScreen(
+                        recitationModel = null,
+                        recitationName = null,
+                        index = it,
+                        isOnline = false
+                    ))
+                }
+            )
+        }
+
         composable<ScreenRoute.RadioScreen> {
             RadioScreen{
                 navController.navigateUp()
@@ -257,11 +278,13 @@ fun SetUpNavHost(
             }
             )
         }
+
         composable<ScreenRoute.NamesOfAllahScreen> {
             NamesOfAllahScreen {
                 navController.navigateUp()
             }
         }
+
         composable<ScreenRoute.TafsirDetailsScreen> {
             val surah = Gson().fromJson(
                 it.arguments?.getString("surah"),
@@ -319,6 +342,7 @@ fun SetUpNavHost(
                 navController.navigateUp()
             }
         }
+
         composable<AzanPlayerScreen> {
             val (prayEnum , time) = PrayerTimesHelper.getNextPrayer() ?: (PrayEnum.FAJR to 0L)
             AzanScreen(
