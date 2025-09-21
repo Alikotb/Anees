@@ -37,11 +37,11 @@ fun createReminderNotification(soundType: Int, context: Context){
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     val channelId = "azan_reminder_notification$soundType"
     val azan = when (soundType) {
-        6 -> "اقترب الفجر"
-        7 -> "اقترب الظهر"
-        8 -> "اقترب العصر"
-        9 -> "اقترب المغرب"
-        10 -> "اقترب العشاء"
+        6 -> "الفجر"
+        7 -> "الظهر"
+        8 -> "العصر"
+        9 -> "المغرب"
+        10 -> "العشاء"
         else -> "Unknown"
     }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -61,7 +61,7 @@ fun createReminderNotification(soundType: Int, context: Context){
     val notificationIcon = getReminderNotificationIcon(soundType)
 
     val notification = NotificationCompat.Builder(context, channelId)
-        .setContentTitle(azan)
+        .setContentTitle("اقتربت صلاة $azan")
         .setContentText("إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَّوْقُوتًا")
         .setSmallIcon(notificationIcon)
         .build()
